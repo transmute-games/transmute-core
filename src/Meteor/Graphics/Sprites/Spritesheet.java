@@ -138,7 +138,7 @@ public class Spritesheet extends Bitmap {
 	/**
 	 * Generates a series of timed action.
 	 *
-	 * @param duration Time in milliseconds to be applied to all generated frames.
+	 * @param duration Time in seconds to be applied to all generated frames.
 	 * @param spriteLoc Location of the sprite's (in terms of cells).
 	 * @return Generated action with specified cells and provided time for all frames.
 	 */
@@ -156,14 +156,14 @@ public class Spritesheet extends Bitmap {
 	/**
 	 * Generates a series of timed action.
 	 *
-	 * Note that the length of the time array must be the same as spriteLoc array.
+	 * Note that the length of the {@code duration[]} must be the same as {@code spriteLoc[]}.
 	 *
-	 * @param time Time in milliseconds to be applied for each frame. Size should be equal to <strong>spriteLoc</strong>.
+	 * @param duration Time in seconds to be applied for each frame. Size should be equal to <strong>spriteLoc</strong>.
 	 * @param spriteLoc Location of the sprite's (in terms of cells).
 	 * @return Generated action with specified cells and provided time for each frame.
 	 */
-	public Animation generateAnimation(int[] time, Tuple2i[] spriteLoc) {
-		if(time.length != spriteLoc.length)
+	public Animation generateAnimation(int[] duration, Tuple2i[] spriteLoc) {
+		if(duration.length != spriteLoc.length)
 			throw new IllegalArgumentException("Frame time array size should have the same length as spriteLoc array size!");
 		Bitmap[] sprites = new Bitmap[spriteLoc.length];
 		int i = 0;
@@ -172,7 +172,7 @@ public class Spritesheet extends Bitmap {
 			sprites[i] = sprite;
 			i++;
 		}
-		return new Animation(sprites, time);
+		return new Animation(sprites, duration);
 	}
 
 	/**
@@ -180,7 +180,7 @@ public class Spritesheet extends Bitmap {
 	 * or horizontal strip (i.e. 1 in width or height) and stores frames for an action.
 	 *
 	 * @param sequenceOrientation Orientation of the Spritesheet.
-	 * @param duration Time in milliseconds to be applied to every frame.
+	 * @param duration Time in seconds to be applied to every frame.
 	 * @return Generated action with specified cells and provided time for every frame.
 	 */
 	public Animation generateAnimation(int sequenceOrientation, int duration) {
@@ -209,10 +209,10 @@ public class Spritesheet extends Bitmap {
 	 * or horizontal strip (i.e. 1 in width or height) and stores frames for an action.
 	 *
 	 * @param sequenceOrientation Orientation of the Spritesheet.
-	 * @param frameLengths Times in milliseconds to be applied to each frame.
+	 * @param duration Time in seconds to be applied to each frame.
 	 * @return Generated action with specified cells and provided time for each frame.
 	 */
-	public Animation generateAnimation(int sequenceOrientation, int[] frameLengths) {
+	public Animation generateAnimation(int sequenceOrientation, int[] duration) {
 		Bitmap[] sprites;
 		Animation animation = null;
 		switch(sequenceOrientation) {
@@ -220,13 +220,13 @@ public class Spritesheet extends Bitmap {
 				sprites = new Bitmap[cellSprites.length];
 				for(int i = 0; i < cellSprites.length; i++)
 					sprites[i] = cellSprites[i][0];
-				animation = new Animation(sprites, frameLengths);
+				animation = new Animation(sprites, duration);
 				return animation;
 			case ORIENTATION_VERTICAL:
 				sprites = new Bitmap[cellSprites[0].length];
 				for(int i = 0; i < sprites.length; i++)
 					sprites[i] = cellSprites[0][i];
-				animation = new Animation(sprites, frameLengths);
+				animation = new Animation(sprites, duration);
 				return animation;
 			default:
 				return null;
