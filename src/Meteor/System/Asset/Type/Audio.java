@@ -32,6 +32,7 @@ public class Audio extends Asset {
 			clip.open(audioIn);
 			target = clip;
 		} catch(Exception e) {
+			e.printStackTrace();
 			new Error(Error.FileNotFoundException(Audio.TYPE, filePath));
 		}
 	}
@@ -48,6 +49,7 @@ public class Audio extends Asset {
 			clip = AudioSystem.getClip();
 			clip.open(audioIn);
 		} catch(Exception e) {
+			e.printStackTrace();
 			new Error(Error.FileNotFoundException(Audio.TYPE, filePath));
 		}
 		
