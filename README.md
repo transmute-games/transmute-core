@@ -1,7 +1,6 @@
 # Meteor
 ![Project Preview](thumbnail.png)
 
-![status](https://img.shields.io/pypi/status/Django.svg)
 ![license](https://img.shields.io/apm/l/vim-mode.svg)
 
 ## About
