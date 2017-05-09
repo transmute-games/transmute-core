@@ -3,7 +3,7 @@ package Meteor.Graphics.Sprites;
 import java.awt.image.BufferedImage;
 
 import Meteor.Graphics.Bitmap;
-import Meteor.Graphics.Images.ImageUtils;
+import Meteor.System.Asset.Type.Images.ImageUtils;
 import Meteor.Units.Tuple2i;
 import Meteor.Units.Tuple4i;
 

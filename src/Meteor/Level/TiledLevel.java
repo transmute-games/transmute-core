@@ -8,7 +8,7 @@ import Meteor.GameEngine.Meteor;
 import Meteor.Graphics.Bitmap;
 import Meteor.Graphics.Context;
 import Meteor.System.Asset.Asset;
-import Meteor.System.Asset.Type.Image;
+import Meteor.System.Asset.Type.Images.Image;
 
 public class TiledLevel extends Level {
 	private int tileSize;

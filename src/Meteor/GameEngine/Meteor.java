@@ -12,7 +12,7 @@ import Meteor.Input.Input;
 import Meteor.System.Error;
 import Meteor.System.Util;
 import Meteor.System.Asset.AssetManager;
-import Meteor.System.Asset.Type.Font;
+import Meteor.System.Asset.Type.Fonts.Font;
 
 /**
  * {@code Meteor} is the main game engine class.

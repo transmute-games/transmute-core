@@ -7,16 +7,16 @@ import java.util.Queue;
 
 import javax.sound.sampled.Clip;
 
-import Meteor.Audio.AudioManager;
-import Meteor.Font.FontManager;
 import Meteor.Graphics.Bitmap;
-import Meteor.Graphics.Images.ImageManager;
 import Meteor.Graphics.Sprites.Spritesheet;
 import Meteor.System.Error;
 import Meteor.System.Util;
-import Meteor.System.Asset.Type.Audio;
-import Meteor.System.Asset.Type.Font;
-import Meteor.System.Asset.Type.Image;
+import Meteor.System.Asset.Type.Audios.Audio;
+import Meteor.System.Asset.Type.Audios.AudioManager;
+import Meteor.System.Asset.Type.Fonts.Font;
+import Meteor.System.Asset.Type.Fonts.FontManager;
+import Meteor.System.Asset.Type.Images.Image;
+import Meteor.System.Asset.Type.Images.ImageManager;
 
 /**
  * <p>

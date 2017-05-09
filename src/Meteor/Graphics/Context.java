@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.Arrays;
 
-import Meteor.System.Asset.Type.Font;
+import Meteor.System.Asset.Type.Fonts.Font;
 
 /**
  * This is the heart of the rendering engine. A master BufferedImage is created using the ARGB color model
