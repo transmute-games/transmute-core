@@ -5,9 +5,10 @@ package Meteor.GameEngine.Interfaces;
  * <br>
  * This class is used to force other classes implementing {@code Initializable} to implement its methods.
  */
-public interface Initializable {
-	/**
-	 * A method that takes field variable(s) and instantiates them.
-	 */
-	void init();
+public interface Initializable
+{
+    /**
+     * A method that takes field variable(s) and instantiates them.
+     */
+    void init();
 }

@@ -7,19 +7,29 @@ import Meteor.Graphics.Context;
 import Meteor.States.State;
 import Meteor.States.StateManager;
 
-public class GameState extends State {
+public class GameState extends State
+{
 
-	public GameState(StateManager sManager) {
-		super("gameState", sManager);
-		init();
-	}
+    public GameState(StateManager sManager)
+    {
+        super("gameState", sManager);
+        init();
+    }
 
-	@Override public void init() {
-		@SuppressWarnings("unused")
-		GameManager gManager = Game.getGameManager();
-	}
+    @Override
+    public void init()
+    {
+        @SuppressWarnings("unused")
+        GameManager gManager = Game.getGameManager();
+    }
 
-	@Override public void update(Manager manager, double delta) {}
+    @Override
+    public void update(Manager manager, double delta)
+    {
+    }
 
-	@Override public void render(Manager manager, Context ctx) {}
+    @Override
+    public void render(Manager manager, Context ctx)
+    {
+    }
 }
