@@ -9,6 +9,7 @@ import Meteor.GameEngine.Interfaces.Updatable;
 import Meteor.Graphics.Context;
 import Meteor.Graphics.Sprites.Animation;
 import Meteor.Graphics.Sprites.Sprite;
+import Meteor.System.Asset.Type.Images.ImageUtils;
 
 /**
  * {@code Tile} is a generic tile class.
@@ -84,7 +85,7 @@ public class Tile implements Updatable
     @Override
     public void update(Manager manager, double delta)
     {
-        //if (isAnimated()) animation.update(delta);
+        if (isAnimated()) animation.update();
     }
 
     /**
@@ -98,8 +99,8 @@ public class Tile implements Updatable
      */
     public void render(Manager manager, Context ctx, int x, int y)
     {
-        //if (isAnimated()) ImageUtils.render(g, animation.getSprite(), x, y, width, height);
-        //else ImageUtils.render(g, sprite.getImage(), x, y, width, height);
+        if (isAnimated()) ImageUtils.render(ctx, animation.getBitmap(), x, y);
+        else ImageUtils.render(ctx, sprite.getImage(), x, y);
     }
 
     /**

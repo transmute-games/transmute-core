@@ -155,7 +155,7 @@ public class ImageUtils
             new Error(Error.FileNotFoundException("imageUtils", filePath));
         }
 
-        return getData((BufferedImage) Image.load(ImageUtils.class, filePath).getImage());
+        return getData(Image.load(ImageUtils.class, filePath).getImage());
     }
 
     /**
@@ -251,6 +251,19 @@ public class ImageUtils
     public static BufferedImage load(String filePath, float scale) throws IOException
     {
         return load(Files.newInputStream(Paths.get(filePath)), scale);
+    }
+
+    /**
+     * Method used to render an image to the screen or game window object.
+     *
+     * @param ctx   The Game render 'canvas'.
+     * @param bmp   The bitmap form of the image.
+     * @param xPos  The x-coordinate relative to the screen to place the image.
+     * @param yPos  The y-coordinate relative to the screen to place the image.
+     */
+    public static void render(Context ctx, Bitmap bmp, int xPos, int yPos)
+    {
+        ctx.renderBitmap(bmp, xPos, yPos);
     }
 
     /**

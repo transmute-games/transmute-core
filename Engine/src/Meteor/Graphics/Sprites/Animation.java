@@ -181,7 +181,6 @@ public class Animation
      */
     public void render(Context ctx, int x, int y, float alpha, int tint)
     {
-        update();
         Frame f = frames.get(frame);
         ctx.renderBitmap(f.bmp, x, y, alpha, tint);
     }
@@ -189,7 +188,7 @@ public class Animation
     /**
      * Updates action timers and frame information.
      */
-    private void update()
+    public void update()
     {
         if (firstUpdate && !isStarted)
         {
