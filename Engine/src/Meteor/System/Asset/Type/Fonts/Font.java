@@ -104,7 +104,8 @@ public class Font extends Asset
         }
 
         image = ImageUtils.convertTo(BufferedImage.TYPE_INT_ARGB, image);
-        target = new Spritesheet(image, defaultGlyphSize);
+        Bitmap bmp = ImageUtils.getAsBitmap(image);
+        target = new Spritesheet(bmp, defaultGlyphSize, new Tuple2i(0, 0), 0, 0);
     }
 
     public static Spritesheet load(Class<?> className, String filePath, Tuple2i defaultGlyphSize)
@@ -126,7 +127,8 @@ public class Font extends Asset
         }
 
         image = ImageUtils.convertTo(BufferedImage.TYPE_INT_ARGB, image);
-        return new Spritesheet(image, defaultGlyphSize);
+        Bitmap bmp = ImageUtils.getAsBitmap(image);
+        return new Spritesheet(bmp, defaultGlyphSize, new Tuple2i(0, 0), 0, 0);
     }
 
     @Override
@@ -191,7 +193,6 @@ public class Font extends Asset
 
             ctx.renderBitmap(glyph, xRender, yRender + glyphSink, alpha, color);
             xRender += glyphWidth;
-            yRender += glyphHeight;
         }
     }
 

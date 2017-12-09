@@ -280,6 +280,20 @@ public class Context
     }
 
     /**
+     * Draws a line of text to the screen.
+     * Additionally, the <pre>'\n'</pre> character can be used to switch to a new line.
+     *
+     * @param text Text to be drawn on screen.
+     * @param x    x-coordinate on screen.
+     * @param y    y-coordinate on screen.
+     * @param scale Custom scaling per glyph (1.0f is 1:1 ratio).
+     */
+    public void renderText(String text, int x, int y, float scale)
+    {
+        renderText(text, x, y, 0x00000000, scale);
+    }
+
+    /**
      * Draws a line of text to the screen with custom color.
      * Additionally, the <pre>'\n'</pre> character can be used to switch to a new line.
      *
