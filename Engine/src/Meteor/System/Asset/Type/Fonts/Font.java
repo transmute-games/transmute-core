@@ -191,6 +191,7 @@ public class Font extends Asset
 
             ctx.renderBitmap(glyph, xRender, yRender + glyphSink, alpha, color);
             xRender += glyphWidth;
+            yRender += glyphHeight;
         }
     }
 
