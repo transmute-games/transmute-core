@@ -88,7 +88,7 @@ public class Font extends Asset
     {
         if (filePath == null)
         {
-            new Error(Error.filePathException(Image.TYPE));
+            new Error(Error.filePathException(Font.TYPE));
             return;
         }
 
@@ -111,7 +111,7 @@ public class Font extends Asset
     {
         if (filePath == null)
         {
-            new Error(Error.filePathException(Image.TYPE));
+            new Error(Error.filePathException(Font.TYPE));
         }
 
         BufferedImage image = null;
