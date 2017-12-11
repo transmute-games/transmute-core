@@ -37,7 +37,7 @@ public abstract class Meteor implements Runnable, Cortex
     private boolean isRunning = false; //The variable that controls if game is running or not
     private static final String ERROR_MESSAGE = "Failed to Load " + gameTitle + " " + gameVersion; //Basic error message
     @SuppressWarnings("unused")
-    private long start = System.currentTimeMillis(); //The start timer
+    private long start = System.currentTimeMillis(); //The tile timer
 
     private boolean fpsVerbose = false; //The global debug mode variable
 
@@ -259,7 +259,7 @@ public abstract class Meteor implements Runnable, Cortex
     }
 
     /**
-     * Prints the start screen.
+     * Prints the tile screen.
      */
     private void printStartScreen()
     {

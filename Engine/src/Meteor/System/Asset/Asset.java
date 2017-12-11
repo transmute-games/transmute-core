@@ -21,7 +21,7 @@ public abstract class Asset
     protected String key;
 
     /**
-     * Referred resource, to be loaded on start-up
+     * Referred resource, to be loaded on tile-up
      */
     protected Object target;
 

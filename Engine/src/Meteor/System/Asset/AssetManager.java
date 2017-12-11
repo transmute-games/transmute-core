@@ -51,7 +51,7 @@ public class AssetManager
     private static final Map<String, Asset> REGISTRAR = new HashMap<>();
 
     /**
-     * Indexing all deferred resource to be loaded during start-up
+     * Indexing all deferred resource to be loaded during tile-up
      */
     private static final Queue<Asset> LOAD_QUEUE = new ArrayDeque<>();
 

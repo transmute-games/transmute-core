@@ -75,17 +75,17 @@ public class Animation
     private long lastUpdate;
 
     /**
-     * Control for looping the action (i.e. start from beginning again when completed)
+     * Control for looping the action (i.e. tile from beginning again when completed)
      */
     private boolean looping = false;
 
     /**
-     * Control for reversing the action (i.e. start from last frame of bitmap list)
+     * Control for reversing the action (i.e. tile from last frame of bitmap list)
      */
     private boolean isReverseMode = false;
 
     /**
-     * Control for ping-pong mode (i.e. start from beginning but play reverse when last frame is reached, loop)
+     * Control for ping-pong mode (i.e. tile from beginning but play reverse when last frame is reached, loop)
      */
     private boolean isPingPongMode = false;
 

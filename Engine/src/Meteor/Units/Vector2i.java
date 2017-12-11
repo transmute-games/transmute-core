@@ -30,11 +30,11 @@ public class Vector2i
     }
 
     /**
-     * Calculates the distance between two vectors, 'start' and 'goal'.
+     * Calculates the distance between two vectors, 'tile' and 'goal'.
      *
      * @param start The starting vector.
      * @param goal  The ending vector.
-     * @return The distance between 'start' and 'goal'.
+     * @return The distance between 'tile' and 'goal'.
      */
     public static double getDistance(Vector2i start, Vector2i goal)
     {

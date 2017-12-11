@@ -206,7 +206,7 @@ public class Bitmap
     /**
      * Returns a bitmap that is a smaller portion of the original. This is
      * similar to 'getPixels(int xStart, int yStart, int xEnd, int yEnd)' but the result
-     * is wrapped in a Bitmap class for simplified use in RenderContext.
+     * is wrapped in a Bitmap class for simplified use in Context.
      * <p>
      * The parameters specified define the bounds for the sub-bitmap.
      *

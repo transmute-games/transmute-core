@@ -22,10 +22,11 @@ public class Tile implements Updatable
 
     public static Manager manager; //The game manager object
     private Sprite sprite; //The sprite attached to the tile
-    private List<Sprite> spriteList = new ArrayList<>(); //The list of sprite's attached to the object
+    private List<Sprite> frames = new ArrayList<>(); //The list of animation frames for this tile
     private Animation animation; //The animation attached to the tile
     private int width, height; //The width and height of the tile
     private int key; //The unique identifier of the tile used by the loader
+
 
     /**
      * The constructor used to define a tile.
@@ -49,15 +50,15 @@ public class Tile implements Updatable
      * @param width      The width of the tile.
      * @param height     The height of the tile.
      * @param key        The unique identifier of the tile.
-     * @param spriteList The list of sprites.
+     * @param frames The list of sprites.
      */
-    public Tile(int width, int height, int key, Sprite... spriteList)
+    public Tile(int width, int height, int key, Sprite... frames)
     {
         this.width = width;
         this.height = height;
         this.key = key;
 
-        Collections.addAll(this.spriteList, spriteList);
+        Collections.addAll(this.frames, frames);
     }
 
     /**
@@ -104,7 +105,7 @@ public class Tile implements Updatable
     }
 
     /**
-     * Method used to grab a sprite object at a given index from the 'spriteList' object.
+     * Method used to grab a sprite object at a given index from the 'frames' object.
      *
      * @param index The index attached to the sprite object.
      * @return The sprite object.
@@ -112,8 +113,8 @@ public class Tile implements Updatable
     public Sprite getSprite(int index)
     {
         Sprite tempSprite = null;
-        if (spriteList.get(index) != null)
-            tempSprite = spriteList.get(index);
+        if (frames.get(index) != null)
+            tempSprite = frames.get(index);
         return tempSprite;
     }
 
