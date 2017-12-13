@@ -1,17 +1,20 @@
 package Meteor.Objects;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import Meteor.GameEngine.Manager;
 import Meteor.GameEngine.Interfaces.Renderable;
 import Meteor.GameEngine.Interfaces.Updatable;
+import Meteor.GameEngine.Manager;
 import Meteor.Graphics.Color;
 import Meteor.Graphics.Context;
+import Meteor.Graphics.Sprites.Animation;
+import Meteor.Graphics.Sprites.Frame;
 import Meteor.Graphics.Sprites.Sprite;
 import Meteor.Level.Level;
 import Meteor.Units.Tuple4i;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * {@code Object} is a generic object class.
@@ -20,14 +23,16 @@ import Meteor.Units.Tuple4i;
  */
 public abstract class Object implements Updatable, Renderable
 {
-    public static final boolean SHOULD_DISPLAY = false; //Weather or not to display the collision bounds
+    public static final boolean SHOULD_DISPLAY = true; //Weather or not to display the collision bounds
 
     protected Manager manager;  //The engine manager object
     protected Level level; //The level object
     protected String name; //The name of the object
     protected Tuple4i properties; //The x, y, width and height properties
+    private float scale; //Scaling ratio
     protected Sprite sprite; //The image attached to the object
-    protected List<Sprite> spriteList = new ArrayList<>(); //The list of image's associated with this object
+    protected Animation defaultAnimation; //The default animation associated with this object
+    protected List<Animation> animationList = new ArrayList<>(); //The animation associated with this object
 
     private boolean isRemoved = false; //Weather or not the object was removed from a level
     private Bounds bounds; //The object collision bounds
@@ -46,6 +51,8 @@ public abstract class Object implements Updatable, Renderable
         this.name = name.toLowerCase();
         this.sprite = sprite;
         this.properties = properties;
+
+        scale = 1.0f;
     }
 
     /**
@@ -53,16 +60,57 @@ public abstract class Object implements Updatable, Renderable
      *
      * @param manager    The engine manager object.
      * @param name       The name of the object.
+     * @param sprite     The sprite attached to the object.
      * @param properties The x, y, width, and height properties.
-     * @param spriteList The list of sprites.
+     * @param scale      Scaling ratio (1f is 1:1 ratio).
      */
-    protected Object(Manager manager, String name, Tuple4i properties, Sprite... spriteList)
+    protected Object(Manager manager, String name, Sprite sprite, Tuple4i properties, float scale)
+    {
+        this.manager = manager;
+        this.name = name.toLowerCase();
+        this.sprite = sprite;
+        this.properties = properties;
+        this.scale = scale;
+    }
+
+    /**
+     * The constructor used to define a object.
+     * <p>
+     * NOTE: You must specify the list of animations in the sub-class.
+     * To do this, add to the {@code animationList} by using the
+     * {@code addAnimations()} method in the constructor of the sub-class.
+     *
+     * @param manager    The engine manager object.
+     * @param name       The name of the object.
+     * @param properties The x, y, width, and height properties.
+     * @param scale      Scaling ratio (1f is 1:1 ratio).
+     */
+    protected Object(Manager manager, String name, Tuple4i properties, float scale)
+    {
+        this.manager = manager;
+        this.name = name.toLowerCase();
+        this.properties = properties;
+        this.scale = scale;
+    }
+
+    /**
+     * The constructor used to define a object.
+     * <p>
+     * NOTE: You must specify the list of animations in the sub-class.
+     * To do this, add to the {@code animationList} by using the
+     * {@code addAnimations()} method in the constructor of the sub-class.
+     *
+     * @param manager    The engine manager object.
+     * @param name       The name of the object.
+     * @param properties The x, y, width, and height properties.
+     */
+    protected Object(Manager manager, String name, Tuple4i properties)
     {
         this.manager = manager;
         this.name = name.toLowerCase();
         this.properties = properties;
 
-        Collections.addAll(this.spriteList, spriteList);
+        scale = 1.0f;
     }
 
     /**
@@ -75,20 +123,59 @@ public abstract class Object implements Updatable, Renderable
         this.level = level;
 
         properties = new Tuple4i(properties.location.x * level.getWidth(), properties.location.y * level.getHeight(), properties.getWidth(), properties.getHeight());
-        bounds = new Bounds(this, properties, Color.RED, SHOULD_DISPLAY);
+        bounds = new Bounds(this, properties, scale, Color.RED, SHOULD_DISPLAY);
     }
 
     /**
-     * Method used to grab a sprite object attached to an index.
+     * Adds a list of animations to the {@code animationList}.
+     * <p>
+     * NOTE: this method MUST be called within the sub-class's
+     * constructor or else {@code animationList} will be NULL.
      *
+     * @param animations The list of animations.
+     */
+    public void addAnimations(Animation... animations)
+    {
+        Collections.addAll(animationList, animations);
+    }
+
+    /**
+     * Sets the default animation if, for example, the player is idle.
+     *
+     * @param animation The default animation.
+     */
+    public void setDefaultAnimation(Animation animation)
+    {
+        this.defaultAnimation = animation;
+    }
+
+    /**
+     * Method used to grab a sprite object attached
+     * to an index in the specified animation.
+     *
+     * @param name  The name of the animation holding the sprite
      * @param index The index attached to the sprite object.
      * @return The sprite object.
      */
-    public Sprite getImage(int index)
+    public Sprite getImage(String name, int index)
     {
         Sprite tempSprite = null;
-        if (spriteList.get(index) != null)
-            tempSprite = spriteList.get(index);
+
+        for (Animation a : animationList)
+        {
+            if (a.getName().equalsIgnoreCase(name))
+            {
+                LinkedList<Frame> frames = a.frames;
+
+                Frame frame = frames.get(index);
+
+                if (frame != null)
+                {
+                    tempSprite = frame.sprite;
+                }
+            }
+        }
+
         return tempSprite;
     }
 
@@ -189,5 +276,13 @@ public abstract class Object implements Updatable, Renderable
     public int getHeight()
     {
         return properties.height;
+    }
+
+    /**
+     * @return Scaling ratio (1f is 1:1 ratio).
+     */
+    public float getScale()
+    {
+        return scale;
     }
 }

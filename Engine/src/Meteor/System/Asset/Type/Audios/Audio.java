@@ -33,7 +33,7 @@ public class Audio extends Asset
 
         try
         {
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(assetLoader.getResourceAsStream(filePath));
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(getClass().getClassLoader().getResourceAsStream(filePath));
             clip = AudioSystem.getClip();
             clip.open(audioIn);
             target = clip;
@@ -55,7 +55,7 @@ public class Audio extends Asset
 
         try
         {
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(assetLoader.getResourceAsStream(filePath));
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(className.getClassLoader().getResourceAsStream(filePath));
             clip = AudioSystem.getClip();
             clip.open(audioIn);
         } catch (Exception e)

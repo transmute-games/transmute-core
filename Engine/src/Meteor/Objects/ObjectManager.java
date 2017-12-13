@@ -1,12 +1,12 @@
 package Meteor.Objects;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import Meteor.GameEngine.Manager;
 import Meteor.GameEngine.Interfaces.Renderable;
 import Meteor.GameEngine.Interfaces.Updatable;
+import Meteor.GameEngine.Manager;
 import Meteor.Graphics.Context;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@code ObjectManager} is a object handler class.

@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import Meteor.Graphics.Bitmap;
 import Meteor.System.Error;
 import Meteor.System.Asset.Asset;
 import Meteor.System.Asset.Type.Fonts.Font;
@@ -32,18 +31,19 @@ public class Image extends Asset
 
         try
         {
-            image = ImageUtils.load(assetLoader.getResourceAsStream(filePath));
+            image = ImageUtils.load(getClass().getClassLoader().getResourceAsStream(filePath));
         } catch (IOException e)
         {
             e.printStackTrace();
             new Error(Error.FileNotFoundException(Image.TYPE, filePath));
         }
 
+        assert image != null;
         image = ImageUtils.convertTo(BufferedImage.TYPE_INT_ARGB, image);
-        target = new Bitmap(image);
+        target = image;
     }
 
-    public static Bitmap load(Class<?> className, String filePath)
+    public static BufferedImage load(Class<?> className, String filePath)
     {
         if (filePath == null)
         {
@@ -54,25 +54,26 @@ public class Image extends Asset
 
         try
         {
-            image = ImageIO.read(className.getResourceAsStream(filePath));
+            image = ImageIO.read(className.getClassLoader().getResourceAsStream(filePath));
         } catch (IOException e)
         {
             e.printStackTrace();
             new Error(Error.FileNotFoundException(Font.TYPE, filePath));
         }
 
+        assert image != null;
         image = ImageUtils.convertTo(BufferedImage.TYPE_INT_ARGB, image);
-        return new Bitmap(image);
+        return image;
     }
 
     @Override
-    public Bitmap getData()
+    public BufferedImage getData()
     {
-        if ((Bitmap) target == null)
+        if (target == null)
         {
             new Error("[" + Image.TYPE + "]: [" + fileName + "] has not been loaded.");
         }
 
-        return (Bitmap) target;
+        return (BufferedImage) target;
     }
 }

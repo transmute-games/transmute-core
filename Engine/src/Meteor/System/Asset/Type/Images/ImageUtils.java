@@ -1,10 +1,11 @@
 package Meteor.System.Asset.Type.Images;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.awt.image.VolatileImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -17,7 +18,6 @@ import Meteor.Graphics.Bitmap;
 import Meteor.Graphics.Context;
 import Meteor.Graphics.Sprites.Sprite;
 import Meteor.Graphics.Sprites.Spritesheet;
-import Meteor.System.Error;
 import Meteor.Units.Tuple2i;
 
 /**
@@ -138,8 +138,63 @@ public class ImageUtils
     public static BufferedImage convertTo(int type, BufferedImage image)
     {
         if (image.getType() != type)
-            image = new BufferedImage(image.getWidth(), image.getHeight(), type);
+        {
+            int width = image.getWidth();
+            int height = image.getHeight();
+            int[] data = getData(image);
+
+            BufferedImage result = new BufferedImage(width, height, type);
+            result.setRGB(0, 0, width, height, data, 0, width);
+        }
+
         return image;
+    }
+
+    /**
+     * Generates a scaled version of a given image based on a new given dimension.
+     *
+     * @param width  Width of scaled bitmap.
+     * @param height Height of scaled bitmap.
+     * @return The scaled version of a given image based on a new given dimension.
+     */
+    public static BufferedImage getScaledImage(BufferedImage image, int width, int height)
+    {
+        VolatileImage img = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice().getDefaultConfiguration()
+                .createCompatibleVolatileImage(width, height, VolatileImage.TRANSLUCENT);
+        Graphics2D _g = img.createGraphics();
+        _g.setComposite(AlphaComposite.DstOut);
+        _g.setColor(new Color(0f, 0f, 0f, 0f));
+        _g.fillRect(0, 0, width, height);
+        _g.setComposite(AlphaComposite.Src);
+        _g.drawImage(image, 0, 0, width, height, null);
+        _g.dispose();
+        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        result.setRGB(0, 0, width, height, img.getSnapshot().getRGB(0, 0, width, height, null, 0, width), 0, width);
+        return result;
+    }
+
+    public static BufferedImage getFlipped(BufferedImage image, boolean horizontal, boolean vertical)
+    {
+        if (!horizontal && !vertical) return image;
+
+        BufferedImage result = null;
+
+        if (horizontal && !vertical)
+        {
+            AffineTransform affineTransform = AffineTransform.getScaleInstance(-1, 1);
+            affineTransform.translate(-image.getWidth(null), 0);
+            AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+            result = affineTransformOp.filter(image, null);
+        } else if (vertical && !horizontal)
+        {
+            AffineTransform affineTransform = AffineTransform.getScaleInstance(1, -1);
+            affineTransform.translate(0, -image.getHeight(null));
+            AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+            result = affineTransformOp.filter(image, null);
+        }
+
+        return result;
     }
 
     /**
@@ -150,12 +205,7 @@ public class ImageUtils
      */
     public static int[] getData(String filePath)
     {
-        if ((Bitmap) Image.load(ImageUtils.class, filePath) == null)
-        {
-            new Error(Error.FileNotFoundException("imageUtils", filePath));
-        }
-
-        return getData(Image.load(ImageUtils.class, filePath).getImage());
+        return getData(Image.load(ImageUtils.class, filePath));
     }
 
     /**
@@ -166,9 +216,20 @@ public class ImageUtils
      */
     public static int[] getData(BufferedImage image)
     {
-        return ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
-    }
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int[] data = null;
 
+        if (image.getType() == BufferedImage.TYPE_INT_RGB || image.getType() == BufferedImage.TYPE_INT_ARGB)
+        {
+            data = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+        } else
+        {
+            data = image.getRGB(0, 0, width, height, null, 0, width);;
+        }
+
+        return data;
+    }
     /**
      * Method converts a {@code BufferedImage} into a {@code Bitmap}.
      *
@@ -201,7 +262,7 @@ public class ImageUtils
      */
     public static Spritesheet getAsSpritesheet(BufferedImage image, int cellWidth, int cellHeight)
     {
-        return new Spritesheet(getAsBitmap(image), new Tuple2i(cellWidth, cellHeight), new Tuple2i(0, 0), 0, 0);
+        return new Spritesheet(image, new Tuple2i(cellWidth, cellHeight), new Tuple2i(0, 0), 0, 0);
     }
 
     /**
@@ -236,8 +297,7 @@ public class ImageUtils
         AffineTransformOp scaleOp = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         int newWidth = (int) ((float) image.getWidth() * scale);
         int newHeight = (int) ((float) image.getHeight() * scale);
-        BufferedImage result = scaleOp.filter(image, new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB));
-        return result;
+        return scaleOp.filter(image, new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB));
     }
 
     /**

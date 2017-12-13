@@ -1,7 +1,6 @@
 package GameStates;
 
 import GameEngine.Game;
-import GameEngine.GameManager;
 import Meteor.GameEngine.Manager;
 import Meteor.Graphics.Context;
 import Meteor.States.State;
@@ -21,11 +20,11 @@ public class LoadingState extends State
     @Override
     public void init()
     {
-        GameManager gameManager = Game.getGameManager();
+        Manager manager = Game.getManager();
 
         ResourceLoader.load();
 
-        gameManager.setAssetManager(AssetManager.getInstance());
+        manager.setAssetManager(AssetManager.getInstance());
     }
 
     @Override

@@ -6,16 +6,26 @@ import Meteor.Level.TiledLevel;
 import Meteor.Objects.Object;
 import Meteor.Units.Tuple4i;
 
-public class Mob extends Object
+public abstract class Mob extends Object
 {
+    public Mob(Manager manager, String name, Tuple4i properties)
+    {
+        super(manager, name, properties);
+    }
+
     public Mob(Manager manager, String name, Sprite sprite, Tuple4i properties)
     {
         super(manager, name, sprite, properties);
     }
 
-    public Mob(Manager manager, String name, Tuple4i properties, Sprite... spriteList)
+    public Mob(Manager manager, String name, Sprite sprite, Tuple4i properties, float scale)
     {
-        super(manager, name, properties, spriteList);
+        super(manager, name, sprite, properties, scale);
+    }
+
+    public Mob(Manager manager, String name, Tuple4i properties, float scale)
+    {
+        super(manager, name, properties, scale);
     }
 
     public void move(int xMove, int yMove)

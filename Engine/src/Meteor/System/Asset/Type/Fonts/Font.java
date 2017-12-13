@@ -9,7 +9,6 @@ import Meteor.Graphics.Context;
 import Meteor.Graphics.Sprites.Spritesheet;
 import Meteor.System.Error;
 import Meteor.System.Asset.Asset;
-import Meteor.System.Asset.Type.Images.Image;
 import Meteor.System.Asset.Type.Images.ImageUtils;
 import Meteor.Units.Tuple2i;
 
@@ -22,9 +21,9 @@ public class Font extends Asset
      */
     public static Font defaultFont;
 
-    public static final void initializeDefaultFont()
+    public static final void initializeDefaultFont(String filePath)
     {
-        defaultFont = new Font("$default", "/font.png",
+        defaultFont = new Font("$default", filePath,
                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         + "abcdefghijklmnopqrstuvwxyz"
                         + "0123456789;'\"           \n"
@@ -96,16 +95,16 @@ public class Font extends Asset
 
         try
         {
-            image = ImageUtils.load(assetLoader.getResourceAsStream(filePath));
+            image = ImageUtils.load(getClass().getClassLoader().getResourceAsStream(filePath));
         } catch (IOException e)
         {
             e.printStackTrace();
             new Error(Error.FileNotFoundException(Font.TYPE, filePath));
         }
 
+        assert image != null;
         image = ImageUtils.convertTo(BufferedImage.TYPE_INT_ARGB, image);
-        Bitmap bmp = ImageUtils.getAsBitmap(image);
-        target = new Spritesheet(bmp, defaultGlyphSize, new Tuple2i(0, 0), 0, 0);
+        target = new Spritesheet(image, defaultGlyphSize, new Tuple2i(0, 0), 0, 0);
     }
 
     public static Spritesheet load(Class<?> className, String filePath, Tuple2i defaultGlyphSize)
@@ -119,7 +118,7 @@ public class Font extends Asset
 
         try
         {
-            image = ImageUtils.load(className.getResourceAsStream(filePath));
+            image = ImageUtils.load(className.getClassLoader().getResourceAsStream(filePath));
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -127,14 +126,13 @@ public class Font extends Asset
         }
 
         image = ImageUtils.convertTo(BufferedImage.TYPE_INT_ARGB, image);
-        Bitmap bmp = ImageUtils.getAsBitmap(image);
-        return new Spritesheet(bmp, defaultGlyphSize, new Tuple2i(0, 0), 0, 0);
+        return new Spritesheet(image, defaultGlyphSize, new Tuple2i(0, 0), 0, 0);
     }
 
     @Override
     public Spritesheet getData()
     {
-        if ((Spritesheet) target == null)
+        if (target == null)
         {
             new Error("[" + Font.TYPE + "]: [" + fileName + "] has not been loaded.");
         }

@@ -1,5 +1,6 @@
 package Meteor.System.Asset;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
@@ -117,7 +118,7 @@ public class AssetManager
      */
     private static void distributeToManagers(Asset asset)
     {
-        if (asset instanceof Image) ImageManager.add(asset.getKey(), (Bitmap) asset.getData());
+        if (asset instanceof Image) ImageManager.add(asset.getKey(), (BufferedImage) asset.getData());
         else if (asset instanceof Audio) AudioManager.add(asset.getKey(), (Clip) asset.getData());
         else if (asset instanceof Font) FontManager.add(asset.getKey(), (Spritesheet) asset.getData());
 

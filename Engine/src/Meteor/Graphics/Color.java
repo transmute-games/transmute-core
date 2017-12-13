@@ -2,7 +2,7 @@ package Meteor.Graphics;
 
 /**
  * A pixel integer converter that converts color models (r, g, b, a) to/from a packed
- * 32-bit integer. 32-bit <strong>DataBufferInt</strong> are used for pixel data model
+ * 32-bitmap integer. 32-bitmap <strong>DataBufferInt</strong> are used for pixel data model
  * in the render context.
  */
 public class Color

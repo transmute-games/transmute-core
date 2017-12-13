@@ -1,14 +1,13 @@
 package Utilities;
 
-import Meteor.Graphics.Sprites.SpriteManager;
 import Meteor.System.Asset.AssetManager;
+import Meteor.System.Asset.Type.Fonts.Font;
 
 public class ResourceLoader
 {
-    public static SpriteManager SPRITE_MANAGER;
-
     public static void load()
     {
+        Font.initializeDefaultFont("fonts/font.png");
         AssetManager.load();
     }
 }

@@ -11,6 +11,8 @@ import Meteor.Graphics.Bitmap;
  */
 public class Sprite extends Bitmap
 {
+    public Bitmap bitmap; //The bitmap of a sprite
+
     private BufferedImage image; //The sprite's image
     private int size; //The size of the sprite
     private int width; //The width of the sprite
@@ -34,13 +36,14 @@ public class Sprite extends Bitmap
     /**
      * The constructor used to define a sprite given a Bitmap.
      *
-     * @param bmp The bitmap of a sprite.
+     * @param bitmap The bitmap of a sprite.
      */
-    public Sprite(Bitmap bmp)
+    public Sprite(Bitmap bitmap)
     {
-        super(bmp);
+        super(bitmap);
 
-        this.image = bmp.getImage();
+        this.bitmap = bitmap;
+        this.image = bitmap.getImage();
         width = this.image.getWidth();
         height = this.image.getHeight();
         if (width == height) size = width;

@@ -1,7 +1,6 @@
 package GameStates;
 
 import GameEngine.Game;
-import GameEngine.GameManager;
 import Meteor.GameEngine.Manager;
 import Meteor.Graphics.Context;
 import Meteor.States.State;
@@ -20,7 +19,7 @@ public class GameState extends State
     public void init()
     {
         @SuppressWarnings("unused")
-        GameManager gManager = Game.getGameManager();
+       Manager manager = Game.getManager();
     }
 
     @Override

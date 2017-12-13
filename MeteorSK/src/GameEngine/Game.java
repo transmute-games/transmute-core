@@ -13,7 +13,6 @@ import Utilities.Library;
 public class Game extends Meteor
 {
     private StateManager stateManager;
-    private static GameManager gameManager;
 
     public Game(String gameTitle, String gameVersion, int gameWidth, int gameRatio, int gameScale)
     {
@@ -28,8 +27,7 @@ public class Game extends Meteor
 
         stateManager = new StateManager(this);
 
-        gameManager = new GameManager(this);
-        gameManager.setStateManager(stateManager);
+        manager.setStateManager(stateManager);
 
         stateManager.push(new LoadingState(stateManager));
     }
@@ -39,18 +37,13 @@ public class Game extends Meteor
     {
         if (Input.isKeyPressed(KeyEvent.VK_ESCAPE)) System.exit(0);
 
-        stateManager.update(gameManager, delta);
+        stateManager.update(manager, delta);
     }
 
     @Override
     public void render(Manager manager, Context ctx)
     {
-        stateManager.render(gameManager, ctx);
-    }
-
-    public static GameManager getGameManager()
-    {
-        return gameManager;
+        stateManager.render(manager, ctx);
     }
 
     public static void main(String[] args)

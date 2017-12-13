@@ -12,7 +12,6 @@ import Meteor.Input.Input;
 import Meteor.System.Error;
 import Meteor.System.Util;
 import Meteor.System.Asset.AssetManager;
-import Meteor.System.Asset.Type.Fonts.Font;
 
 /**
  * {@code Meteor} is the main game engine class.
@@ -153,10 +152,6 @@ public abstract class Meteor implements Runnable, Cortex
         double nsPerFrame = 1000000000.0d / targetFPS;
         int frames = 0, updates = 0;
         long lastVerbose = System.currentTimeMillis();
-
-        Font.initializeDefaultFont();
-        AssetManager.load();
-        ctx.setFont(AssetManager.getDefaultFont());
 
         init();
 

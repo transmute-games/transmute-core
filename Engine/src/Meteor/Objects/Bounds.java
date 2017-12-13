@@ -1,10 +1,9 @@
 package Meteor.Objects;
 
-import java.awt.Rectangle;
-
-import Meteor.GameEngine.Manager;
 import Meteor.GameEngine.Interfaces.Cortex;
+import Meteor.GameEngine.Manager;
 import Meteor.Graphics.Context;
+import Meteor.Graphics.Rectangle;
 import Meteor.Units.Tuple2i;
 import Meteor.Units.Tuple4i;
 
@@ -17,6 +16,7 @@ public class Bounds implements Cortex
     private Rectangle bounds; //The rectangular collision bounds
     private Tuple4i properties; //The properties to be attached to the collision bounds
     private Tuple2i offsets; //The (x, y) offsets to be applied to the collision bounds
+    private float scale; //Scaling ratio
     private int color; //The color of the collision bounds
     private boolean shouldDisplay; //Weather or not the bounds should be seen
 
@@ -31,10 +31,32 @@ public class Bounds implements Cortex
      */
     public Bounds(Object object, Rectangle bounds, Tuple4i properties, int color, boolean shouldDisplay)
     {
-        setBounds(bounds, properties);
-
         this.object = object;
+        this.bounds = bounds;
         this.properties = properties;
+        this.offsets = new Tuple2i();
+        this.color = color;
+        this.shouldDisplay = shouldDisplay;
+
+        scale = 1.0f;
+    }
+
+    /** 
+     * The constructor used to create the collision component.
+     *
+     * @param object        The object attached to this component.
+     * @param bounds        The rectangular collision bounds.
+     * @param properties    The properties to be attached to the collision bounds.
+     * @param scale         Scaling ratio (1f is 1:1 ratio).
+     * @param color         The color of the collision bounds.
+     * @param shouldDisplay Weather or not the bounds should be seen.
+     */
+    public Bounds(Object object, Rectangle bounds, Tuple4i properties, float scale, int color, boolean shouldDisplay)
+    {
+        this.object = object;
+        this.bounds = bounds;
+        this.properties = properties;
+        this.scale = scale;
         this.offsets = new Tuple2i();
         this.color = color;
         this.shouldDisplay = shouldDisplay;
@@ -45,13 +67,15 @@ public class Bounds implements Cortex
      *
      * @param object        The object attached to this component.
      * @param properties    The properties to be attached to the collision bounds.
+     * @param scale         Scaling ratio (1f is 1:1 ratio).
      * @param color         The color of the collision bounds.
      * @param shouldDisplay Weather or not the bounds should be seen.
      */
-    public Bounds(Object object, Tuple4i properties, int color, boolean shouldDisplay)
+    public Bounds(Object object, Tuple4i properties, float scale, int color, boolean shouldDisplay)
     {
         this.object = object;
         this.properties = properties;
+        this.scale = scale;
         this.offsets = new Tuple2i();
         this.color = color;
         this.shouldDisplay = shouldDisplay;
@@ -62,23 +86,21 @@ public class Bounds implements Cortex
     @Override
     public void init()
     {
-        setBounds(bounds, properties);
+        setBounds(properties);
     }
 
     /**
      * Method used to configure the rectangular collision bounds.
      *
-     * @param bounds     The rectangular collision bounds.
      * @param properties The properties to be attached to the collision bounds.
      */
-    public void setBounds(Rectangle bounds, Tuple4i properties)
+    public void setBounds(Tuple4i properties)
     {
         if (this.bounds == null) this.bounds = new Rectangle();
-        bounds.x = properties.getX();
-        bounds.y = properties.getY();
-        bounds.width = properties.getWidth();
-        bounds.height = properties.getHeight();
-        this.bounds = bounds;
+        this.bounds.x = properties.getX();
+        this.bounds.y = properties.getY();
+        this.bounds.width = properties.getWidth();
+        this.bounds.height = properties.getHeight();
     }
 
     /**
@@ -90,7 +112,7 @@ public class Bounds implements Cortex
      */
     public Rectangle getBounds(int xOffset, int yOffset)
     {
-        return new Rectangle(object.getX() + bounds.x + xOffset, object.getY() + bounds.y + yOffset, bounds.width, bounds.height);
+        return new Rectangle(object.getX() + bounds.x + xOffset, object.getY() + bounds.y + yOffset, bounds.width * scale, bounds.height * scale);
     }
 
     /**
@@ -102,7 +124,7 @@ public class Bounds implements Cortex
     @Override
     public void update(Manager manager, double delta)
     {
-        bounds.setBounds(properties.location.x, properties.location.y, properties.getWidth(), properties.getHeight());
+        bounds.setBounds(properties.location.x, properties.location.y, properties.getWidth() * scale, properties.getHeight() * scale);
     }
 
     /**
@@ -159,6 +181,6 @@ public class Bounds implements Cortex
     @Override
     public String toString()
     {
-        return String.format("(%d - %d, %d - %d), %d, %d", bounds.x, offsets.x, bounds.y, offsets.y, bounds.width, bounds.height);
+        return String.format("(%d - %d, %d - %d), %.2f, %.2f %.2f", bounds.x, offsets.x, bounds.y, offsets.y, bounds.width, bounds.height, scale);
     }
 }

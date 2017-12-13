@@ -144,7 +144,7 @@ public class SpriteManager
             for (int i = 0; i < locArray.length; i++)
             {
                 Tuple2i loc = locArray[i];
-                spriteArray[i] = new Sprite(spritesheet.crop(loc.x, loc.y, spritesheet.getCellSize().x, spritesheet.getCellSize().y));
+                spriteArray[i] = new Sprite(spritesheet.crop(loc.x, loc.y));
             }
 
             SPRITE_MAP.put(key, spriteArray);
@@ -168,7 +168,7 @@ public class SpriteManager
             for (int i = 0; i < propertiesArray.length; i++)
             {
                 Tuple4i properties = propertiesArray[i];
-                spriteArray[i] = new Sprite(spritesheet.crop(properties.getX(), properties.getY(), properties.getWidth(), properties.getHeight()));
+                spriteArray[i] = new Sprite(spritesheet.crop(properties.getX(), properties.getY()));
             }
 
             SPRITE_MAP.put(key, spriteArray);
@@ -179,13 +179,14 @@ public class SpriteManager
     /**
      * Method used to generate an animation given an array of sprites.
      *
+     * @param name        The name of the animation
      * @param duration    Time in milliseconds to be applied to all generated frames.
      * @param spriteArray The list of sprites to animation.
      * @return Generated action with specified cells and provided time for all frames.
      */
-    public Animation generateAnimation(int duration, Sprite... spriteArray)
+    public Animation generateAnimation(String name, int duration, Sprite... spriteArray)
     {
-        return new Animation(spriteArray, duration);
+        return new Animation(name, spriteArray, duration);
     }
 
     /**

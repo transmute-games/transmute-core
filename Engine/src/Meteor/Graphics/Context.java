@@ -1,10 +1,10 @@
 package Meteor.Graphics;
 
+import Meteor.System.Asset.Type.Fonts.Font;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.Arrays;
-
-import Meteor.System.Asset.Type.Fonts.Font;
 
 /**
  * This is the heart of the rendering engine. A master BufferedImage is created using the ARGB color model
@@ -226,6 +226,45 @@ public class Context
     }
 
     /**
+     * Fills a rectangle on-screen with a given color.
+     *
+     * @param x      x-coordinate on screen
+     * @param y      y-coordinate on screen
+     * @param width  Width of rectangle
+     * @param height Height of rectangle
+     * @param color  Color of rectangle (Use <code>Color.toPixelInt()</code>)
+     */
+    public void renderFilledRectangle(float x, float y, float width, float height, int color)
+    {
+        float xStart = x;
+        float yStart = y;
+        float xEnd = xStart + width;
+        float yEnd = yStart + height;
+
+        if (xStart < 0) xStart = 0;
+        if (yStart < 0) yStart = 0;
+        if (xEnd > this.width) xEnd = this.width;
+        if (yEnd > this.height) yEnd = this.height;
+        if (xStart >= this.width || yStart >= this.height || xEnd < 0 || yEnd < 0) return;
+
+        for (int xPos = (int) xStart; xPos < xEnd; xPos++)
+        {
+            for (int yPos = (int) yStart; yPos < yEnd; yPos++)
+            {
+                int index = yPos * this.width + xPos;
+                if (index < 0 || index > data.length - 1) continue;
+                if (((color >> 24) & 0xFF) == 255)
+                {
+                    data[index] = color;
+                } else if (((color >> 24) & 0xFF) > 0)
+                {
+                    data[index] = Color.tint(data[index], color);
+                }
+            }
+        }
+    }
+
+    /**
      * Draws a rectangle on-screen with a given color.
      *
      * @param x      x-coordinate on screen
@@ -234,12 +273,26 @@ public class Context
      * @param height Height of rectangle
      * @param color  Color of rectangle (Use <code>Color.toPixelInt()</code>)
      */
-    public void renderRectangle(int x, int y, int width, int height, int color)
+    public void renderRectangle(int x, int y, int width, int height, float scale, int color)
+    {
+        renderRectangle(x, y, width * scale, height * scale, color);
+    }
+    
+    /**
+     * Draws a rectangle on-screen with a given color.
+     *
+     * @param x      x-coordinate on screen
+     * @param y      y-coordinate on screen
+     * @param width  Width of rectangle
+     * @param height Height of rectangle
+     * @param color  Color of rectangle (Use <code>Color.toPixelInt()</code>)
+     */
+    public void renderRectangle(int x, int y, float width, float height, int color)
     {
         int xStart = x;
         int yStart = y;
-        int xEnd = xStart + width;
-        int yEnd = yStart + height;
+        float xEnd = xStart + width;
+        float yEnd = yStart + height;
         if (xStart >= this.width || yStart >= this.height || xEnd < 0 || yEnd < 0) return;
         if (xStart < 0) xStart = 0;
         if (yStart < 0) yStart = 0;
