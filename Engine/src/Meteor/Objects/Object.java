@@ -17,8 +17,8 @@ import Meteor.Units.Tuple2i;
  */
 public abstract class Object implements Updatable, Renderable
 {
-    public static final int ANIMATABLE = 0x0;
-    public static final int STATIC = 0x1;
+    public static final int ANIMATABLE = 0x0; //A type of object that has an animation
+    public static final int STATIC = 0x1; //A type of object that does not have an animation
 
     protected Manager manager;  //The engine manager object
     protected String name; //The name of the object

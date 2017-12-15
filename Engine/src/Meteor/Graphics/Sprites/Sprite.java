@@ -96,6 +96,12 @@ public class Sprite extends Bitmap
         setBounds(image);
     }
 
+    /**
+     * Calculates a precise bounding box when given a image of type
+     * {@code BufferedImage.TYPE_INT_ARGB}
+     *
+     * @param image The image to calculate a precise bounding box.
+     */
     private void setBounds(BufferedImage image)
     {
         int xMin = Integer.MAX_VALUE;

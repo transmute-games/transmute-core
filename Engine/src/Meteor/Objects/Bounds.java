@@ -7,6 +7,11 @@ import Meteor.Graphics.Rectangle;
 import Meteor.Units.Dimension2f;
 import Meteor.Units.Tuple2i;
 
+/**
+ * {@code Bounds} is an classes used to represent 2D-object-based collisions.
+ * <br>
+ * This class is a a object that contains and manipulates the bounding box of an object.
+ */
 public class Bounds implements Cortex
 {
     public static boolean SHOW = true; //A value for the {@code shouldDisplay}
