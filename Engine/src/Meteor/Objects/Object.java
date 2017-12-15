@@ -1,20 +1,16 @@
 package Meteor.Objects;
 
+
 import Meteor.GameEngine.Interfaces.Renderable;
 import Meteor.GameEngine.Interfaces.Updatable;
 import Meteor.GameEngine.Manager;
-import Meteor.Graphics.Color;
 import Meteor.Graphics.Context;
 import Meteor.Graphics.Sprites.Animation;
-import Meteor.Graphics.Sprites.Frame;
 import Meteor.Graphics.Sprites.Sprite;
 import Meteor.Level.Level;
-import Meteor.Units.Tuple4i;
+import Meteor.Units.Tuple2i;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.awt.*;
 
 /**
  * {@code Object} is a generic object class.
@@ -23,94 +19,50 @@ import java.util.List;
  */
 public abstract class Object implements Updatable, Renderable
 {
-    public static final boolean SHOULD_DISPLAY = true; //Weather or not to display the collision bounds
+    public static final int ANIMATABLE = 0x0;
+    public static final int STATIC = 0x1;
 
     protected Manager manager;  //The engine manager object
-    protected Level level; //The level object
     protected String name; //The name of the object
-    protected Tuple4i properties; //The x, y, width and height properties
-    private float scale; //Scaling ratio
-    protected Sprite sprite; //The image attached to the object
-    protected Animation defaultAnimation; //The default animation associated with this object
-    protected List<Animation> animationList = new ArrayList<>(); //The animation associated with this object
+    private int type;
+    protected Level level; //The level attached to the object
+    protected Tuple2i location; //The objects location
+
+    protected Animation currentAnimation; //The currently selected animation
+    protected Sprite sprite; //The sprite of the object if no animation is specified
+    protected float scale; //The scaling ratio
+    protected Bounds bounds; //The object collision bounds
 
     private boolean isRemoved = false; //Weather or not the object was removed from a level
-    private Bounds bounds; //The object collision bounds
 
-    /**
-     * The constructor used to define a object.
-     *
-     * @param manager    The engine manager object.
-     * @param name       The name of the object.
-     * @param sprite     The sprite attached to the object.
-     * @param properties The x, y, width, and height properties.
-     */
-    protected Object(Manager manager, String name, Sprite sprite, Tuple4i properties)
+    public Object(Manager manager, String name, int type, Sprite sprite, Tuple2i location, float scale)
     {
         this.manager = manager;
         this.name = name.toLowerCase();
+        this.type = type;
         this.sprite = sprite;
-        this.properties = properties;
-
-        scale = 1.0f;
-    }
-
-    /**
-     * The constructor used to define a object.
-     *
-     * @param manager    The engine manager object.
-     * @param name       The name of the object.
-     * @param sprite     The sprite attached to the object.
-     * @param properties The x, y, width, and height properties.
-     * @param scale      Scaling ratio (1f is 1:1 ratio).
-     */
-    protected Object(Manager manager, String name, Sprite sprite, Tuple4i properties, float scale)
-    {
-        this.manager = manager;
-        this.name = name.toLowerCase();
-        this.sprite = sprite;
-        this.properties = properties;
+        this.location = location;
         this.scale = scale;
     }
 
-    /**
-     * The constructor used to define a object.
-     * <p>
-     * NOTE: You must specify the list of animations in the sub-class.
-     * To do this, add to the {@code animationList} by using the
-     * {@code addAnimations()} method in the constructor of the sub-class.
-     *
-     * @param manager    The engine manager object.
-     * @param name       The name of the object.
-     * @param properties The x, y, width, and height properties.
-     * @param scale      Scaling ratio (1f is 1:1 ratio).
-     */
-    protected Object(Manager manager, String name, Tuple4i properties, float scale)
+
+    public Object(Manager manager, String name, int type, Tuple2i location, float scale)
     {
         this.manager = manager;
         this.name = name.toLowerCase();
-        this.properties = properties;
+        this.type = type;
+        this.location = location;
         this.scale = scale;
     }
 
-    /**
-     * The constructor used to define a object.
-     * <p>
-     * NOTE: You must specify the list of animations in the sub-class.
-     * To do this, add to the {@code animationList} by using the
-     * {@code addAnimations()} method in the constructor of the sub-class.
-     *
-     * @param manager    The engine manager object.
-     * @param name       The name of the object.
-     * @param properties The x, y, width, and height properties.
-     */
-    protected Object(Manager manager, String name, Tuple4i properties)
+    public Object(Manager manager, String name, int type, Tuple2i location)
     {
         this.manager = manager;
         this.name = name.toLowerCase();
-        this.properties = properties;
+        this.type = type;
+        this.location = location;
 
-        scale = 1.0f;
+        setScale(1.0f);
     }
 
     /**
@@ -121,70 +73,42 @@ public abstract class Object implements Updatable, Renderable
     public void init(Level level)
     {
         this.level = level;
-
-        properties = new Tuple4i(properties.location.x * level.getWidth(), properties.location.y * level.getHeight(), properties.getWidth(), properties.getHeight());
-        bounds = new Bounds(this, properties, scale, Color.RED, SHOULD_DISPLAY);
     }
 
-    /**
-     * Adds a list of animations to the {@code animationList}.
-     * <p>
-     * NOTE: this method MUST be called within the sub-class's
-     * constructor or else {@code animationList} will be NULL.
-     *
-     * @param animations The list of animations.
-     */
-    public void addAnimations(Animation... animations)
+    @Override
+    public void update(Manager manager, double delta)
     {
-        Collections.addAll(animationList, animations);
-    }
-
-    /**
-     * Sets the default animation if, for example, the player is idle.
-     *
-     * @param animation The default animation.
-     */
-    public void setDefaultAnimation(Animation animation)
-    {
-        this.defaultAnimation = animation;
-    }
-
-    /**
-     * Method used to grab a sprite object attached
-     * to an index in the specified animation.
-     *
-     * @param name  The name of the animation holding the sprite
-     * @param index The index attached to the sprite object.
-     * @return The sprite object.
-     */
-    public Sprite getImage(String name, int index)
-    {
-        Sprite tempSprite = null;
-
-        for (Animation a : animationList)
+        if (type == Object.ANIMATABLE)
         {
-            if (a.getName().equalsIgnoreCase(name))
-            {
-                LinkedList<Frame> frames = a.frames;
+            setSprite(currentAnimation);
+            setBounds(sprite, location);
 
-                Frame frame = frames.get(index);
-
-                if (frame != null)
-                {
-                    tempSprite = frame.sprite;
-                }
-            }
+            currentAnimation.update();
+            bounds.update(manager, delta);
+        } else if (type == Object.STATIC)
+        {
+            setBounds(sprite, location);
+            bounds.update(manager, delta);
         }
-
-        return tempSprite;
     }
 
-    /**
-     * @return The sprite attached to the object.
-     */
-    public Sprite getSprite()
+    @Override
+    public void render(Manager manager, Context ctx)
     {
-        return sprite;
+        if (type == Object.ANIMATABLE)
+        {
+            setSprite(currentAnimation);
+            setBounds(sprite, location);
+
+            currentAnimation.render(ctx, location.x, location.y);
+            bounds.render(manager, ctx);
+        } else if (type == Object.STATIC)
+        {
+            setBounds(sprite, location);
+
+            bounds.render(manager, ctx);
+            ctx.renderBitmap(sprite, location.x, location.y);
+        }
     }
 
     /**
@@ -200,34 +124,23 @@ public abstract class Object implements Updatable, Renderable
         {
             if (object.name.equalsIgnoreCase(this.name)) continue;
 
-            if (object.bounds.getBounds(0, 0).intersects(this.bounds.getBounds(xOffset, yOffset))) return true;
+            if (object.bounds != null && this.bounds != null)
+            {
+                if (object.bounds.getBounds(0, 0).intersects(this.bounds.getBounds(xOffset, yOffset))) return true;
+            }
         }
 
         return false;
     }
 
     /**
-     * Method that MUST be called {@code super.update(manager, delta);} in order for the collision bounds to be updated.
+     * Sets the animation to be displayed on screen.
      *
-     * @param manager The engine manager object.
-     * @param delta   Time elapsed between each frame.
+     * @param currentAnimation The animation to be displayed on screen.
      */
-    @Override
-    public void update(Manager manager, double delta)
+    public void setCurrentAnimation(Animation currentAnimation)
     {
-        if (bounds != null) bounds.update(manager, delta);
-    }
-
-    /**
-     * Method that MUST be called {@code super.render(manager, ctx);} in order for the collision bounds to be rendered.
-     *
-     * @param manager The engine manager object.
-     * @param ctx     The Game render 'canvas'.
-     */
-    @Override
-    public void render(Manager manager, Context ctx)
-    {
-        if (bounds != null) bounds.render(manager, ctx);
+        this.currentAnimation = currentAnimation;
     }
 
     /**
@@ -247,42 +160,51 @@ public abstract class Object implements Updatable, Renderable
     }
 
     /**
-     * @return The x-location of the object.
+     * @return The width-location of the object.
      */
     public int getX()
     {
-        return properties.location.x;
+        return location.x;
     }
 
     /**
-     * @return The y-location of the object.
+     * @return The height-location of the object.
      */
     public int getY()
     {
-        return properties.location.y;
+        return location.y;
     }
 
     /**
-     * @return The width of the object.
+     * Sets the scale of the object
+     *
+     * @param scale Scaling ratio (1f is 1:1 ratio).
      */
-    public int getWidth()
+    public void setScale(float scale)
     {
-        return properties.width;
+        this.scale = scale;
     }
 
     /**
-     * @return The height of the object.
-     */
-    public int getHeight()
-    {
-        return properties.height;
-    }
-
-    /**
-     * @return Scaling ratio (1f is 1:1 ratio).
+     * @return The scaling ratio
      */
     public float getScale()
     {
         return scale;
+    }
+
+    public void setBounds(Sprite sprite, Tuple2i location)
+    {
+        bounds.bounds.setBounds(sprite, location);
+    }
+
+    public void setSprite(Animation animation)
+    {
+        this.sprite = animation.getSprite();
+    }
+
+    public Sprite getSprite()
+    {
+        return sprite;
     }
 }

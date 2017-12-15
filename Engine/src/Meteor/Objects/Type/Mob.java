@@ -1,31 +1,20 @@
 package Meteor.Objects.Type;
 
 import Meteor.GameEngine.Manager;
-import Meteor.Graphics.Sprites.Sprite;
 import Meteor.Level.TiledLevel;
 import Meteor.Objects.Object;
-import Meteor.Units.Tuple4i;
+import Meteor.Units.Tuple2i;
 
 public abstract class Mob extends Object
 {
-    public Mob(Manager manager, String name, Tuple4i properties)
+    public Mob(Manager manager, String name, Tuple2i location, float scale)
     {
-        super(manager, name, properties);
+        super(manager, name, Object.ANIMATABLE, location, scale);
     }
 
-    public Mob(Manager manager, String name, Sprite sprite, Tuple4i properties)
+    public Mob(Manager manager, String name, Tuple2i location)
     {
-        super(manager, name, sprite, properties);
-    }
-
-    public Mob(Manager manager, String name, Sprite sprite, Tuple4i properties, float scale)
-    {
-        super(manager, name, sprite, properties, scale);
-    }
-
-    public Mob(Manager manager, String name, Tuple4i properties, float scale)
-    {
-        super(manager, name, properties, scale);
+        super(manager, name, Object.ANIMATABLE, location);
     }
 
     public void move(int xMove, int yMove)
@@ -39,8 +28,8 @@ public abstract class Mob extends Object
 
         if (!isCollidingWithTile(xMove, yMove))
         {
-            properties.location.x += xMove;
-            properties.location.y += yMove;
+            location.x += xMove;
+            location.y += yMove;
         }
     }
 
@@ -51,8 +40,8 @@ public abstract class Mob extends Object
             TiledLevel level = (TiledLevel) this.level;
             for (int i = 0; i < level.getData().length; i++)
             {
-                int xt = (int) Math.floor(((properties.location.x + xMove) - i % level.getWidth()) / level.getTileSize());
-                int yt = (int) Math.floor(((properties.location.y + yMove) - i / level.getHeight()) / level.getTileSize());
+                int xt = (int) Math.floor(((location.x + xMove) - i % level.getWidth()) / level.getTileSize());
+                int yt = (int) Math.floor(((location.y + yMove) - i / level.getHeight()) / level.getTileSize());
 
                 if (level.getTile(xt, yt) == null) continue;
                 if (level.getTile(xt, yt).isSolid()) return true;

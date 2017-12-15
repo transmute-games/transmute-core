@@ -8,23 +8,47 @@ package Meteor.Units;
 public class Tuple4f
 {
     public Tuple2f location;
-    public float w, h;
+    public float width, height;
 
-    public Tuple4f(float x, float y, float w, float h)
+    public Tuple4f(float x, float y, float width, float height)
     {
         this.location = new Tuple2f(x, y);
-        this.w = w;
-        this.h = h;
+        this.width = width;
+        this.height = height;
     }
 
     public Tuple4i asTuple4i()
     {
-        return new Tuple4i((int) location.x, (int) location.y, (int) w, (int) h);
+        return new Tuple4i((int) location.x, (int) location.y, (int) width, (int) height);
+    }
+
+    public float getWidth()
+    {
+        return width;
+    }
+
+    public float getHeight()
+    {
+        return height;
+    }
+
+    public float getX()
+    {
+        return location.x;
+    }
+
+    public float getY()
+    {
+        return location.y;
     }
 
     @Override
     public String toString()
     {
-        return String.format("(%d, %d), width: %d, height: %d", location.x, location.y, w, w);
+        return "Tuple4f{" +
+                "location=" + location +
+                ", width=" + width +
+                ", height=" + height +
+                '}';
     }
 }

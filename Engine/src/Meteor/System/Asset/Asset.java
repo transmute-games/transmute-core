@@ -208,6 +208,14 @@ public abstract class Asset
     @Override
     public String toString()
     {
-        return String.format("[Asset]: TYPE: \"%s\", NAME: \"%s\", KEY: \"%s\", FILE-PATH: \"%s\"", prefix, name, key, filePath);
+        return "Asset{" +
+                "key='" + key + '\'' +
+                ", target=" + target +
+                ", prefix='" + prefix + '\'' +
+                ", name='" + name + '\'' +
+                ", filePath='" + filePath + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", fileType='" + fileType + '\'' +
+                '}';
     }
 }

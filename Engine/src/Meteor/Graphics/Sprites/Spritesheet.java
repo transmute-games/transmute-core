@@ -71,20 +71,20 @@ public class Spritesheet extends Bitmap
         Bitmap bmp = ImageUtils.getAsBitmap(image);
         int xOffset = startOffset.x;
         int yOffset = startOffset.y;
-        int w = cellSize.x;
-        int h = cellSize.y;
-        int scaledWidth = image.getWidth() / w;
-        int scaledHeight = image.getHeight() / h;
+        int width = cellSize.x;
+        int height = cellSize.y;
+        int scaledWidth = image.getWidth() / width;
+        int scaledHeight = image.getHeight() / height;
         sprites = new Sprite[scaledWidth][scaledHeight];
         for (int x = 0; x < scaledWidth; x++)
         {
             for (int y = 0; y < scaledHeight; y++)
             {
                 //Map cells into a grid for future reference
-                int[] data = bmp.getData(xOffset + x * (w + vertGap),
-                        yOffset + y * (h + horizGap), (x + 1) * w, (y + 1) * h);
+                int[] data = bmp.getData(xOffset + x * (width + vertGap),
+                        yOffset + y * (height + horizGap), (x + 1) * width, (y + 1) * height);
 
-                sprites[x][y] = new Sprite(new Bitmap(data, w, h));
+                sprites[x][y] = new Sprite(new Bitmap(data, width, height));
             }
         }
     }
@@ -137,7 +137,7 @@ public class Spritesheet extends Bitmap
     /**
      * Generates a series of timed action.
      *
-     * @param name      The name of the animation.
+     * @param name      The name of the currentAnimation.
      * @param duration  Time in seconds to be applied to all generated frames.
      * @param spriteLoc Location of the sprite's (in terms of cells).
      * @return Generated action with specified cells and provided time for all frames.
@@ -160,7 +160,7 @@ public class Spritesheet extends Bitmap
      * <p>
      * Note that the length of the {@code duration[]} must be the same as {@code spriteLoc[]}.
      *
-     * @param name      The name of the animation.
+     * @param name      The name of the currentAnimation.
      * @param duration  Time in seconds to be applied for each frame. Size should be equal to <strong>spriteLoc</strong>.
      * @param spriteLoc Location of the sprite's (in terms of cells).
      * @return Generated action with specified cells and provided time for each frame.
@@ -184,7 +184,7 @@ public class Spritesheet extends Bitmap
      * Generates a series of timed action, assuming the Spritesheet is either a vertical
      * or horizontal strip (i.e. 1 in width or height) and stores frames for an action.
      *
-     * @param name                The name of the animation.
+     * @param name                The name of the currentAnimation.
      * @param sequenceOrientation Orientation of the Spritesheet.
      * @param duration            Time in seconds to be applied to every frame.
      * @return Generated action with specified cells and provided time for every frame.

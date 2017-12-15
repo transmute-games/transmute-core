@@ -238,7 +238,7 @@ public abstract class Meteor implements Runnable, Cortex
         Graphics2D _g = nativeImage.createGraphics();
         _g.drawImage(ctx.getImage(), 0, 0, null);
         _g.dispose();
-        g.drawImage(nativeImage, 0, 0, getWidth(), getHeight(), null);
+        g.drawImage(nativeImage, 0, 0, getWidth() * getScale(), getHeight() * getScale(), null);
         g.dispose();
         bs.show();
     }

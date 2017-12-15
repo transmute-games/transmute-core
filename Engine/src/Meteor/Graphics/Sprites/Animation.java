@@ -279,6 +279,12 @@ public class Animation
         for (int i = 0; i < frames.size(); i++)
         {
             Bitmap original = frames.get(i).sprite.bitmap;
+
+            if (original == null)
+            {
+                original = ImageUtils.getAsBitmap(frames.get(i).sprite.getImage());
+            }
+
             original = ImageUtils.getAsBitmap(ImageUtils.getFlipped(original.getImage(), horizontal, vertical));
             Sprite mirror = new Sprite(original);
             animation[i] = mirror;

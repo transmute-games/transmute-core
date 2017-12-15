@@ -7,14 +7,14 @@ package Meteor.Units;
  */
 public class Vector2i
 {
-    public int x; //x-position on the screen
-    public int y; //y-position on the screen
+    public int x; //width-position on the screen
+    public int y; //height-position on the screen
 
     /**
      * The constructor used to define a {@code vector2i}.
      *
-     * @param x The x-position on the screen.
-     * @param y The y-position on the screen.
+     * @param x The width-position on the screen.
+     * @param y The height-position on the screen.
      */
     public Vector2i(int x, int y)
     {
@@ -224,10 +224,10 @@ public class Vector2i
     }
 
     /**
-     * Method used to change the pre-existing x and y positions.
+     * Method used to change the pre-existing width and height positions.
      *
-     * @param x The x-position on the screen.
-     * @param y The y-position on the screen.
+     * @param x The width-position on the screen.
+     * @param y The height-position on the screen.
      */
     public void setPositions(int x, int y)
     {
@@ -236,7 +236,7 @@ public class Vector2i
     }
 
     /**
-     * @return The x-position on the screen.
+     * @return The width-position on the screen.
      */
     private int getX()
     {
@@ -244,9 +244,9 @@ public class Vector2i
     }
 
     /**
-     * Method used to set the x-position on the screen.
+     * Method used to set the width-position on the screen.
      *
-     * @param x The x-position on the screen.
+     * @param x The width-position on the screen.
      */
     void setX(int x)
     {
@@ -254,7 +254,7 @@ public class Vector2i
     }
 
     /**
-     * @return The y-position on the screen.
+     * @return The height-position on the screen.
      */
     private int getY()
     {
@@ -262,9 +262,9 @@ public class Vector2i
     }
 
     /**
-     * Method used to set the y-position on the screen.
+     * Method used to set the height-position on the screen.
      *
-     * @param y The y-position on the screen.
+     * @param y The height-position on the screen.
      */
     void setY(int y)
     {
@@ -274,6 +274,11 @@ public class Vector2i
     @Override
     public String toString()
     {
-        return String.format("(%d, %d)", (int) x, (int) y);
+        return "Vector2i{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
+
+
 }

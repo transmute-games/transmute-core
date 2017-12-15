@@ -29,6 +29,9 @@ public class Tuple2f
     @Override
     public String toString()
     {
-        return String.format("(%d, %d)", x, y);
+        return "Tuple2f{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

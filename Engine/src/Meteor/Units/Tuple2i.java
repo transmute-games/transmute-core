@@ -29,6 +29,9 @@ public class Tuple2i
     @Override
     public String toString()
     {
-        return String.format("(%d, %d)", x, y);
+        return "Tuple2i{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

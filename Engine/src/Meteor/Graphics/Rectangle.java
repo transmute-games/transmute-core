@@ -1,5 +1,8 @@
 package Meteor.Graphics;
 
+import Meteor.Graphics.Sprites.Sprite;
+import Meteor.Units.Tuple2i;
+
 public class Rectangle
 {
     public int x;
@@ -23,12 +26,22 @@ public class Rectangle
         this.height = height;
     }
 
-    public void setBounds(int x, int y, float width, float height)
+    public void setBounds(int x, int y, float width, float height, float scale)
     {
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.width = width * scale;
+        this.height = height * scale;
+    }
+
+    public void setBounds(Sprite sprite, Tuple2i location)
+    {
+        Rectangle bounds = sprite.getBounds();
+
+        this.x = location.x + bounds.x;
+        this.y = location.y + bounds.y;
+        this.width = bounds.width;
+        this.height = bounds.height;
     }
 
     public Rectangle getBounds()
@@ -52,11 +65,12 @@ public class Rectangle
         {
             return false;
         }
+
         r.width += r.x;
         r.height += r.y;
         width += x;
         height += y;
-        //      overflow || intersect
+
         return ((r.width < r.x || r.width > x) &&
                 (r.height < r.y || r.height > y) &&
                 (width < x || width > r.x) &&
@@ -73,6 +87,16 @@ public class Rectangle
         return y;
     }
 
+    public void setX(int x)
+    {
+        this.x = x;
+    }
+
+    public void setY(int y)
+    {
+        this.y = y;
+    }
+
     public float getWidth()
     {
         return width;
@@ -81,5 +105,26 @@ public class Rectangle
     public float getHeight()
     {
         return height;
+    }
+
+    public void setWidth(float width)
+    {
+        this.width = width;
+    }
+
+    public void setHeight(float height)
+    {
+        this.height = height;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Rectangle{" +
+                "x=" + x +
+                ", y=" + y +
+                ", width=" + width +
+                ", height=" + height +
+                '}';
     }
 }

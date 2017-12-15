@@ -7,15 +7,15 @@ package Meteor.Units;
  */
 public class Tuple4i
 {
-    public Vector2i location; //The location (x, y) on the screen
+    public Vector2i location; //The location (width, height) on the screen
     public int width; //width of a object
     public int height; //height of a object
 
     /**
      * The constructor used to define a {@code Tuple4i}.
      *
-     * @param x      The x-position of the item.
-     * @param y      The y-position of the item.
+     * @param x      The width-position of the item.
+     * @param y      The height-position of the item.
      * @param width  The width of a item.
      * @param height The height of a item.
      */
@@ -33,10 +33,10 @@ public class Tuple4i
     }
 
     /**
-     * Method used to change the pre-existing x and y locations as well as the item's width and height.
+     * Method used to change the pre-existing width and height locations as well as the item's width and height.
      *
-     * @param x      The x-position of the item.
-     * @param y      The y-position of the item.
+     * @param x      The width-position of the item.
+     * @param y      The height-position of the item.
      * @param width  The width of a item.
      * @param height The height of a item.
      */
@@ -48,7 +48,7 @@ public class Tuple4i
     }
 
     /**
-     * @return The x-location on the screen.
+     * @return The width-location on the screen.
      */
     public int getX()
     {
@@ -56,9 +56,9 @@ public class Tuple4i
     }
 
     /**
-     * Method used to set the x-location on the screen.
+     * Method used to set the width-location on the screen.
      *
-     * @param x The x-location on the screen.
+     * @param x The width-location on the screen.
      */
     public void setX(int x)
     {
@@ -66,7 +66,7 @@ public class Tuple4i
     }
 
     /**
-     * @return The y-location on the screen.
+     * @return The height-location on the screen.
      */
     public int getY()
     {
@@ -74,9 +74,9 @@ public class Tuple4i
     }
 
     /**
-     * Method used to set the y-location on the screen.
+     * Method used to set the height-location on the screen.
      *
-     * @param y The y-location on the screen.
+     * @param y The height-location on the screen.
      */
     public void setY(int y)
     {
@@ -110,7 +110,7 @@ public class Tuple4i
     }
 
     /**
-     * @return The tuple containing the (x, y) location.
+     * @return The tuple containing the (width, height) location.
      */
     public Vector2i getLocation()
     {
@@ -130,6 +130,10 @@ public class Tuple4i
     @Override
     public String toString()
     {
-        return String.format("(%d, %d), width: %d, height: %d", location.x, location.y, width, height);
+        return "Tuple4i{" +
+                "location=" + location +
+                ", width=" + width +
+                ", height=" + height +
+                '}';
     }
 }

@@ -4,18 +4,18 @@ import Meteor.GameEngine.Interfaces.Cortex;
 import Meteor.GameEngine.Manager;
 import Meteor.Graphics.Context;
 import Meteor.Graphics.Rectangle;
+import Meteor.Units.Dimension2f;
 import Meteor.Units.Tuple2i;
-import Meteor.Units.Tuple4i;
 
 public class Bounds implements Cortex
 {
     public static boolean SHOW = true; //A value for the {@code shouldDisplay}
     public static boolean HIDE = false; //A value for the {@code shouldDisplay}
 
-    private Object object; //the parent object
-    private Rectangle bounds; //The rectangular collision bounds
-    private Tuple4i properties; //The properties to be attached to the collision bounds
-    private Tuple2i offsets; //The (x, y) offsets to be applied to the collision bounds
+    public Rectangle bounds; //The rectangular collision bounds
+    private Tuple2i location; //The x and y coordinates of the collision bounds
+    private Dimension2f dimensions; //The width and height of the collision bounds
+    private Tuple2i offsets; //The (width, height) offsets to be applied to the collision bounds
     private float scale; //Scaling ratio
     private int color; //The color of the collision bounds
     private boolean shouldDisplay; //Weather or not the bounds should be seen
@@ -23,96 +23,83 @@ public class Bounds implements Cortex
     /**
      * The constructor used to create the collision component.
      *
-     * @param object        The object attached to this component.
-     * @param bounds        The rectangular collision bounds.
-     * @param properties    The properties to be attached to the collision bounds.
+     * @param location      The x and y coordinates of the collision bounds
+     * @param dimensions    The width and height of the collision bounds
+     * @param scale         The scaling ratio
      * @param color         The color of the collision bounds.
      * @param shouldDisplay Weather or not the bounds should be seen.
      */
-    public Bounds(Object object, Rectangle bounds, Tuple4i properties, int color, boolean shouldDisplay)
+    public Bounds(Tuple2i location, Dimension2f dimensions, float scale, int color, boolean shouldDisplay)
     {
-        this.object = object;
-        this.bounds = bounds;
-        this.properties = properties;
+        this.location = location;
+        this.dimensions = dimensions;
         this.offsets = new Tuple2i();
-        this.color = color;
-        this.shouldDisplay = shouldDisplay;
-
-        scale = 1.0f;
-    }
-
-    /** 
-     * The constructor used to create the collision component.
-     *
-     * @param object        The object attached to this component.
-     * @param bounds        The rectangular collision bounds.
-     * @param properties    The properties to be attached to the collision bounds.
-     * @param scale         Scaling ratio (1f is 1:1 ratio).
-     * @param color         The color of the collision bounds.
-     * @param shouldDisplay Weather or not the bounds should be seen.
-     */
-    public Bounds(Object object, Rectangle bounds, Tuple4i properties, float scale, int color, boolean shouldDisplay)
-    {
-        this.object = object;
-        this.bounds = bounds;
-        this.properties = properties;
         this.scale = scale;
-        this.offsets = new Tuple2i();
-        this.color = color;
-        this.shouldDisplay = shouldDisplay;
-    }
-
-    /**
-     * The constructor used to create the collision component.
-     *
-     * @param object        The object attached to this component.
-     * @param properties    The properties to be attached to the collision bounds.
-     * @param scale         Scaling ratio (1f is 1:1 ratio).
-     * @param color         The color of the collision bounds.
-     * @param shouldDisplay Weather or not the bounds should be seen.
-     */
-    public Bounds(Object object, Tuple4i properties, float scale, int color, boolean shouldDisplay)
-    {
-        this.object = object;
-        this.properties = properties;
-        this.scale = scale;
-        this.offsets = new Tuple2i();
         this.color = color;
         this.shouldDisplay = shouldDisplay;
 
         init();
     }
 
+    /**
+     * The constructor used to create the collision component.
+     *
+     * @param location      The x and y coordinates of the collision bounds
+     * @param dimensions    The width and height of the collision bounds
+     * @param color         The color of the collision bounds.
+     * @param shouldDisplay Weather or not the bounds should be seen.
+     */
+    public Bounds(Tuple2i location, Dimension2f dimensions, int color, boolean shouldDisplay)
+    {
+        this.location = location;
+        this.dimensions = dimensions;
+        this.offsets = new Tuple2i();
+        this.color = color;
+        this.shouldDisplay = shouldDisplay;
+
+        scale = 1.0f;
+
+        init();
+    }
+
+    /**
+     * The constructor used to create the collision component.
+     *
+     * @param location      The x and y coordinates of the collision bounds
+     * @param rectangle     The calculated collision bounds from Sprite.class
+     * @param color         The color of the collision bounds.
+     * @param shouldDisplay Weather or not the bounds should be seen.
+     */
+    public Bounds(Tuple2i location, Rectangle rectangle, int color, boolean shouldDisplay)
+    {
+        this.location = new Tuple2i(location.x + rectangle.x, location.y + rectangle.y);
+        this.dimensions = new Dimension2f(rectangle.width, rectangle.height);
+        this.offsets = new Tuple2i();
+        this.color = color;
+        this.shouldDisplay = shouldDisplay;
+
+        scale = 1.0f;
+
+        init();
+    }
+
+
     @Override
     public void init()
     {
-        setBounds(properties);
+        bounds = new Rectangle(location.x, location.y, dimensions.width * scale, dimensions.height * scale);
     }
 
     /**
-     * Method used to configure the rectangular collision bounds.
+     * Method used to grab the rectangular collision bounds based on a (width, height) offset.
      *
-     * @param properties The properties to be attached to the collision bounds.
-     */
-    public void setBounds(Tuple4i properties)
-    {
-        if (this.bounds == null) this.bounds = new Rectangle();
-        this.bounds.x = properties.getX();
-        this.bounds.y = properties.getY();
-        this.bounds.width = properties.getWidth();
-        this.bounds.height = properties.getHeight();
-    }
-
-    /**
-     * Method used to grab the rectangular collision bounds based on a (x, y) offset.
-     *
-     * @param xOffset The x-offset of the object.
-     * @param yOffset The y-offset of the object.
+     * @param xOffset The width-offset of the object.
+     * @param yOffset The height-offset of the object.
      * @return The rectangular collision bounds.
      */
     public Rectangle getBounds(int xOffset, int yOffset)
     {
-        return new Rectangle(object.getX() + bounds.x + xOffset, object.getY() + bounds.y + yOffset, bounds.width * scale, bounds.height * scale);
+        return new Rectangle(bounds.x + xOffset, bounds.y + yOffset, bounds.width * scale, bounds.height * scale);
     }
 
     /**
@@ -124,7 +111,7 @@ public class Bounds implements Cortex
     @Override
     public void update(Manager manager, double delta)
     {
-        bounds.setBounds(properties.location.x, properties.location.y, properties.getWidth() * scale, properties.getHeight() * scale);
+        bounds.setBounds(location.x, location.y, dimensions.width, dimensions.height, scale);
     }
 
     /**
@@ -138,23 +125,35 @@ public class Bounds implements Cortex
     {
         if (shouldDisplay)
         {
-            ctx.renderRectangle(object.getX() + bounds.x - offsets.x, object.getY() + bounds.y - offsets.y, bounds.width, bounds.height, color);
+            ctx.renderRectangle(bounds.x - offsets.x, bounds.y - offsets.y, bounds.width, bounds.height, color);
         }
     }
 
-    /**
-     * @return The properties to be attached to the collision bounds.
-     */
-    public Tuple4i getProperties()
+    public Tuple2i getLocation()
     {
-        return properties;
+        return location;
+    }
+
+    public float getWidth()
+    {
+        return dimensions.width;
+    }
+
+    public float getHeight()
+    {
+        return dimensions.height;
+    }
+
+    public float getScale()
+    {
+        return scale;
     }
 
     /**
-     * Method used to configure the (x, y) offsets.
+     * Method used to configure the (width, height) offsets.
      *
-     * @param xOffset The x-offset of the object.
-     * @param yOffset The y-offset of the object.
+     * @param xOffset The width-offset of the object.
+     * @param yOffset The height-offset of the object.
      */
     public void setOffsets(int xOffset, int yOffset)
     {
@@ -163,7 +162,7 @@ public class Bounds implements Cortex
     }
 
     /**
-     * @return The (x, y) offsets to be applied to the collision bounds.
+     * @return The (width, height) offsets to be applied to the collision bounds.
      */
     public Tuple2i getOffsets()
     {
@@ -181,6 +180,15 @@ public class Bounds implements Cortex
     @Override
     public String toString()
     {
-        return String.format("(%d - %d, %d - %d), %.2f, %.2f %.2f", bounds.x, offsets.x, bounds.y, offsets.y, bounds.width, bounds.height, scale);
+        return "Bounds{" +
+                "bounds=" + bounds +
+                ", location=" + location +
+                ", dimensions=" + dimensions +
+                ", offsets=" + offsets +
+                ", scale=" + scale +
+                ", color=" + color +
+                ", shouldDisplay=" + shouldDisplay +
+                '}';
     }
+
 }
