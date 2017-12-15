@@ -17,13 +17,13 @@ public class AStar
 {
     private static final int SEARCH_AREA = 3 * 3; //The search area within the level. Represents a small portion of the level.
     private List<Node> open = new ArrayList<>(); //The list of possible Nodes that may reach the destination.
-    private  List<Node> closed = new ArrayList<>(); //The list of already looked at Nodes.
+    private List<Node> closed = new ArrayList<>(); //The list of already looked at Nodes.
     private TiledLevel level; //The level associated with this search.
 
     /**
      * Compares two Nodes based on f-cost.
      */
-    private Comparator<Node> nodeComparator =  (a, b) ->
+    private Comparator<Node> nodeComparator = (a, b) ->
     {
         if (a.f() < b.f()) return 1;
         else if (a.f() > b.f()) return -1;
@@ -39,7 +39,7 @@ public class AStar
      * Calculates the fastest path given a starting point and a destination.
      *
      * @param start The starting location.
-     * @param goal The destination.
+     * @param goal  The destination.
      * @return The fastest path from a starting point to a given destination.
      */
     public List<Node> findPath(Vector2i start, Vector2i goal)
@@ -49,13 +49,13 @@ public class AStar
 
         open.add(current);
 
-        while(open.size() > 0)
+        while (open.size() > 0)
         {
             open.sort(nodeComparator);
 
             current = open.get(0);
 
-            if (current.tile.equals(goal))
+            if (current.location.equals(goal))
             {
                 while (current.parent != null)
                 {
@@ -80,7 +80,7 @@ public class AStar
      * Calculates a low-cost path given the current Node and the target.
      *
      * @param current The current Node in question.
-     * @param goal The target or destination.
+     * @param goal    The target or destination.
      */
     private void sort(Node current, Vector2i goal)
     {
@@ -88,8 +88,8 @@ public class AStar
         {
             if (i == 4) continue;
 
-            int xi = current.tile.x; //x-initial
-            int yi = current.tile.y; //y-initial
+            int xi = current.location.x; //x-initial
+            int yi = current.location.y; //y-initial
 
             int xf = (i % 3) - 1; //x-final
             int yf = (i / 3) - 1; //y-final
@@ -104,7 +104,7 @@ public class AStar
             if (tile.isSolid()) continue;
 
             double g = current.getG() +
-                    (getDistance(current.tile, tileVector) == 1 ? 1 : 0.95);
+                    (getDistance(current.location, tileVector) == 1 ? 1 : 0.95);
             double h = getDistance(tileVector, goal);
 
             Node node = new Node(level, tileVector, current, g, h);
@@ -118,21 +118,21 @@ public class AStar
      * Calculates the distance between two vectors.
      *
      * @param start The starting point.
-     * @param goal The ending point or destination.
+     * @param goal  The ending point or destination.
      * @return The distance between two vectors.
      */
     private double getDistance(Vector2i start, Vector2i goal)
     {
         double xChange = start.x - goal.x;
         double yChange = start.y - goal.y;
-        
+
         return Math.sqrt(xChange * xChange + yChange * yChange);
     }
 
     /**
      * Checks if a given list contains a specific vector.
      *
-     * @param list The list of Nodes in question.
+     * @param list     The list of Nodes in question.
      * @param vector2i The specific vector to look for.
      * @return Weather or not the given list contains a specific vector.
      */
@@ -140,7 +140,7 @@ public class AStar
     {
         for (Node n : list)
         {
-            if (n.tile.equals(vector2i)) return true;
+            if (n.location.equals(vector2i)) return true;
         }
 
         return false;

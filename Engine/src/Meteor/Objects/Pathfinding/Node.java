@@ -17,11 +17,11 @@ public class Node
     /**
      * Defines a Node given a level, a location, the previous Node, g-cost and h-cost.
      *
-     * @param level The level associated with this Node.
+     * @param level    The level associated with this Node.
      * @param location The location of this Node.
-     * @param parent The parent or previous Node.
-     * @param g The g-cost of this Node.
-     * @param h The h-cost of this Node.
+     * @param parent   The parent or previous Node.
+     * @param g        The g-cost of this Node.
+     * @param h        The h-cost of this Node.
      */
     public Node(TiledLevel level, Vector2i location, Node parent, double g, double h)
     {
@@ -37,9 +37,9 @@ public class Node
     /**
      * Defines a Node given a level, a location and previous Node.
      *
-     * @param level The level associated with this Node.
+     * @param level    The level associated with this Node.
      * @param location The location of this Node.
-     * @param parent The parent or previous Node.
+     * @param parent   The parent or previous Node.
      */
     public Node(TiledLevel level, Vector2i location, Node parent)
     {
