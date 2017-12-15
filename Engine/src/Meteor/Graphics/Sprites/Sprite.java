@@ -122,7 +122,7 @@ public class Sprite extends Bitmap
             }
         }
 
-        bounds = new Rectangle((xMax - xMin) / 2, (yMax - yMin) / 2, (xMax - xMin), (yMax - yMin));
+        bounds = new Rectangle(xMin, yMin, (xMax - xMin), (yMax - yMin));
     }
 
     /**
