@@ -10,8 +10,6 @@ import Meteor.Graphics.Sprites.Sprite;
 import Meteor.Level.Level;
 import Meteor.Units.Tuple2i;
 
-import java.awt.*;
-
 /**
  * {@code Object} is a generic object class.
  * <br>
