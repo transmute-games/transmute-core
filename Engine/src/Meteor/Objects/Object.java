@@ -33,6 +33,16 @@ public abstract class Object implements Updatable, Renderable
 
     private boolean isRemoved = false; //Weather or not the object was removed from a level
 
+    /**
+     * Defines a object in the game with a name, type and location in the level.
+     *
+     * @param manager  The game manager object.
+     * @param name     The name of the object (e.g. player).
+     * @param type     The type of the object (e.g. {@code Object.ANIMATABLE}).
+     * @param sprite   The sprite of the object.
+     * @param location The x, y location of the object.
+     * @param scale    The scaling ratio (1f is 1:1 ratio).
+     */
     public Object(Manager manager, String name, int type, Sprite sprite, Tuple2i location, float scale)
     {
         this.manager = manager;
@@ -43,7 +53,15 @@ public abstract class Object implements Updatable, Renderable
         this.scale = scale;
     }
 
-
+    /**
+     * Defines a object in the game with a name, type and location in the level.
+     *
+     * @param manager  The game manager object.
+     * @param name     The name of the object (e.g. player).
+     * @param type     The type of the object (e.g. {@code Object.ANIMATABLE}).
+     * @param location The x, y location of the object.
+     * @param scale    The scaling ratio (1f is 1:1 ratio).
+     */
     public Object(Manager manager, String name, int type, Tuple2i location, float scale)
     {
         this.manager = manager;
@@ -53,6 +71,14 @@ public abstract class Object implements Updatable, Renderable
         this.scale = scale;
     }
 
+    /**
+     * Defines a object in the game with a name, type and location in the level.
+     *
+     * @param manager  The game manager object.
+     * @param name     The name of the object (e.g. player).
+     * @param type     The type of the object (e.g. {@code Object.ANIMATABLE}).
+     * @param location The x, y location of the object.
+     */
     public Object(Manager manager, String name, int type, Tuple2i location)
     {
         this.manager = manager;
@@ -158,7 +184,7 @@ public abstract class Object implements Updatable, Renderable
     }
 
     /**
-     * @return The width-location of the object.
+     * @return The width of the object.
      */
     public int getX()
     {
@@ -166,7 +192,7 @@ public abstract class Object implements Updatable, Renderable
     }
 
     /**
-     * @return The height-location of the object.
+     * @return The height of the object.
      */
     public int getY()
     {
@@ -191,16 +217,31 @@ public abstract class Object implements Updatable, Renderable
         return scale;
     }
 
+    /**
+     * Method used to update the properties of the rectangle (e.g.
+     * the x-location of the rectangle.).
+     *
+     * @param sprite   The sprite object containing the precise collision-bounds (rectangle).
+     * @param location The location of the object (e.g. x, y).
+     */
     public void setBounds(Sprite sprite, Tuple2i location)
     {
         bounds.bounds.setBounds(sprite, location);
     }
 
+    /**
+     * Sets the current sprite based on the current frame of a given animation sequence.
+     *
+     * @param animation The currently running animation.
+     */
     public void setSprite(Animation animation)
     {
         this.sprite = animation.getSprite();
     }
 
+    /**
+     * @return The sprite of the object.
+     */
     public Sprite getSprite()
     {
         return sprite;

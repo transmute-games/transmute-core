@@ -8,13 +8,21 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * A* (pronounced as "A star") is a computer algorithm that is widely used in
+ * path-finding and graph traversal, the process of plotting an efficiently
+ * directed path between multiple points, called nodes.
+ */
 public class AStar
 {
-    private static final int SEARCH_AREA = 3 * 3;
-    private List<Node> open = new ArrayList<>();
-    private  List<Node> closed = new ArrayList<>();
-    private TiledLevel level;
+    private static final int SEARCH_AREA = 3 * 3; //The search area within the level. Represents a small portion of the level.
+    private List<Node> open = new ArrayList<>(); //The list of possible Nodes that may reach the destination.
+    private  List<Node> closed = new ArrayList<>(); //The list of already looked at Nodes.
+    private TiledLevel level; //The level associated with this search.
 
+    /**
+     * Compares two Nodes based on f-cost.
+     */
     private Comparator<Node> nodeComparator =  (a, b) ->
     {
         if (a.f() < b.f()) return 1;
@@ -27,6 +35,13 @@ public class AStar
         this.level = level;
     }
 
+    /**
+     * Calculates the fastest path given a starting point and a destination.
+     *
+     * @param start The starting location.
+     * @param goal The destination.
+     * @return The fastest path from a starting point to a given destination.
+     */
     public List<Node> findPath(Vector2i start, Vector2i goal)
     {
         List<Node> path = new ArrayList<>();
@@ -61,6 +76,12 @@ public class AStar
         return path;
     }
 
+    /**
+     * Calculates a low-cost path given the current Node and the target.
+     *
+     * @param current The current Node in question.
+     * @param goal The target or destination.
+     */
     private void sort(Node current, Vector2i goal)
     {
         for (int i = 0; i < SEARCH_AREA; i++)
@@ -93,6 +114,13 @@ public class AStar
         }
     }
 
+    /**
+     * Calculates the distance between two vectors.
+     *
+     * @param start The starting point.
+     * @param goal The ending point or destination.
+     * @return The distance between two vectors.
+     */
     private double getDistance(Vector2i start, Vector2i goal)
     {
         double xChange = start.x - goal.x;
@@ -101,6 +129,13 @@ public class AStar
         return Math.sqrt(xChange * xChange + yChange * yChange);
     }
 
+    /**
+     * Checks if a given list contains a specific vector.
+     *
+     * @param list The list of Nodes in question.
+     * @param vector2i The specific vector to look for.
+     * @return Weather or not the given list contains a specific vector.
+     */
     private boolean contains(List<Node> list, Vector2i vector2i)
     {
         for (Node n : list)
@@ -111,6 +146,9 @@ public class AStar
         return false;
     }
 
+    /**
+     * @return The tiled-level being searched.
+     */
     public TiledLevel getLevel()
     {
         return level;

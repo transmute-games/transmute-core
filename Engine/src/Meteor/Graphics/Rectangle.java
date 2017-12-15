@@ -3,13 +3,21 @@ package Meteor.Graphics;
 import Meteor.Graphics.Sprites.Sprite;
 import Meteor.Units.Tuple2i;
 
+/**
+ * {@code Rectangle} is a generic representation of a rectangular shape.
+ * <br>
+ * This class is a generic representation of a rectangle.
+ */
 public class Rectangle
 {
-    public int x;
-    public int y;
-    public float width;
-    public float height;
+    public int x; //The x-location of the rectangle
+    public int y; //The y-location of the rectangle
+    public float width; //The width of the rectangle
+    public float height; //The height of the rectangle
 
+    /**
+     * Default constructor
+     */
     public Rectangle()
     {
         x = 0;
@@ -18,6 +26,14 @@ public class Rectangle
         height = 0;
     }
 
+    /**
+     * Defines a rectangle object.
+     *
+     * @param x      The x-location of the rectangle
+     * @param y      The y-location of the rectangle
+     * @param width  The width of the rectangle.
+     * @param height The height of the rectangle.
+     */
     public Rectangle(int x, int y, float width, float height)
     {
         this.x = x;
@@ -26,6 +42,16 @@ public class Rectangle
         this.height = height;
     }
 
+    /**
+     * Method used to update the properties of the rectangle (e.g.
+     * the x-location of the rectangle.).
+     *
+     * @param x      The x-location of the rectangle
+     * @param y      The y-location of the rectangle
+     * @param width  The width of the rectangle.
+     * @param height The height of the rectangle.
+     * @param scale  The scaling ratio (1f is 1:1 ratio).
+     */
     public void setBounds(int x, int y, float width, float height, float scale)
     {
         this.x = x;
@@ -34,6 +60,13 @@ public class Rectangle
         this.height = height * scale;
     }
 
+    /**
+     * Method used to update the properties of the rectangle (e.g.
+     * the x-location of the rectangle.).
+     *
+     * @param sprite   The sprite object containing the precise collision-bounds (rectangle).
+     * @param location The location of the object (e.g. x, y).
+     */
     public void setBounds(Sprite sprite, Tuple2i location)
     {
         Rectangle bounds = sprite.getBounds();
@@ -44,6 +77,9 @@ public class Rectangle
         this.height = bounds.height;
     }
 
+    /**
+     * @return A rectangle object given this object's x, y, width and height
+     */
     public Rectangle getBounds()
     {
         return new Rectangle(x, y, width, height);
@@ -77,41 +113,73 @@ public class Rectangle
                 (height < y || height > r.y));
     }
 
+    /**
+     * @return The x-location of the rectangle.
+     */
     public int getX()
     {
         return x;
     }
 
+    /**
+     * @return The y-location of the rectangle.
+     */
     public int getY()
     {
         return y;
     }
 
+    /**
+     * Sets the x-location of the rectangle.
+     *
+     * @param x The x-location of the rectangle.
+     */
     public void setX(int x)
     {
         this.x = x;
     }
 
+    /**
+     * Sets the y-location of the rectangle.
+     *
+     * @param y The y-location of the rectangle.
+     */
     public void setY(int y)
     {
         this.y = y;
     }
 
+    /**
+     * @return The width of the rectangle.
+     */
     public float getWidth()
     {
         return width;
     }
 
+    /**
+     * @return The height of the rectangle.
+     */
     public float getHeight()
     {
         return height;
     }
 
+    /**
+     * Sets the width of the rectangle.
+     *
+     * @param width The width of the rectangle.
+     */
     public void setWidth(float width)
     {
         this.width = width;
     }
 
+    /**
+     * Sets the height of the rectangle.
+     *
+     * @param height The height of the rectangle.
+     */
     public void setHeight(float height)
     {
         this.height = height;
