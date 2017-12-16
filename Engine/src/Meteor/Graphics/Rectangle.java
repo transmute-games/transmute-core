@@ -69,6 +69,8 @@ public class Rectangle
      */
     public void setBounds(Sprite sprite, Tuple2i location)
     {
+        if (sprite.getBounds() == null) return;
+
         Rectangle bounds = sprite.getBounds();
 
         this.x = location.x + bounds.x;

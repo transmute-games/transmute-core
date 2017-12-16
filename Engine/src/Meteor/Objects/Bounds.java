@@ -77,6 +77,8 @@ public class Bounds implements Cortex
      */
     public Bounds(Tuple2i location, Rectangle rectangle, int color, boolean shouldDisplay)
     {
+        if (rectangle == null) rectangle = new Rectangle();
+
         this.location = new Tuple2i(location.x + rectangle.x, location.y + rectangle.y);
         this.dimensions = new Dimension2f(rectangle.width, rectangle.height);
         this.offsets = new Tuple2i();
