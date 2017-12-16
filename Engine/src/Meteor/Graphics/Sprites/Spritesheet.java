@@ -95,7 +95,7 @@ public class Spritesheet extends Bitmap
             }
         }
     }
-    
+
     /**
      * Instantiates a Spritesheet object from a given Bitmap object (the main image) with sprite-sheet
      * parameters.

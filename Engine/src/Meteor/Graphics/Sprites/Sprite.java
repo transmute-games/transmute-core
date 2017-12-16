@@ -26,23 +26,6 @@ public class Sprite extends Bitmap
      * The constructor used to define a sprite given a BufferedImage.
      *
      * @param image The image of a sprite.
-     */
-    public Sprite(BufferedImage image)
-    {
-        super(image);
-        this.image = image;
-        this.bitmap = ImageUtils.getAsBitmap(image);
-
-        width = image.getWidth();
-        height = image.getHeight();
-        if (width == height) size = width;
-        setScale(1.0f);
-    }
-
-    /**
-     * The constructor used to define a sprite given a BufferedImage.
-     *
-     * @param image The image of a sprite.
      * @param initializeBounds Weather or not to create a pixel-perfect bounding box within the sprite.
      */
     public Sprite(BufferedImage image, boolean initializeBounds)
@@ -58,22 +41,15 @@ public class Sprite extends Bitmap
         setScale(1.0f);
     }
 
+
     /**
-     * The constructor used to define a sprite given a Bitmap.
+     * The constructor used to define a sprite given a BufferedImage.
      *
-     * @param bitmap The bitmap of a sprite.
+     * @param image The image of a sprite.
      */
-    public Sprite(Bitmap bitmap)
+    public Sprite(BufferedImage image)
     {
-        super(bitmap);
-
-        this.bitmap = bitmap;
-        this.image = bitmap.getImage();
-
-        width = this.image.getWidth();
-        height = this.image.getHeight();
-        if (width == height) size = width;
-        setScale(1.0f);
+        this(image, false);
     }
 
     /**
@@ -96,21 +72,14 @@ public class Sprite extends Bitmap
         setScale(1.0f);
     }
 
-
     /**
-     * The constructor used to define a sprite given a BufferedImage.
+     * The constructor used to define a sprite given a Bitmap.
      *
-     * @param image The image of a sprite.
+     * @param bitmap The bitmap of a sprite.
      */
-    public Sprite(BufferedImage image, float scale)
+    public Sprite(Bitmap bitmap)
     {
-        super(image);
-        this.image = image;
-        this.scale = scale;
-
-        width = image.getWidth();
-        height = image.getHeight();
-        if (width == height) size = width;
+        this(bitmap, false);
     }
 
     /**
@@ -131,23 +100,15 @@ public class Sprite extends Bitmap
         if (initializeBounds) setBounds(image);
     }
 
+
     /**
-     * The constructor used to define a sprite given a Bitmap.
+     * The constructor used to define a sprite given a BufferedImage.
      *
-     * @param bitmap The bitmap of a sprite.
-     * @param scale  Scaling ratio (1f is 1:1 ratio).
+     * @param image The image of a sprite.
      */
-    public Sprite(Bitmap bitmap, float scale)
+    public Sprite(BufferedImage image, float scale)
     {
-        super(bitmap);
-
-        this.bitmap = bitmap;
-        this.image = bitmap.getImage();
-
-        width = this.image.getWidth();
-        height = this.image.getHeight();
-        if (width == height) size = width;
-        this.scale = scale;
+        this(image, scale, false);
     }
 
     /**
@@ -170,6 +131,17 @@ public class Sprite extends Bitmap
         this.scale = scale;
 
         if (initializeBounds) setBounds(image);
+    }
+
+    /**
+     * The constructor used to define a sprite given a Bitmap.
+     *
+     * @param bitmap The bitmap of a sprite.
+     * @param scale  Scaling ratio (1f is 1:1 ratio).
+     */
+    public Sprite(Bitmap bitmap, float scale)
+    {
+        this(bitmap, scale, false);
     }
 
     /**
