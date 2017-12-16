@@ -62,47 +62,6 @@ public class Spritesheet extends Bitmap
      * @param startOffset Starting position to calculate sprite position (in pixels).
      * @param vertGap     Vertical pixel gap size (0 if none).
      * @param horizGap    Horizontal pixel gap size (0 if none).
-     */
-    public Spritesheet(BufferedImage image, Tuple2i cellSize, Tuple2i startOffset, int vertGap, int horizGap)
-    {
-        super(image);
-
-        this.image = image;
-        this.cellSize = cellSize;
-        this.verticalGapSize = vertGap;
-        this.horizontalGapSize = horizGap;
-        this.startOffset = startOffset;
-
-        Bitmap bmp = ImageUtils.getAsBitmap(image);
-        int xOffset = startOffset.x;
-        int yOffset = startOffset.y;
-        int width = cellSize.x;
-        int height = cellSize.y;
-        int scaledWidth = image.getWidth() / width;
-        int scaledHeight = image.getHeight() / height;
-        sprites = new Sprite[scaledWidth][scaledHeight];
-        for (int x = 0; x < scaledWidth; x++)
-        {
-            for (int y = 0; y < scaledHeight; y++)
-            {
-                //Map cells into a grid for future reference
-                int[] data = bmp.getData(xOffset + x * (width + vertGap),
-                        yOffset + y * (height + horizGap), (x + 1) * width, (y + 1) * height);
-
-                sprites[x][y] = new Sprite(new Bitmap(data, width, height), initializeBounds);
-            }
-        }
-    }
-
-    /**
-     * Instantiates a Spritesheet object from a given Bitmap object (the main image) with sprite-sheet
-     * parameters.
-     *
-     * @param image       The big image to be used as Spritesheet.
-     * @param cellSize    Width and height of each sprite in a cell (Assuming cells are equal in size).
-     * @param startOffset Starting position to calculate sprite position (in pixels).
-     * @param vertGap     Vertical pixel gap size (0 if none).
-     * @param horizGap    Horizontal pixel gap size (0 if none).
      * @param initializeBounds Weather or not to create a pixel-perfect bounding box within the sprite.
      */
     public Spritesheet(BufferedImage image, Tuple2i cellSize, Tuple2i startOffset, int vertGap, int horizGap, boolean initializeBounds)
@@ -135,6 +94,21 @@ public class Spritesheet extends Bitmap
                 sprites[x][y] = new Sprite(new Bitmap(data, width, height), initializeBounds);
             }
         }
+    }
+    
+    /**
+     * Instantiates a Spritesheet object from a given Bitmap object (the main image) with sprite-sheet
+     * parameters.
+     *
+     * @param image       The big image to be used as Spritesheet.
+     * @param cellSize    Width and height of each sprite in a cell (Assuming cells are equal in size).
+     * @param startOffset Starting position to calculate sprite position (in pixels).
+     * @param vertGap     Vertical pixel gap size (0 if none).
+     * @param horizGap    Horizontal pixel gap size (0 if none).
+     */
+    public Spritesheet(BufferedImage image, Tuple2i cellSize, Tuple2i startOffset, int vertGap, int horizGap)
+    {
+        this(image, cellSize, startOffset, vertGap, horizGap, false);
     }
 
     /**
