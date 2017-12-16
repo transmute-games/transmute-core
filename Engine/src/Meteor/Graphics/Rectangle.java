@@ -90,7 +90,7 @@ public class Rectangle
     /**
      * Determines whether or not this <code>Rectangle</code> and the specified
      * <code>Rectangle</code> intersect. Two rectangles intersect if
-     * their intersection is nonempty.
+     * their intersection is non-empty.
      *
      * @param r the specified <code>Rectangle</code>
      * @return <code>true</code> if the specified <code>Rectangle</code>
