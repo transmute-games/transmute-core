@@ -184,7 +184,7 @@ public class SpriteManager
      * @param spriteArray The list of sprites to animation.
      * @return Generated action with specified cells and provided time for all frames.
      */
-    public Animation generateAnimation(String name, int duration, Sprite... spriteArray)
+    public Animation createAnimation(String name, int duration, Sprite... spriteArray)
     {
         return new Animation(name, spriteArray, duration);
     }
