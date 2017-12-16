@@ -142,11 +142,22 @@ public class Spritesheet extends Bitmap
      *
      * @param image    The big image to be used as Spritesheet.
      * @param cellSize Width and height of each sprite in a cell (Assuming cells are equal in size).
-     * @param createBounds Weather or not to create a pixel-perfect bounding box within the sprite.
      */
-    public Spritesheet(BufferedImage image, int cellSize, boolean createBounds)
+    public Spritesheet(BufferedImage image, int cellSize)
     {
-        this(image, new Tuple2i(cellSize, cellSize), new Tuple2i(0, 0), 0, 0, createBounds);
+        this(image, new Tuple2i(cellSize, cellSize), new Tuple2i(0, 0), 0, 0, false);
+    }
+
+    /**
+     * Instantiates a Spritesheet object from a given BufferedImage object (the main image).
+     *
+     * @param image    The big image to be used as Spritesheet.
+     * @param cellSize Width and height of each sprite in a cell (Assuming cells are equal in size).
+     * @param initializeBounds Weather or not to create a pixel-perfect bounding box within the sprite.
+     */
+    public Spritesheet(BufferedImage image, int cellSize, boolean initializeBounds)
+    {
+        this(image, new Tuple2i(cellSize, cellSize), new Tuple2i(0, 0), 0, 0, initializeBounds);
     }
 
     /**
