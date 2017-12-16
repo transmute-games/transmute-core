@@ -104,6 +104,8 @@ public class Sprite extends Bitmap
      */
     private void setBounds(BufferedImage image)
     {
+        if (image.getType() != BufferedImage.TYPE_INT_ARGB) return;
+
         int xMin = Integer.MAX_VALUE;
         int xMax = Integer.MIN_VALUE;
         int yMin = Integer.MAX_VALUE;
