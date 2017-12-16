@@ -39,9 +39,9 @@ public class Bounds implements Cortex
         this.location = location;
         this.dimensions = dimensions;
         this.offsets = new Tuple2i();
-        this.scale = scale;
         this.color = color;
         this.shouldDisplay = shouldDisplay;
+        this.scale = scale;
 
         init();
     }
@@ -56,15 +56,7 @@ public class Bounds implements Cortex
      */
     public Bounds(Tuple2i location, Dimension2f dimensions, int color, boolean shouldDisplay)
     {
-        this.location = location;
-        this.dimensions = dimensions;
-        this.offsets = new Tuple2i();
-        this.color = color;
-        this.shouldDisplay = shouldDisplay;
-
-        scale = 1.0f;
-
-        init();
+        this(location, dimensions, 1.0f, color, shouldDisplay);
     }
 
     /**
@@ -94,7 +86,8 @@ public class Bounds implements Cortex
     @Override
     public void init()
     {
-        bounds = new Rectangle(location.x, location.y, dimensions.width * scale, dimensions.height * scale);
+
+        setBounds(location.x, location.y, dimensions.width * scale, dimensions.height * scale);
     }
 
     /**
@@ -182,6 +175,19 @@ public class Bounds implements Cortex
     public int getColor()
     {
         return color;
+    }
+
+    /**
+     * Initializes the bounding rectangle.
+     *
+     * @param x The x-location of the rectangle.
+     * @param y The y-location of the rectangle.
+     * @param width The width of the rectangle.
+     * @param height The height of the rectangle.
+     */
+    public void setBounds(int x, int y, float width, float height)
+    {
+        this.bounds = new Rectangle(x, y, width, height);
     }
 
     @Override
