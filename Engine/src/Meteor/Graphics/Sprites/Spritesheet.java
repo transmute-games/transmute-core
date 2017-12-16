@@ -49,6 +49,11 @@ public class Spritesheet extends Bitmap
     private float scale = 1f;
 
     /**
+     * Weather or not to create a pixel-perfect bounding box within the sprite.
+     */
+    private boolean initializeBounds = false;
+
+    /**
      * Instantiates a Spritesheet object from a given Bitmap object (the main image) with sprite-sheet
      * parameters.
      *
@@ -84,7 +89,7 @@ public class Spritesheet extends Bitmap
                 int[] data = bmp.getData(xOffset + x * (width + vertGap),
                         yOffset + y * (height + horizGap), (x + 1) * width, (y + 1) * height);
 
-                sprites[x][y] = new Sprite(new Bitmap(data, width, height), false);
+                sprites[x][y] = new Sprite(new Bitmap(data, width, height), initializeBounds);
             }
         }
     }
@@ -98,9 +103,9 @@ public class Spritesheet extends Bitmap
      * @param startOffset Starting position to calculate sprite position (in pixels).
      * @param vertGap     Vertical pixel gap size (0 if none).
      * @param horizGap    Horizontal pixel gap size (0 if none).
-     * @param createBounds Weather or not to create a pixel-perfect bounding box within the sprite.
+     * @param initializeBounds Weather or not to create a pixel-perfect bounding box within the sprite.
      */
-    public Spritesheet(BufferedImage image, Tuple2i cellSize, Tuple2i startOffset, int vertGap, int horizGap, boolean createBounds)
+    public Spritesheet(BufferedImage image, Tuple2i cellSize, Tuple2i startOffset, int vertGap, int horizGap, boolean initializeBounds)
     {
         super(image);
 
@@ -109,6 +114,7 @@ public class Spritesheet extends Bitmap
         this.verticalGapSize = vertGap;
         this.horizontalGapSize = horizGap;
         this.startOffset = startOffset;
+        this.initializeBounds = initializeBounds;
 
         Bitmap bmp = ImageUtils.getAsBitmap(image);
         int xOffset = startOffset.x;
@@ -126,7 +132,7 @@ public class Spritesheet extends Bitmap
                 int[] data = bmp.getData(xOffset + x * (width + vertGap),
                         yOffset + y * (height + horizGap), (x + 1) * width, (y + 1) * height);
 
-                sprites[x][y] = new Sprite(new Bitmap(data, width, height), createBounds);
+                sprites[x][y] = new Sprite(new Bitmap(data, width, height), initializeBounds);
             }
         }
     }
@@ -172,29 +178,7 @@ public class Spritesheet extends Bitmap
         int newCellHeight = (int) (cellSize.y * scale);
         Tuple2i newCellSize = new Tuple2i(newCellWidth, newCellHeight);
 
-        Spritesheet s = new Spritesheet(scaledImage, newCellSize, startOffset, verticalGapSize, horizontalGapSize, false);
-        s.scale = scale;
-        return s;
-    }
-
-    /**
-     * Generates a scaled copy of the existing Spritesheet.
-     *
-     * @param scale Scaling ratio (1f is 1:1 ratio).
-     * @param createBounds Weather or not to create a pixel-perfect bounding box within the sprite.
-     * @return A scaled copy of the Spritesheet.
-     */
-    public Spritesheet getScaled(float scale, boolean createBounds)
-    {
-        int newWidth = (int) (getWidth() * scale);
-        int newHeight = (int) (getHeight() * scale);
-        BufferedImage scaledImage = ImageUtils.getScaledImage(image, newWidth, newHeight);
-
-        int newCellWidth = (int) (cellSize.x * scale);
-        int newCellHeight = (int) (cellSize.y * scale);
-        Tuple2i newCellSize = new Tuple2i(newCellWidth, newCellHeight);
-
-        Spritesheet s = new Spritesheet(scaledImage, newCellSize, startOffset, verticalGapSize, horizontalGapSize, createBounds);
+        Spritesheet s = new Spritesheet(scaledImage, newCellSize, startOffset, verticalGapSize, horizontalGapSize, initializeBounds);
         s.scale = scale;
         return s;
     }

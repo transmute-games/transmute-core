@@ -43,9 +43,9 @@ public class Sprite extends Bitmap
      * The constructor used to define a sprite given a BufferedImage.
      *
      * @param image The image of a sprite.
-     * @param createBounds Weather or not to create a pixel-perfect bounding box within the sprite.
+     * @param initializeBounds Weather or not to create a pixel-perfect bounding box within the sprite.
      */
-    public Sprite(BufferedImage image, boolean createBounds)
+    public Sprite(BufferedImage image, boolean initializeBounds)
     {
         super(image);
         this.image = image;
@@ -54,7 +54,7 @@ public class Sprite extends Bitmap
         width = image.getWidth();
         height = image.getHeight();
         if (width == height) size = width;
-        if (createBounds) setBounds(image);
+        if (initializeBounds) setBounds(image);
         setScale(1.0f);
     }
 
@@ -80,9 +80,9 @@ public class Sprite extends Bitmap
      * The constructor used to define a sprite given a Bitmap.
      *
      * @param bitmap The bitmap of a sprite.
-     * @param createBounds Weather or not to create a pixel-perfect bounding box within the sprite.
+     * @param initializeBounds Weather or not to create a pixel-perfect bounding box within the sprite.
      */
-    public Sprite(Bitmap bitmap, boolean createBounds)
+    public Sprite(Bitmap bitmap, boolean initializeBounds)
     {
         super(bitmap);
 
@@ -92,7 +92,7 @@ public class Sprite extends Bitmap
         width = this.image.getWidth();
         height = this.image.getHeight();
         if (width == height) size = width;
-        if (createBounds) setBounds(image);
+        if (initializeBounds) setBounds(image);
         setScale(1.0f);
     }
 
@@ -117,9 +117,9 @@ public class Sprite extends Bitmap
      * The constructor used to define a sprite given a BufferedImage.
      *
      * @param image The image of a sprite.
-     * @param createBounds Weather or not to create a pixel-perfect bounding box within the sprite.
+     * @param initializeBounds Weather or not to create a pixel-perfect bounding box within the sprite.
      */
-    public Sprite(BufferedImage image, float scale, boolean createBounds)
+    public Sprite(BufferedImage image, float scale, boolean initializeBounds)
     {
         super(image);
         this.image = image;
@@ -128,7 +128,7 @@ public class Sprite extends Bitmap
         width = image.getWidth();
         height = image.getHeight();
         if (width == height) size = width;
-        if (createBounds) setBounds(image);
+        if (initializeBounds) setBounds(image);
     }
 
     /**
@@ -155,9 +155,9 @@ public class Sprite extends Bitmap
      *
      * @param bitmap The bitmap of a sprite.
      * @param scale  Scaling ratio (1f is 1:1 ratio).
-     * @param createBounds Weather or not to create a pixel-perfect bounding box within the sprite.
+     * @param initializeBounds Weather or not to create a pixel-perfect bounding box within the sprite.
      */
-    public Sprite(Bitmap bitmap, float scale, boolean createBounds)
+    public Sprite(Bitmap bitmap, float scale, boolean initializeBounds)
     {
         super(bitmap);
 
@@ -169,7 +169,7 @@ public class Sprite extends Bitmap
         if (width == height) size = width;
         this.scale = scale;
 
-        if (createBounds) setBounds(image);
+        if (initializeBounds) setBounds(image);
     }
 
     /**
