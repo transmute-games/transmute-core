@@ -84,7 +84,49 @@ public class Spritesheet extends Bitmap
                 int[] data = bmp.getData(xOffset + x * (width + vertGap),
                         yOffset + y * (height + horizGap), (x + 1) * width, (y + 1) * height);
 
-                sprites[x][y] = new Sprite(new Bitmap(data, width, height));
+                sprites[x][y] = new Sprite(new Bitmap(data, width, height), false);
+            }
+        }
+    }
+
+    /**
+     * Instantiates a Spritesheet object from a given Bitmap object (the main image) with sprite-sheet
+     * parameters.
+     *
+     * @param image       The big image to be used as Spritesheet.
+     * @param cellSize    Width and height of each sprite in a cell (Assuming cells are equal in size).
+     * @param startOffset Starting position to calculate sprite position (in pixels).
+     * @param vertGap     Vertical pixel gap size (0 if none).
+     * @param horizGap    Horizontal pixel gap size (0 if none).
+     * @param createBounds Weather or not to create a pixel-perfect bounding box within the sprite.
+     */
+    public Spritesheet(BufferedImage image, Tuple2i cellSize, Tuple2i startOffset, int vertGap, int horizGap, boolean createBounds)
+    {
+        super(image);
+
+        this.image = image;
+        this.cellSize = cellSize;
+        this.verticalGapSize = vertGap;
+        this.horizontalGapSize = horizGap;
+        this.startOffset = startOffset;
+
+        Bitmap bmp = ImageUtils.getAsBitmap(image);
+        int xOffset = startOffset.x;
+        int yOffset = startOffset.y;
+        int width = cellSize.x;
+        int height = cellSize.y;
+        int scaledWidth = image.getWidth() / width;
+        int scaledHeight = image.getHeight() / height;
+        sprites = new Sprite[scaledWidth][scaledHeight];
+        for (int x = 0; x < scaledWidth; x++)
+        {
+            for (int y = 0; y < scaledHeight; y++)
+            {
+                //Map cells into a grid for future reference
+                int[] data = bmp.getData(xOffset + x * (width + vertGap),
+                        yOffset + y * (height + horizGap), (x + 1) * width, (y + 1) * height);
+
+                sprites[x][y] = new Sprite(new Bitmap(data, width, height), createBounds);
             }
         }
     }
@@ -94,10 +136,11 @@ public class Spritesheet extends Bitmap
      *
      * @param image    The big image to be used as Spritesheet.
      * @param cellSize Width and height of each sprite in a cell (Assuming cells are equal in size).
+     * @param createBounds Weather or not to create a pixel-perfect bounding box within the sprite.
      */
-    public Spritesheet(BufferedImage image, int cellSize)
+    public Spritesheet(BufferedImage image, int cellSize, boolean createBounds)
     {
-        this(image, new Tuple2i(cellSize, cellSize), new Tuple2i(0, 0), 0, 0);
+        this(image, new Tuple2i(cellSize, cellSize), new Tuple2i(0, 0), 0, 0, createBounds);
     }
 
     /**
@@ -129,7 +172,29 @@ public class Spritesheet extends Bitmap
         int newCellHeight = (int) (cellSize.y * scale);
         Tuple2i newCellSize = new Tuple2i(newCellWidth, newCellHeight);
 
-        Spritesheet s = new Spritesheet(scaledImage, newCellSize, startOffset, verticalGapSize, horizontalGapSize);
+        Spritesheet s = new Spritesheet(scaledImage, newCellSize, startOffset, verticalGapSize, horizontalGapSize, false);
+        s.scale = scale;
+        return s;
+    }
+
+    /**
+     * Generates a scaled copy of the existing Spritesheet.
+     *
+     * @param scale Scaling ratio (1f is 1:1 ratio).
+     * @param createBounds Weather or not to create a pixel-perfect bounding box within the sprite.
+     * @return A scaled copy of the Spritesheet.
+     */
+    public Spritesheet getScaled(float scale, boolean createBounds)
+    {
+        int newWidth = (int) (getWidth() * scale);
+        int newHeight = (int) (getHeight() * scale);
+        BufferedImage scaledImage = ImageUtils.getScaledImage(image, newWidth, newHeight);
+
+        int newCellWidth = (int) (cellSize.x * scale);
+        int newCellHeight = (int) (cellSize.y * scale);
+        Tuple2i newCellSize = new Tuple2i(newCellWidth, newCellHeight);
+
+        Spritesheet s = new Spritesheet(scaledImage, newCellSize, startOffset, verticalGapSize, horizontalGapSize, createBounds);
         s.scale = scale;
         return s;
     }
