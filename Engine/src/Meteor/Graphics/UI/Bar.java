@@ -17,24 +17,6 @@ public class Bar implements Renderable
     private float max = 1.0f; //The maximum amount of foreground that could be filled.
 
     /**
-     * Defines a status-bar given its background, foreground, x and y location, width and height.
-     *
-     * @param bg     The background color.
-     * @param fg     The foreground color.
-     * @param x      The x-location of the status-bar.
-     * @param y      The y-location of the status-bar.
-     * @param width  The width of the status-bar.
-     * @param height The height of the status-bar.
-     */
-    public Bar(int bg, int fg, int x, int y, int width, int height)
-    {
-        this.bg = bg;
-        this.fg = fg;
-
-        this.bounds = new Rectangle(x, y, width, height);
-    }
-
-    /**
      * Defines a status-bar given its background, foreground, x and y location, width, height and a
      * specific amount of foreground that could be filled.
      *
@@ -53,6 +35,21 @@ public class Bar implements Renderable
         this.max = max;
 
         this.bounds = new Rectangle(x, y, width, height);
+    }
+
+    /**
+     * Defines a status-bar given its background, foreground, x and y location, width and height.
+     *
+     * @param bg     The background color.
+     * @param fg     The foreground color.
+     * @param x      The x-location of the status-bar.
+     * @param y      The y-location of the status-bar.
+     * @param width  The width of the status-bar.
+     * @param height The height of the status-bar.
+     */
+    public Bar(int bg, int fg, int x, int y, int width, int height)
+    {
+        this(bg, fg, x, y, width, height, 1.0f);
     }
 
     @Override
