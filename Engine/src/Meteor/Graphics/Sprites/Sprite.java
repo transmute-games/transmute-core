@@ -97,10 +97,10 @@ public class Sprite extends Bitmap
     }
 
     /**
-     * Calculates a precise bounding box when given a image of type
+     * Calculates a pixel-perfect bounding box when given a image of type
      * {@code BufferedImage.TYPE_INT_ARGB}
      *
-     * @param image The image to calculate a precise bounding box.
+     * @param image The image to calculate a pixel-perfect bounding box.
      */
     private void setBounds(BufferedImage image)
     {
