@@ -46,21 +46,12 @@ public abstract class Object implements Updatable, Renderable
 
     public Object(Manager manager, String name, int type, Tuple2i location, float scale)
     {
-        this.manager = manager;
-        this.name = name.toLowerCase();
-        this.type = type;
-        this.location = location;
-        this.scale = scale;
+        this(manager, name, type, null, location, scale);
     }
 
     public Object(Manager manager, String name, int type, Tuple2i location)
     {
-        this.manager = manager;
-        this.name = name.toLowerCase();
-        this.type = type;
-        this.location = location;
-
-        setScale(1.0f);
+        this(manager, name, type, location, 1.0f);
     }
 
     /**
