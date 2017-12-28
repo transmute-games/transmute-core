@@ -1,6 +1,5 @@
 package Meteor.System.Asset;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,11 +12,8 @@ import Meteor.Graphics.Sprites.Spritesheet;
 import Meteor.System.Error;
 import Meteor.System.Util;
 import Meteor.System.Asset.Type.Audios.Audio;
-import Meteor.System.Asset.Type.Audios.AudioManager;
 import Meteor.System.Asset.Type.Fonts.Font;
-import Meteor.System.Asset.Type.Fonts.FontManager;
 import Meteor.System.Asset.Type.Images.Image;
-import Meteor.System.Asset.Type.Images.ImageManager;
 
 /**
  * <p>
@@ -97,9 +93,19 @@ public class AssetManager
             Asset asset = LOAD_QUEUE.peek();
             asset.load();
             Util.logCached(AssetManager.CLASS_NAME, asset.getFileName());
-            AssetManager.distributeToManagers(asset);
             LOAD_QUEUE.remove(asset);
         }
+    }
+
+    /**
+     * Determines if an asset with a given key exists in the REGISTRAR.
+     *
+     * @param key The lower-cased key attached to the asset.
+     * @return If the asset with a given key exists in the REGISTRAR.
+     */
+    public static boolean containsKey(String key)
+    {
+        return REGISTRAR.containsKey(key);
     }
 
     /**
@@ -109,38 +115,6 @@ public class AssetManager
     {
         if (LOAD_QUEUE.isEmpty()) return true;
         else return false;
-    }
-
-    /**
-     * Distributes an asset to its respective manager based on its type.
-     *
-     * @param asset The asset to be sent to its respective manager.
-     */
-    private static void distributeToManagers(Asset asset)
-    {
-        if (asset instanceof Image) ImageManager.add(asset.getKey(), (BufferedImage) asset.getData());
-        else if (asset instanceof Audio) AudioManager.add(asset.getKey(), (Clip) asset.getData());
-        else if (asset instanceof Font) FontManager.add(asset.getKey(), (Spritesheet) asset.getData());
-    }
-
-    /**
-     * Removes a given asset from its respective manager by using its type.
-     *
-     * @param key  Unique identifier name.
-     * @param type The type associated with the resource.
-     */
-    private static void removeFromManagers(String key, String type)
-    {
-        if (type.equalsIgnoreCase(Image.TYPE))
-        {
-            ImageManager.remove(key, true);
-        } else if (type.equalsIgnoreCase(Audio.TYPE))
-        {
-            AudioManager.remove(key, true);
-        } else if (type.equalsIgnoreCase(Font.TYPE))
-        {
-            FontManager.remove(key, true);
-        }
     }
 
     /**
@@ -179,15 +153,13 @@ public class AssetManager
         //Check if key associated with the asset is in the registrar
         if (REGISTRAR.containsKey(key))
         {
-            //Check the type of the asset and remove it from its respective manager
-            removeFromManagers(key, type);
             REGISTRAR.remove(key);
             Util.logRemove(AssetManager.CLASS_NAME, key, AssetManager.MAP_NAME);
         } else new Error(Error.KeyNotFoundException(AssetManager.CLASS_NAME, key, AssetManager.MAP_NAME));
     }
 
     /**
-     * Creates a unique identifer for a resource.
+     * Creates a unique identifier for a resource.
      *
      * @param type The type associated with the resource.
      * @param name The name of the resource.
@@ -255,16 +227,12 @@ public class AssetManager
     {
         REGISTRAR.clear();
         LOAD_QUEUE.clear();
-
-        ImageManager.cleanUp();
-        AudioManager.cleanUp();
-        FontManager.cleanUp();
     }
 
     /**
      * @return An instance of AssetManager.
      */
-    public static AssetManager getInstance()
+    public synchronized static AssetManager getInstance()
     {
         return instance;
     }
