@@ -98,10 +98,10 @@ public class AssetManager
     }
 
     /**
-     * Determines if an asset with a given key exists in the REGISTRAR.
+     * Determines if an asset with a given key exists in the Registrar.
      *
      * @param key The lower-cased key attached to the asset.
-     * @return If the asset with a given key exists in the REGISTRAR.
+     * @return If the asset with a given key exists in the Registrar.
      */
     public static boolean containsKey(String key)
     {
@@ -118,7 +118,7 @@ public class AssetManager
     }
 
     /**
-     * Removes a resource of a given type from the registrar.
+     * Removes a resource of a given type from the Registrar.
      *
      * @param item The item to be removed.
      */
@@ -141,7 +141,7 @@ public class AssetManager
     }
 
     /**
-     * Removes a resource with a given name from the registrar.
+     * Removes a resource with a given name from the Registrar.
      *
      * @param type The type associated with the resource.
      * @param name The name of the resource.
