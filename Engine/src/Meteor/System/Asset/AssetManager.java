@@ -113,8 +113,7 @@ public class AssetManager
      */
     public static boolean isLoaded()
     {
-        if (LOAD_QUEUE.isEmpty()) return true;
-        else return false;
+        return LOAD_QUEUE.isEmpty();
     }
 
     /**
