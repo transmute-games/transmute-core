@@ -1,13 +1,12 @@
 package Meteor.Graphics;
 
-import Meteor.System.Asset.Type.Images.ImageUtils;
+import Meteor.System.Asset.Type.Images.Image;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 import java.awt.image.VolatileImage;
 
 /**
@@ -49,7 +48,7 @@ public class Bitmap
         this.width = width;
         this.height = height;
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        this.data = ImageUtils.getData(image);
+        this.data = Image.getData(image);
     }
 
     /**
@@ -63,7 +62,7 @@ public class Bitmap
         this.height = bitmap.height;
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         this.image.setRGB(0, 0, width, height, bitmap.getImage().getRGB(0, 0, width, height, null, 0, width), 0, width);
-        this.data = ImageUtils.getData(image);
+        this.data = Image.getData(image);
     }
 
     /**
@@ -78,7 +77,7 @@ public class Bitmap
         this.width = image.getWidth();
         this.height = image.getHeight();
         this.data = new int[width * height];
-        this.data = ImageUtils.getData(image);
+        this.data = Image.getData(image);
     }
 
     /**
@@ -96,7 +95,7 @@ public class Bitmap
         this.data = new int[w * h];
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         image.setRGB(0, 0, width, height, data, 0, width);
-        this.data = ImageUtils.getData(image);
+        this.data = Image.getData(image);
     }
 
     /**

@@ -11,7 +11,7 @@ import Meteor.Graphics.Bitmap;
 import Meteor.Graphics.Sprites.Spritesheet;
 import Meteor.System.Error;
 import Meteor.System.Util;
-import Meteor.System.Asset.Type.Audios.Audio;
+import Meteor.System.Asset.Type.Audio.Audio;
 import Meteor.System.Asset.Type.Fonts.Font;
 import Meteor.System.Asset.Type.Images.Image;
 
@@ -100,12 +100,13 @@ public class AssetManager
     /**
      * Determines if an asset with a given key exists in the Registrar.
      *
-     * @param key The lower-cased key attached to the asset.
+     * @param type The type associated with the resource.
+     * @param name The name of the resource.
      * @return If the asset with a given key exists in the Registrar.
      */
-    public static boolean containsKey(String key)
+    public static boolean containsKey(String type, String name)
     {
-        return REGISTRAR.containsKey(key);
+        return REGISTRAR.containsKey(createKey(type, name));
     }
 
     /**
@@ -149,7 +150,7 @@ public class AssetManager
     {
         String key = createKey(type, name);
 
-        //Check if key associated with the asset is in the registrar
+        //Check if key associated with the asset is in the Registrar
         if (REGISTRAR.containsKey(key))
         {
             REGISTRAR.remove(key);

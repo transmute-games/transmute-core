@@ -7,9 +7,9 @@ import java.util.HashMap;
 import Meteor.Graphics.Bitmap;
 import Meteor.Graphics.Context;
 import Meteor.Graphics.Sprites.Spritesheet;
+import Meteor.System.Asset.Type.Images.Image;
 import Meteor.System.Error;
 import Meteor.System.Asset.Asset;
-import Meteor.System.Asset.Type.Images.ImageUtils;
 import Meteor.Units.Tuple2i;
 
 public class Font extends Asset
@@ -95,7 +95,7 @@ public class Font extends Asset
 
         try
         {
-            image = ImageUtils.load(getClass().getClassLoader().getResourceAsStream(filePath));
+            image = Image.load(getClass().getClassLoader().getResourceAsStream(filePath));
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -103,7 +103,7 @@ public class Font extends Asset
         }
 
         assert image != null;
-        image = ImageUtils.convertTo(BufferedImage.TYPE_INT_ARGB, image);
+        image = Image.convertTo(BufferedImage.TYPE_INT_ARGB, image);
         target = new Spritesheet(image, defaultGlyphSize, new Tuple2i(0, 0), 0, 0);
     }
 
@@ -118,14 +118,14 @@ public class Font extends Asset
 
         try
         {
-            image = ImageUtils.load(className.getClassLoader().getResourceAsStream(filePath));
+            image = Image.load(className.getClassLoader().getResourceAsStream(filePath));
         } catch (IOException e)
         {
             e.printStackTrace();
             new Error(Error.FileNotFoundException(Font.TYPE, filePath));
         }
 
-        image = ImageUtils.convertTo(BufferedImage.TYPE_INT_ARGB, image);
+        image = Image.convertTo(BufferedImage.TYPE_INT_ARGB, image);
         return new Spritesheet(image, defaultGlyphSize, new Tuple2i(0, 0), 0, 0);
     }
 

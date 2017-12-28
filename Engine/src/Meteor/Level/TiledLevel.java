@@ -9,7 +9,6 @@ import Meteor.Graphics.Bitmap;
 import Meteor.Graphics.Context;
 import Meteor.System.Asset.Asset;
 import Meteor.System.Asset.Type.Images.Image;
-import Meteor.System.Asset.Type.Images.ImageUtils;
 
 public class TiledLevel extends Level
 {
@@ -45,7 +44,7 @@ public class TiledLevel extends Level
             return;
         }
 
-        Bitmap bmp = ImageUtils.getAsBitmap(Image.load(TiledLevel.class, filePath));
+        Bitmap bmp = Image.getAsBitmap(Image.load(TiledLevel.class, filePath));
         tileArray = bmp.getData();
         width = bmp.getWidth();
         height = bmp.getHeight();

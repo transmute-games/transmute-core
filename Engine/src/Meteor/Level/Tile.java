@@ -9,7 +9,7 @@ import Meteor.GameEngine.Interfaces.Updatable;
 import Meteor.Graphics.Context;
 import Meteor.Graphics.Sprites.Animation;
 import Meteor.Graphics.Sprites.Sprite;
-import Meteor.System.Asset.Type.Images.ImageUtils;
+import Meteor.System.Asset.Type.Images.Image;
 
 /**
  * {@code Tile} is a generic tile class.
@@ -100,8 +100,8 @@ public class Tile implements Updatable
      */
     public void render(Manager manager, Context ctx, int x, int y)
     {
-        if (isAnimated()) ImageUtils.render(ctx, animation.getBitmap(), x, y);
-        else ImageUtils.render(ctx, sprite.getImage(), x, y);
+        if (isAnimated()) Image.render(ctx, animation.getBitmap(), x, y);
+        else Image.render(ctx, sprite.getImage(), x, y);
     }
 
     /**

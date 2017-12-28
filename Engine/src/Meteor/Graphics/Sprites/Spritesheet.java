@@ -3,7 +3,7 @@ package Meteor.Graphics.Sprites;
 import java.awt.image.BufferedImage;
 
 import Meteor.Graphics.Bitmap;
-import Meteor.System.Asset.Type.Images.ImageUtils;
+import Meteor.System.Asset.Type.Images.Image;
 import Meteor.Units.Tuple2i;
 
 public class Spritesheet extends Bitmap
@@ -75,7 +75,7 @@ public class Spritesheet extends Bitmap
         this.startOffset = startOffset;
         this.initializeBounds = initializeBounds;
 
-        Bitmap bmp = ImageUtils.getAsBitmap(image);
+        Bitmap bmp = Image.getAsBitmap(image);
         int xOffset = startOffset.x;
         int yOffset = startOffset.y;
         int width = cellSize.x;
@@ -157,7 +157,7 @@ public class Spritesheet extends Bitmap
     {
         int newWidth = (int) (getWidth() * scale);
         int newHeight = (int) (getHeight() * scale);
-        BufferedImage scaledImage = ImageUtils.getScaledImage(image, newWidth, newHeight);
+        BufferedImage scaledImage = Image.getScaledImage(image, newWidth, newHeight);
 
         int newCellWidth = (int) (cellSize.x * scale);
         int newCellHeight = (int) (cellSize.y * scale);

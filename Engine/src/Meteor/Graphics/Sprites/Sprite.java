@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 import Meteor.Graphics.Bitmap;
 import Meteor.Graphics.Rectangle;
-import Meteor.System.Asset.Type.Images.ImageUtils;
+import Meteor.System.Asset.Type.Images.Image;
 
 /**
  * {@code Sprite} is a generic representation of a sprite class.
@@ -32,7 +32,7 @@ public class Sprite extends Bitmap
     {
         super(image);
         this.image = image;
-        this.bitmap = ImageUtils.getAsBitmap(image);
+        this.bitmap = Image.getAsBitmap(image);
 
         width = image.getWidth();
         height = image.getHeight();
@@ -153,7 +153,7 @@ public class Sprite extends Bitmap
     private void setBounds(BufferedImage image)
     {
         if (image.getType() != BufferedImage.TYPE_INT_ARGB) {
-            image = ImageUtils.convertTo(BufferedImage.TYPE_INT_ARGB, image);
+            image = Image.convertTo(BufferedImage.TYPE_INT_ARGB, image);
         }
 
         int xMin = Integer.MAX_VALUE;

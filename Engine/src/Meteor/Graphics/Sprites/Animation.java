@@ -5,7 +5,7 @@ import java.util.*;
 import Meteor.Graphics.Bitmap;
 import Meteor.Graphics.Color;
 import Meteor.Graphics.Context;
-import Meteor.System.Asset.Type.Images.ImageUtils;
+import Meteor.System.Asset.Type.Images.Image;
 
 /**
  * An animation is a series of Bitmaps played in a timed sequence.
@@ -282,10 +282,10 @@ public class Animation
 
             if (original == null)
             {
-                original = ImageUtils.getAsBitmap(frames.get(i).sprite.getImage());
+                original = Image.getAsBitmap(frames.get(i).sprite.getImage());
             }
 
-            original = ImageUtils.getAsBitmap(ImageUtils.getFlipped(original.getImage(), horizontal, vertical));
+            original = Image.getAsBitmap(Image.getFlipped(original.getImage(), horizontal, vertical));
             Sprite mirror = new Sprite(original);
             animation[i] = mirror;
         }

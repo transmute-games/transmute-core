@@ -1,9 +1,8 @@
-package Meteor.System.Asset.Type.Audios;
+package Meteor.System.Asset.Type.Audio;
 
 import javax.sound.sampled.Clip;
 
 import Meteor.System.Util;
-import Meteor.System.Error;
 import Meteor.System.Asset.AssetManager;
 
 /**
@@ -17,22 +16,6 @@ public class AudioPlayer
     private static boolean muteAudio = false; //The main boolean variable to turn on or off the audio
 
     /**
-     * Method used to grab a audio file contained inside the REGISTRAR.
-     *
-     * @param name The name attached to the audio file.
-     * @return The audio file from the REGISTRAR.
-     */
-    public static Clip get(String name)
-    {
-        String key;
-        key = AssetManager.createKey(Audio.TYPE, name);
-        Clip clip = null;
-        if (AssetManager.containsKey(key)) clip = AssetManager.getAudio(key);
-        if (clip == null) new Error("Something went wrong during the retrieval of the asset, [" + key + "].");
-        return clip;
-    }
-
-    /**
      * Method used to play a given audio file based on an inputted string value.
      *
      * @param name The name attached to the audio file.
@@ -40,7 +23,7 @@ public class AudioPlayer
     public static void play(String name)
     {
         if (muteAudio) return;
-        Clip clip = AudioPlayer.get(name);
+        Clip clip = AssetManager.getAudio(name);
         if (clip == null) return;
         int gap = 0;
         Util.log("[" + CLASS_NAME + "]: Playing [" + name + "].");
@@ -69,7 +52,7 @@ public class AudioPlayer
      */
     private static void stop(String name)
     {
-        Clip clip = AudioPlayer.get(name);
+        Clip clip = AssetManager.getAudio(name);
         if (clip == null) return;
         Util.log("[" + CLASS_NAME + "]: Stopping [" + name + "].");
         if (clip.isRunning()) clip.stop();
@@ -83,7 +66,7 @@ public class AudioPlayer
     public static void resume(String name)
     {
         if (muteAudio) return;
-        Clip clip = AudioPlayer.get(name);
+        Clip clip = AssetManager.getAudio(name);
         if (clip == null) return;
         if (clip.isRunning()) return;
         Util.log("[" + CLASS_NAME + "]: Starting [" + name + "].");
@@ -97,7 +80,7 @@ public class AudioPlayer
      */
     public static void loop(String name)
     {
-        Clip clip = AudioPlayer.get(name);
+        Clip clip = AssetManager.getAudio(name);
         stop(name);
         if (muteAudio) return;
         if (clip == null) return;
@@ -113,6 +96,6 @@ public class AudioPlayer
      */
     public static int getAudioFrames(String name)
     {
-        return get(name).getFrameLength();
+        return AssetManager.getAudio(name).getFrameLength();
     }
 }

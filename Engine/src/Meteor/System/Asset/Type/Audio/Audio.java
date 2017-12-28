@@ -1,4 +1,4 @@
-package Meteor.System.Asset.Type.Audios;
+package Meteor.System.Asset.Type.Audio;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
