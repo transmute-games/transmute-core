@@ -29,7 +29,7 @@ public class Audio extends Asset
             return;
         }
 
-        Clip clip = null;
+        Clip clip;
 
         try
         {
@@ -70,7 +70,7 @@ public class Audio extends Asset
     @Override
     public synchronized Clip getData()
     {
-        if ((Clip) target == null)
+        if (target == null)
         {
             new Error("[" + Audio.TYPE + "]: [" + fileName + "] has not been loaded.");
         }
