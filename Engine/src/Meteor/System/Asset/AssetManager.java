@@ -121,7 +121,6 @@ public class AssetManager
         if (asset instanceof Image) ImageManager.add(asset.getKey(), (BufferedImage) asset.getData());
         else if (asset instanceof Audio) AudioManager.add(asset.getKey(), (Clip) asset.getData());
         else if (asset instanceof Font) FontManager.add(asset.getKey(), (Spritesheet) asset.getData());
-
     }
 
     /**
