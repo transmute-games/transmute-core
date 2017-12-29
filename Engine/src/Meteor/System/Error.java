@@ -1,7 +1,7 @@
 package Meteor.System;
 
 @SuppressWarnings("serial")
-public class Error extends Exception
+public class Error
 {
 
     /**
