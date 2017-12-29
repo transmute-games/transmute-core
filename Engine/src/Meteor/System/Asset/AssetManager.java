@@ -186,7 +186,7 @@ public class AssetManager
      */
     public synchronized static Clip getAudio(String name)
     {
-        return (Clip) REGISTRAR.get((Audio.TYPE + ":" + name).toLowerCase()).getData();
+        return (Clip) REGISTRAR.get(createKey(Audio.TYPE, name).toLowerCase()).getData();
     }
 
     /**
@@ -197,7 +197,7 @@ public class AssetManager
      */
     public synchronized static Bitmap getImage(String name)
     {
-        return (Bitmap) REGISTRAR.get((Image.TYPE + ":" + name).toLowerCase()).getData();
+        return (Bitmap) REGISTRAR.get(createKey(Image.TYPE, name).toLowerCase()).getData();
     }
 
     /**
@@ -208,7 +208,7 @@ public class AssetManager
      */
     public synchronized static Spritesheet getFont(String name)
     {
-        return (Spritesheet) REGISTRAR.get((Font.TYPE + ":" + name).toLowerCase()).getData();
+        return (Spritesheet) REGISTRAR.get(createKey(Font.TYPE, name).toLowerCase()).getData();
     }
 
     /**
