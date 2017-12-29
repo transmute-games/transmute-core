@@ -83,6 +83,54 @@ public class Image extends Asset
         return image;
     }
 
+    /**
+     * Loads a BufferedImage externally or locally through an <strong>InputStream</strong>.
+     * This can be used to load assets within a .jar executable by calling:
+     * <code>className.class.getResourceAsStream(String res);</code>
+     *
+     * @param in Data source to stream.
+     * @return Loaded resource.
+     * @throws IOException When path to the resource is invalid and/or resource cannot be loaded.
+     */
+    public static BufferedImage load(InputStream in) throws IOException
+    {
+        return load(in, 1.0f);
+    }
+
+    /**
+     * Loads a BufferedImage externally or locally through an <strong>InputStream</strong> with custom scaling.
+     * This can be used to load assets within a .jar executable by calling:
+     * <code>className.class.getResourceAsStream(String res);</code>
+     *
+     * @param in    Data source to stream.
+     * @param scale Scale of the resource, 1.0f is 1:1 ratio.
+     * @return Loaded resource.
+     * @throws IOException When path to the resource is invalid and/or resource cannot be loaded.
+     */
+    public static BufferedImage load(InputStream in, float scale) throws IOException
+    {
+        BufferedImage image = ImageIO.read(in);
+        AffineTransform transform = new AffineTransform();
+        transform.scale(scale, scale);
+        AffineTransformOp scaleOp = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        int newWidth = (int) ((float) image.getWidth() * scale);
+        int newHeight = (int) ((float) image.getHeight() * scale);
+        return scaleOp.filter(image, new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB));
+    }
+
+    /**
+     * Loads a BufferedImage in a specified external directory with custom scaling.
+     *
+     * @param filePath Path to resource.
+     * @param scale    Scale of resource, 1.0f is normal 1:1 scaling.
+     * @return Loaded resource.
+     * @throws IOException When path to the resource is invalid and/or resource cannot be loaded.
+     */
+    public static BufferedImage load(String filePath, float scale) throws IOException
+    {
+        return load(Files.newInputStream(Paths.get(filePath)), scale);
+    }
+
     @Override
     public BufferedImage getData()
     {
@@ -327,54 +375,6 @@ public class Image extends Asset
     public static Spritesheet getAsSpritesheet(BufferedImage image, int cellWidth, int cellHeight)
     {
         return new Spritesheet(image, new Tuple2i(cellWidth, cellHeight), new Tuple2i(0, 0), 0, 0);
-    }
-
-    /**
-     * Loads a BufferedImage externally or locally through an <strong>InputStream</strong>.
-     * This can be used to load assets within a .jar executable by calling:
-     * <code>className.class.getResourceAsStream(String res);</code>
-     *
-     * @param in Data source to stream.
-     * @return Loaded resource.
-     * @throws IOException When path to the resource is invalid and/or resource cannot be loaded.
-     */
-    public static BufferedImage load(InputStream in) throws IOException
-    {
-        return load(in, 1.0f);
-    }
-
-    /**
-     * Loads a BufferedImage externally or locally through an <strong>InputStream</strong> with custom scaling.
-     * This can be used to load assets within a .jar executable by calling:
-     * <code>className.class.getResourceAsStream(String res);</code>
-     *
-     * @param in    Data source to stream.
-     * @param scale Scale of the resource, 1.0f is 1:1 ratio.
-     * @return Loaded resource.
-     * @throws IOException When path to the resource is invalid and/or resource cannot be loaded.
-     */
-    public static BufferedImage load(InputStream in, float scale) throws IOException
-    {
-        BufferedImage image = ImageIO.read(in);
-        AffineTransform transform = new AffineTransform();
-        transform.scale(scale, scale);
-        AffineTransformOp scaleOp = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-        int newWidth = (int) ((float) image.getWidth() * scale);
-        int newHeight = (int) ((float) image.getHeight() * scale);
-        return scaleOp.filter(image, new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB));
-    }
-
-    /**
-     * Loads a BufferedImage in a specified external directory with custom scaling.
-     *
-     * @param filePath Path to resource.
-     * @param scale    Scale of resource, 1.0f is normal 1:1 scaling.
-     * @return Loaded resource.
-     * @throws IOException When path to the resource is invalid and/or resource cannot be loaded.
-     */
-    public static BufferedImage load(String filePath, float scale) throws IOException
-    {
-        return load(Files.newInputStream(Paths.get(filePath)), scale);
     }
 
     /**
