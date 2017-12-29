@@ -96,7 +96,7 @@ public class Image extends Asset
 
     /**
      * Crops the image into a given width and height based
-     * on the inputed x-coordinate, and y-coordinate.
+     * on the inputted x-coordinate, and y-coordinate.
      *
      * @param image      The image to be cropped.
      * @param xPos       The x-coordinate of the item to crop.
@@ -112,7 +112,7 @@ public class Image extends Asset
 
     /**
      * Crops the image into a given width and height based
-     * on the inputed x-coordinate, and y-coordinate.
+     * on the inputted x-coordinate, and y-coordinate.
      *
      * @param image     the image to be cropped.
      * @param xPos      The x-coordinate of the item to crop.
