@@ -282,7 +282,7 @@ public class Image extends Asset
     {
         int width = image.getWidth();
         int height = image.getHeight();
-        int[] data = null;
+        int[] data;
 
         if (image.getType() == BufferedImage.TYPE_INT_RGB || image.getType() == BufferedImage.TYPE_INT_ARGB)
         {
