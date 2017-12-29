@@ -30,9 +30,9 @@ public class Image extends Asset
     public static final int FORMAT_RGB = 0x0; //The image format in RGB
     public static final int FORMAT_ARGB = 0x1; //The image format in RGBA
 
-    public Image(String key, String filePath)
+    public Image(String name, String filePath)
     {
-        super(Image.TYPE, key, filePath);
+        super(Image.TYPE, name, filePath);
     }
 
     @Override

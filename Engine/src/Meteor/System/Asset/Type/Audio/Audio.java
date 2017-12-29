@@ -15,9 +15,9 @@ public class Audio extends Asset
 {
     public static final String TYPE = "audio";
 
-    public Audio(String key, String filePath)
+    public Audio(String name, String filePath)
     {
-        super(Audio.TYPE, key, filePath);
+        super(Audio.TYPE, name, filePath);
     }
 
     @Override
