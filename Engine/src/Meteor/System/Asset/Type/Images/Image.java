@@ -86,7 +86,7 @@ public class Image extends Asset
     /**
      * Loads a BufferedImage externally or locally through an <strong>InputStream</strong>.
      * This can be used to load assets within a .jar executable by calling:
-     * <code>className.class.getResourceAsStream(String res);</code>
+     * <code>className.class.getResourceAsStream(String filePath);</code>
      *
      * @param in Data source to stream.
      * @return Loaded resource.
@@ -100,7 +100,7 @@ public class Image extends Asset
     /**
      * Loads a BufferedImage externally or locally through an <strong>InputStream</strong> with custom scaling.
      * This can be used to load assets within a .jar executable by calling:
-     * <code>className.class.getResourceAsStream(String res);</code>
+     * <code>className.class.getResourceAsStream(String filePath);</code>
      *
      * @param in    Data source to stream.
      * @param scale Scale of the resource, 1.0f is 1:1 ratio.
