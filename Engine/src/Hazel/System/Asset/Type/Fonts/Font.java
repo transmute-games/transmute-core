@@ -31,7 +31,7 @@ public class Font extends Asset
 
         defaultFont.addKerningRule("sxItrf<>?", 5, 0);
         defaultFont.addKerningRule("^1*()+-;:/.,", 4, 0);
-        defaultFont.addKerningRule("j", 4, 1);
+        defaultFont.addKerningRule("jg", 4, 1);
         defaultFont.addKerningRule("li!", 3, 0);
     }
 
