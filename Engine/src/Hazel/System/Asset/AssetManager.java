@@ -66,7 +66,7 @@ public class AssetManager
      */
     public static boolean register(Asset asset)
     {
-        //Reject duplicated assets
+        //Reject duplicate assets
         if (containsKey(asset.getType(), asset.getName()))
         {
             new Error(Error.KeyAlreadyExistsException(AssetManager.CLASS_NAME, asset.getKey(), AssetManager.MAP_NAME));
