@@ -146,7 +146,7 @@ public class Bitmap
     public int[] getData(int xStart, int yStart, int xEnd, int yEnd)
     {
         if (xEnd <= xStart || yEnd <= yStart)
-            throw new IllegalArgumentException(String.format("xEnd <= xStart or yEnd <= yStart! xSartt: %d, xEnd: %d | yStart: %d, yEnd: %d", xStart, xEnd, yStart, yEnd));
+            throw new IllegalArgumentException(String.format("xEnd <= xStart or yEnd <= yStart! xStart: %d, xEnd: %d | yStart: %d, yEnd: %d", xStart, xEnd, yStart, yEnd));
         if (xStart < 0 || xEnd > width || yStart < 0 || yEnd > height)
             throw new IllegalArgumentException(String.format("Selected region out of bounds! xStart: %d, xEnd: %d | yStart: %d (width: %d), yEnd: %d (height: %d)", xStart, xEnd, yStart, width, yEnd, height));
 
@@ -185,7 +185,7 @@ public class Bitmap
                     data[(getHeight() - y - 1) * getWidth() + x] = data[y * getWidth() + x];
                 }
             }
-        } else if (vertical && !horizontal)
+        } else if (!horizontal)
         {
             for (int x = getWidth() - 1; x >= 0; x--)
             {
