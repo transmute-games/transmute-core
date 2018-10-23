@@ -158,8 +158,7 @@ public abstract class Hazel implements Runnable, Cortex
         while (isRunning)
         {
             long now = System.nanoTime();
-            unprocessed += (now - then) / nsPerFrame;
-            delta = unprocessed;
+            delta = unprocessed += (now - then) / nsPerFrame;
             then = now;
             boolean shouldRender = false;
 
