@@ -147,13 +147,13 @@ public abstract class Hazel implements Runnable, Cortex
     @Override
     public void run()
     {
+        init();
+
         long then = System.nanoTime();
         double unprocessed = 0;
         double nsPerFrame = 1000000000.0d / targetFPS;
         int frames = 0, updates = 0;
         long lastVerbose = System.currentTimeMillis();
-
-        init();
 
         while (isRunning)
         {
