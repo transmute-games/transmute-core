@@ -21,7 +21,7 @@ public class Font extends Asset
      */
     public static Font defaultFont;
 
-    public static final void initializeDefaultFont(String filePath)
+    public static void initializeDefaultFont(String filePath)
     {
         defaultFont = new Font("$default", filePath,
                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -118,6 +118,8 @@ public class Font extends Asset
 
         try
         {
+            assert filePath != null;
+
             image = Image.load(className.getClassLoader().getResourceAsStream(filePath));
         } catch (IOException e)
         {
@@ -190,6 +192,7 @@ public class Font extends Asset
             }
 
             ctx.renderBitmap(glyph, xRender, yRender + glyphSink, alpha, color);
+
             xRender += glyphWidth;
         }
     }

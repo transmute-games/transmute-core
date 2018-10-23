@@ -130,7 +130,7 @@ public abstract class Level implements Updatable, Renderable
         {
             Object object = objManager.objectList.get(i);
 
-            if (object.equals(m) || object == null) continue;
+            if (object.equals(m)) continue;
 
             if (object instanceof Mob)
             {
@@ -164,8 +164,7 @@ public abstract class Level implements Updatable, Renderable
         {
             Object object = objManager.objectList.get(i);
 
-            if (object.equals(obj) || object instanceof Mob || object == null) continue;
-
+            if (object.equals(obj) || object instanceof Mob) continue;
 
             int x = object.getX();
             int y = object.getY();

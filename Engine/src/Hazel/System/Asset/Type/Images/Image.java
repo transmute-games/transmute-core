@@ -71,6 +71,8 @@ public class Image extends Asset
 
         try
         {
+            assert filePath != null;
+
             image = ImageIO.read(className.getClassLoader().getResourceAsStream(filePath));
         } catch (IOException e)
         {
@@ -207,6 +209,7 @@ public class Image extends Asset
         if (format == FORMAT_ARGB) return data;
 
         int[] colorData = new int[width * height];
+
         for (int i = 0; i < width * height; i++)
         {
             int r = (data[i] & 0xff0000) >> 16;
@@ -298,7 +301,7 @@ public class Image extends Asset
             affineTransform.translate(-image.getWidth(null), 0);
             AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
             result = affineTransformOp.filter(image, null);
-        } else if (vertical && !horizontal)
+        } else if (!horizontal)
         {
             AffineTransform affineTransform = AffineTransform.getScaleInstance(1, -1);
             affineTransform.translate(0, -image.getHeight(null));

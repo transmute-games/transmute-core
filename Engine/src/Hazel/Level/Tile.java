@@ -112,10 +112,10 @@ public class Tile implements Updatable
      */
     public Sprite getSprite(int index)
     {
-        Sprite tempSprite = null;
+        Sprite sprite = null;
         if (frames.get(index) != null)
-            tempSprite = frames.get(index);
-        return tempSprite;
+            sprite = frames.get(index);
+        return sprite;
     }
 
     /**

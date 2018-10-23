@@ -125,10 +125,10 @@ public abstract class Asset
     {
         if (filePath.contains("\\"))
         {
-            return filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.length());
+            return filePath.substring(filePath.lastIndexOf("\\") + 1);
         } else
         {
-            return filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length());
+            return filePath.substring(filePath.lastIndexOf("/") + 1);
         }
     }
 

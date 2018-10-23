@@ -91,7 +91,7 @@ public class AssetManager
         while (!isLoaded())
         {
             Asset asset = LOAD_QUEUE.peek();
-            asset.load();
+            assert asset != null; asset.load();
             Util.logCached(AssetManager.CLASS_NAME, asset.getFileName());
             LOAD_QUEUE.remove(asset);
         }
