@@ -55,7 +55,7 @@ public class Color
      * @param pixelColor Color integer with model ARGB.
      * @return An array of RGBA information from 0 to 255.
      */
-    public static final int[] fromPixelInt(int pixelColor)
+    public static int[] fromPixelInt(int pixelColor)
     {
         int[] rgba = new int[4];
         rgba[3] = (pixelColor >> 24) & 0xFF;
@@ -74,7 +74,7 @@ public class Color
      * @param a Alpha channel value between 0f - 1f.
      * @return Color integer of type ARGB.
      */
-    public static final int toPixelInt(float r, float g, float b, float a)
+    public static int toPixelInt(float r, float g, float b, float a)
     {
         if (r < 0f) r = 0f;
         if (r > 1f) r = 1f;
@@ -97,7 +97,7 @@ public class Color
      * @param a Alpha channel value between 0 - 255.
      * @return Color integer of type ARGB.
      */
-    public static final int toPixelInt(int r, int g, int b, int a)
+    public static int toPixelInt(int r, int g, int b, int a)
     {
         return ((a & 0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
     }
@@ -108,7 +108,7 @@ public class Color
      * @param argb ARGB color array.
      * @return Color integer of type ARGB.
      */
-    public static final int toPixelInt(int[] argb)
+    public static int toPixelInt(int[] argb)
     {
         return toPixelInt(argb[0], argb[1], argb[2], argb[3]);
     }
@@ -120,7 +120,7 @@ public class Color
      * @param tintColor  Tinting pixel color.
      * @return Tinted color pixel of type ARGB.
      */
-    public static final int tint(int pixelColor, int tintColor)
+    public static int tint(int pixelColor, int tintColor)
     {
         int[] pRGBA = fromPixelInt(pixelColor);
         int[] tRGBA = fromPixelInt(tintColor);

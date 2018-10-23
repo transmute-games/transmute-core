@@ -462,7 +462,7 @@ public class Animation
      */
     public void setScale(float scale)
     {
-        for (int i = 0; i < frames.size(); i++) frames.get(i).sprite.bitmap = frames.get(i).sprite.bitmap.getScaled(scale);
+        for (Frame f : frames) f.sprite.bitmap = f.sprite.bitmap.getScaled(scale);
     }
 
     /**

@@ -36,7 +36,10 @@ public class Spritesheet extends Bitmap
     /**
      * Initial offset to grab sprite from, this is the first coordinate for sprite position calculations
      */
-    private Tuple2i startOffset = new Tuple2i(0, 0);
+    private Tuple2i startOffset;
+    {
+        new Tuple2i(0, 0);
+    }
 
     /**
      * Sorted cell sprite's are stored here

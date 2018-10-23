@@ -56,8 +56,7 @@ public class SpriteManager
      */
     private static boolean checkMap(String key)
     {
-        if (SPRITE_MAP.containsKey(key.toLowerCase())) return true;
-        else return false;
+        return SPRITE_MAP.containsKey(key.toLowerCase());
     }
 
     /**
@@ -90,6 +89,8 @@ public class SpriteManager
         else new Error(Error.KeyNotFoundException(SpriteManager.CLASS_NAME, key, SpriteManager.MAP_NAME));
 
         Sprite sprite = null;
+
+        assert spriteArray != null;
 
         if (index <= spriteArray.length)
         {
