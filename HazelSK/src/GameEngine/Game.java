@@ -22,7 +22,6 @@ public class Game extends Hazel
     @Override
     public void init()
     {
-        setTargetFPS(60);
         setFPSVerbose(true);
 
         stateManager = new StateManager(this);

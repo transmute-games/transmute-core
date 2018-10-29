@@ -44,8 +44,8 @@ public abstract class Hazel implements Runnable, Cortex
     private GameWindow gameWindow; //The game window handler
     private Context ctx; //Game render 'canvas'
     private VolatileImage nativeImage; //Native hardware accelerated canvas image
-    private int numBuffers = 3; //Number of BufferStrategy to use (higher prevents flicker but slows performance)
-    private int targetFPS = 9999; //Desired FPS performance
+    private int numBuffers = 3; //Number of BufferStrategy to use (higher prevents flicker, but slows performance)
+    private int targetFPS = 60; //Desired FPS performance (Default Value = 60 FPS)
     private double delta = 0d; //Time elapsed between each frame
     private Input input; //The game input handler
 

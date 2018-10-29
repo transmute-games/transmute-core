@@ -56,7 +56,7 @@ public class Audio extends Asset
         try
         {
             assert filePath != null;
-            
+
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(className.getClassLoader().getResourceAsStream(filePath));
             clip = AudioSystem.getClip();
             clip.open(audioIn);
