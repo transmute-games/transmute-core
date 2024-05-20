@@ -33,17 +33,7 @@ Ensure you have the following tools installed:
 
 ### Installation
 
-1. **Clone the Repository**:
-
-    ```bash
-    git clone https://github.com/yourusername/TransmuteCore.git
-    ```
-
-2. **Navigate to the Project Directory**:
-
-    ```bash
-    cd TransmuteCore
-    ```
+To install and use this engine, you can make use of the starter-kit found [here](https://github.com/transmute-games/transmute-starter).
 
 ## Usage
 
