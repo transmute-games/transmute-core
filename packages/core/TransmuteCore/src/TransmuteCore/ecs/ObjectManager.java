@@ -1,8 +1,8 @@
 package TransmuteCore.ecs;
 
-import TransmuteCore.core.Interfaces.Renderable;
-import TransmuteCore.core.Interfaces.Updatable;
-import TransmuteCore.core.Interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.Renderable;
+import TransmuteCore.core.interfaces.Updatable;
+import TransmuteCore.core.interfaces.Services.IRenderer;
 import TransmuteCore.core.Manager;
 
 import java.util.ArrayList;

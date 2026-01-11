@@ -1,8 +1,8 @@
-package TransmuteCore.graphics.Sprites;
+package TransmuteCore.graphics.sprites;
 
 import java.util.*;
 
-import TransmuteCore.core.Interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.Services.IRenderer;
 import TransmuteCore.graphics.Bitmap;
 import TransmuteCore.graphics.Color;
 import TransmuteCore.assets.types.Image;

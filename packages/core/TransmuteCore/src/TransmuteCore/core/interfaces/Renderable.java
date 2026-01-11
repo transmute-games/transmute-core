@@ -1,7 +1,7 @@
-package TransmuteCore.core.Interfaces;
+package TransmuteCore.core.interfaces;
 
 import TransmuteCore.core.Manager;
-import TransmuteCore.core.Interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.Services.IRenderer;
 
 /**
  * {@code Renderable} is the main game engine's rendering interface class.

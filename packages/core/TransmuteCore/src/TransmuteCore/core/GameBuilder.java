@@ -1,7 +1,7 @@
 package TransmuteCore.core;
 
-import TransmuteCore.core.Interfaces.Cortex;
-import TransmuteCore.core.Interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.Cortex;
+import TransmuteCore.core.interfaces.Services.IRenderer;
 
 /**
  * Builder pattern for creating TransmuteCore game instances with a fluent API.

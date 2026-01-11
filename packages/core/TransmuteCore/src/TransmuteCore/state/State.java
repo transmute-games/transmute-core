@@ -1,6 +1,6 @@
 package TransmuteCore.state;
 
-import TransmuteCore.core.Interfaces.Cortex;
+import TransmuteCore.core.interfaces.Cortex;
 
 /**
  * {@code State} is the generic game state for a game.

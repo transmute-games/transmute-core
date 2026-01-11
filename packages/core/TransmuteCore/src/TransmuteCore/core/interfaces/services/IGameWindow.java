@@ -1,4 +1,4 @@
-package TransmuteCore.core.Interfaces.Services;
+package TransmuteCore.core.interfaces.services;
 
 import java.awt.Canvas;
 import java.awt.image.BufferStrategy;

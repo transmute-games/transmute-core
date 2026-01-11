@@ -1,7 +1,7 @@
 package TransmuteCore.core;
 
-import TransmuteCore.core.Interfaces.Services.IGameWindow;
-import TransmuteCore.core.Interfaces.WindowEventCallbacks;
+import TransmuteCore.core.interfaces.Services.IGameWindow;
+import TransmuteCore.core.interfaces.WindowEventCallbacks;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;

@@ -4,8 +4,8 @@ import java.util.Stack;
 
 import TransmuteCore.core.TransmuteCore;
 import TransmuteCore.core.Manager;
-import TransmuteCore.core.Interfaces.Cortex;
-import TransmuteCore.core.Interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.Cortex;
+import TransmuteCore.core.interfaces.Services.IRenderer;
 import TransmuteCore.util.exceptions.StateException;
 
 /**

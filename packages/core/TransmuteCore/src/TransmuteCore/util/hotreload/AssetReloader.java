@@ -1,4 +1,4 @@
-package TransmuteCore.System.HotReload;
+package TransmuteCore.util.hotreload;
 
 import TransmuteCore.assets.AssetManager;
 import TransmuteCore.assets.Asset;

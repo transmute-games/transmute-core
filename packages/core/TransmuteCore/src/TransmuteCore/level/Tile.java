@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import TransmuteCore.core.Manager;
-import TransmuteCore.core.Interfaces.Updatable;
-import TransmuteCore.core.Interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.Updatable;
+import TransmuteCore.core.interfaces.Services.IRenderer;
 import TransmuteCore.graphics.sprites.Animation;
 import TransmuteCore.graphics.sprites.Sprite;
 import TransmuteCore.assets.types.Image;

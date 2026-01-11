@@ -1,4 +1,4 @@
-package TransmuteCore.graphics.Sprites;
+package TransmuteCore.graphics.sprites;
 
 import java.awt.image.BufferedImage;
 

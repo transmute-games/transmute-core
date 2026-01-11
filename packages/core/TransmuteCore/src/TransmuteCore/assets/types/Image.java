@@ -1,4 +1,4 @@
-package TransmuteCore.assets.Type.Images;
+package TransmuteCore.assets.types;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import TransmuteCore.core.Interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.Services.IRenderer;
 import TransmuteCore.graphics.Bitmap;
 import TransmuteCore.graphics.sprites.Sprite;
 import TransmuteCore.graphics.sprites.Spritesheet;

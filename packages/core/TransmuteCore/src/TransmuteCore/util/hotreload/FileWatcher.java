@@ -1,4 +1,4 @@
-package TransmuteCore.System.HotReload;
+package TransmuteCore.util.hotreload;
 
 import TransmuteCore.util.Logger;
 

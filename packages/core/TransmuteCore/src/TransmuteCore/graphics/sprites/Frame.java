@@ -1,4 +1,4 @@
-package TransmuteCore.graphics.Sprites;
+package TransmuteCore.graphics.sprites;
 
 /**
  * A frame class that represents a Sprite with a given duration time (in seconds).

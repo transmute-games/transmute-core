@@ -1,4 +1,4 @@
-package TransmuteCore.core.Interfaces.Services;
+package TransmuteCore.core.interfaces.services;
 
 import TransmuteCore.graphics.sprites.Animation;
 import TransmuteCore.graphics.sprites.Sprite;

@@ -1,8 +1,8 @@
 package TransmuteCore.core;
 
-import TransmuteCore.core.Interfaces.Cortex;
-import TransmuteCore.core.Interfaces.GameLoopExceptionHandler;
-import TransmuteCore.core.Interfaces.LifecycleCallbacks;
+import TransmuteCore.core.interfaces.Cortex;
+import TransmuteCore.core.interfaces.GameLoopExceptionHandler;
+import TransmuteCore.core.interfaces.LifecycleCallbacks;
 import TransmuteCore.util.Logger;
 
 /**

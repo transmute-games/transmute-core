@@ -1,4 +1,4 @@
-package TransmuteCore.core.Interfaces;
+package TransmuteCore.core.interfaces;
 
 import TransmuteCore.input.Input;
 

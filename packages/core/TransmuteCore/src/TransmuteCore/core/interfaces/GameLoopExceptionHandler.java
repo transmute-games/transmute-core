@@ -1,4 +1,4 @@
-package TransmuteCore.core.Interfaces;
+package TransmuteCore.core.interfaces;
 
 /**
  * Functional interface for handling exceptions that occur in the game loop.

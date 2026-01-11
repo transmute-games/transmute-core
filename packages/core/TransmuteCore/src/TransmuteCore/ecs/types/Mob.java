@@ -1,4 +1,4 @@
-package TransmuteCore.Objects.Type;
+package TransmuteCore.ecs.types;
 
 import TransmuteCore.core.Manager;
 import TransmuteCore.level.TiledLevel;

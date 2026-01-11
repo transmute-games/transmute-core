@@ -1,4 +1,4 @@
-package TransmuteCore.assets.Type.Fonts;
+package TransmuteCore.assets.types;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

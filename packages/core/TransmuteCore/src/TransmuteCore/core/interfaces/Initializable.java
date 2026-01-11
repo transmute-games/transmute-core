@@ -1,4 +1,4 @@
-package TransmuteCore.core.Interfaces;
+package TransmuteCore.core.interfaces;
 
 /**
  * {@code Initializable} is the main game engine's initializing interface class.

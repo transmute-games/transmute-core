@@ -1,10 +1,10 @@
 package TransmuteCore.core;
 
-import TransmuteCore.core.Interfaces.Cortex;
-import TransmuteCore.core.Interfaces.LifecycleCallbacks;
-import TransmuteCore.core.Interfaces.WindowEventCallbacks;
-import TransmuteCore.core.Interfaces.Services.IAssetManager;
-import TransmuteCore.core.Interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.Cortex;
+import TransmuteCore.core.interfaces.LifecycleCallbacks;
+import TransmuteCore.core.interfaces.WindowEventCallbacks;
+import TransmuteCore.core.interfaces.Services.IAssetManager;
+import TransmuteCore.core.interfaces.Services.IRenderer;
 import TransmuteCore.graphics.Context;
 import TransmuteCore.input.Input;
 import TransmuteCore.util.Logger;

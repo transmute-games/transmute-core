@@ -7,7 +7,7 @@ import java.util.Queue;
 
 import javax.sound.sampled.Clip;
 
-import TransmuteCore.core.Interfaces.Services.IAssetManager;
+import TransmuteCore.core.interfaces.Services.IAssetManager;
 import TransmuteCore.graphics.Bitmap;
 import TransmuteCore.graphics.sprites.Spritesheet;
 import TransmuteCore.util.Logger;

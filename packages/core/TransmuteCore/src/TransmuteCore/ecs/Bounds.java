@@ -1,8 +1,8 @@
 package TransmuteCore.ecs;
 
-import TransmuteCore.core.Interfaces.Cortex;
+import TransmuteCore.core.interfaces.Cortex;
 import TransmuteCore.core.Manager;
-import TransmuteCore.core.Interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.Services.IRenderer;
 import TransmuteCore.graphics.Rectangle;
 import TransmuteCore.math.Dimension2f;
 import TransmuteCore.math.Tuple2i;

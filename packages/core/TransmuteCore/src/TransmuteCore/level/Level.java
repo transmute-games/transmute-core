@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import TransmuteCore.core.Manager;
-import TransmuteCore.core.Interfaces.Renderable;
-import TransmuteCore.core.Interfaces.Updatable;
-import TransmuteCore.core.Interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.Renderable;
+import TransmuteCore.core.interfaces.Updatable;
+import TransmuteCore.core.interfaces.Services.IRenderer;
 import TransmuteCore.ecs.Object;
 import TransmuteCore.ecs.ObjectManager;
 import TransmuteCore.ecs.types.Mob;

@@ -1,4 +1,4 @@
-package TransmuteCore.util;
+package TransmuteCore.util.exceptions;
 
 import TransmuteCore.core.TransmuteCore;
 

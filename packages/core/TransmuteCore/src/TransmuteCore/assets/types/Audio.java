@@ -1,4 +1,4 @@
-package TransmuteCore.assets.Type.Audio;
+package TransmuteCore.assets.types;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

@@ -1,4 +1,4 @@
-package TransmuteCore.ecs.Pathfinding;
+package TransmuteCore.ecs.pathfinding;
 
 import TransmuteCore.level.TiledLevel;
 import TransmuteCore.math.Vector2i;

@@ -1,10 +1,10 @@
-package TransmuteCore.graphics.Sprites;
+package TransmuteCore.graphics.sprites;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import TransmuteCore.core.Interfaces.Services.ISpriteManager;
+import TransmuteCore.core.interfaces.Services.ISpriteManager;
 import TransmuteCore.util.Error;
 import TransmuteCore.util.Logger;
 import TransmuteCore.math.Tuple2i;
