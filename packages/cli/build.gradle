@@ -1,0 +1,55 @@
+plugins {
+    id 'application'
+}
+
+// CLI uses its own version scheme
+version = '0.1.0-ALPHA'
+
+application {
+    mainClass = 'games.transmute.cli.TransmuteCLI'
+}
+
+dependencies {
+    // No dependencies on core - CLI is standalone
+    // Uses templates to generate projects that depend on core
+}
+
+// Create a fat JAR for distribution
+task fatJar(type: Jar) {
+    manifest {
+        attributes(
+            'Main-Class': application.mainClass.get(),
+            'Implementation-Title': 'Transmute CLI',
+            'Implementation-Version': version
+        )
+    }
+    archiveBaseName = 'transmute-cli'
+    archiveClassifier = 'all'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    
+    with jar
+}
+
+// Task to create distributable CLI
+task dist {
+    dependsOn fatJar
+    description = 'Creates a distributable CLI JAR'
+    doLast {
+        println "\nTransmute CLI built successfully!"
+        println "Location: ${fatJar.archiveFile.get()}"
+        println "\nUsage:"
+        println "  java -jar ${fatJar.archiveFile.get().asFile.name} new <project-name>"
+        println "\nOr create an alias:"
+        println "  alias transmute='java -jar ${fatJar.archiveFile.get().asFile.absolutePath}'"
+    }
+}
+
+// Development task
+task dev {
+    dependsOn build
+    description = 'Builds the CLI for development'
+}
