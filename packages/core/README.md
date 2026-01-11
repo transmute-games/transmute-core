@@ -1,4 +1,4 @@
-# TransmuteCore Engine
+# 🧙🏼 TransmuteCore Engine
 
 The core TransmuteCore 2D pixel game engine library. This package contains the complete game engine implementation.
 

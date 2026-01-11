@@ -1,4 +1,4 @@
-# Transmute CLI
+# 🧙🏼 Transmute CLI
 
 Command-line tool for scaffolding new TransmuteCore game projects.
 
@@ -240,7 +240,7 @@ cd quest
    ```bash
    # Bash/Zsh (~/.bashrc or ~/.zshrc)
    export PATH="$PATH:$HOME/.local/bin"
-   
+
    # Fish (~/.config/fish/config.fish)
    set -U fish_user_paths $HOME/.local/bin $fish_user_paths
    ```
