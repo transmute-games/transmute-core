@@ -152,9 +152,11 @@ public class TransmuteCLI {
         String scaleStr = reader.readLine().trim();
         config.screenScale = scaleStr.isEmpty() ? 2 : Integer.parseInt(scaleStr);
         
-        System.out.print("Package Name [com.example." + projectName.toLowerCase() + "]: ");
+        // Sanitize project name for default package
+        String sanitizedProjectName = projectName.toLowerCase().replaceAll("[^a-z0-9]", "");
+        System.out.print("Package Name [com.example." + sanitizedProjectName + "]: ");
         String pkg = reader.readLine().trim();
-        config.packageName = pkg.isEmpty() ? "com.example." + projectName.toLowerCase() : pkg;
+        config.packageName = pkg.isEmpty() ? "com.example." + sanitizedProjectName : pkg;
         
         System.out.println("\n--- Configuration ---");
         System.out.println("Template: " + template);

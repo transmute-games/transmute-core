@@ -18,6 +18,11 @@ public class ProjectGenerator {
             throw new IOException("Directory '" + projectName + "' already exists");
         }
         
+        // Validate project name
+        if (projectName == null || projectName.trim().isEmpty()) {
+            throw new IOException("Project name cannot be empty");
+        }
+        
         System.out.println("Generating project '" + projectName + "' with template '" + templateName + "'...");
         
         // Create project directory
@@ -28,8 +33,11 @@ public class ProjectGenerator {
             config.gameTitle = projectName;
         }
         if (config.packageName.equals("com.example.game")) {
-            config.packageName = "com.example." + projectName.toLowerCase().replaceAll("[^a-z0-9]", "");
+            config.packageName = "com.example." + sanitizePackageName(projectName);
         }
+        
+        // Validate and sanitize package name
+        config.packageName = validateAndSanitizePackageName(config.packageName);
         
         // Create project structure
         createProjectStructure(projectPath, config);
@@ -390,5 +398,97 @@ public class ProjectGenerator {
     private void writeFile(Path path, String content) throws IOException {
         Files.createDirectories(path.getParent());
         Files.writeString(path, content);
+    }
+    
+    /**
+     * Sanitizes a string to be used as part of a Java package name.
+     * Removes all non-alphanumeric characters and converts to lowercase.
+     */
+    private String sanitizePackageName(String input) {
+        return input.toLowerCase().replaceAll("[^a-z0-9]", "");
+    }
+    
+    /**
+     * Validates and sanitizes a full package name (with dots).
+     * Ensures it follows Java package naming conventions.
+     */
+    private String validateAndSanitizePackageName(String packageName) throws IOException {
+        if (packageName == null || packageName.trim().isEmpty()) {
+            throw new IOException("Package name cannot be empty");
+        }
+        
+        // Remove whitespace
+        packageName = packageName.trim();
+        
+        // Split by dots
+        String[] parts = packageName.split("\\.");
+        StringBuilder sanitized = new StringBuilder();
+        
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i].trim();
+            
+            // Skip empty parts
+            if (part.isEmpty()) {
+                continue;
+            }
+            
+            // Sanitize each part (remove non-alphanumeric, lowercase)
+            part = part.toLowerCase().replaceAll("[^a-z0-9_]", "");
+            
+            // Check if part starts with a digit (invalid in Java)
+            if (!part.isEmpty() && Character.isDigit(part.charAt(0))) {
+                part = "_" + part;
+            }
+            
+            // Skip if sanitization resulted in empty string
+            if (part.isEmpty()) {
+                continue;
+            }
+            
+            // Java keywords that can't be used as package names
+            if (isJavaKeyword(part)) {
+                part = "_" + part;
+            }
+            
+            if (sanitized.length() > 0) {
+                sanitized.append(".");
+            }
+            sanitized.append(part);
+        }
+        
+        String result = sanitized.toString();
+        
+        // Validate final result
+        if (result.isEmpty()) {
+            throw new IOException("Invalid package name: resulted in empty string after sanitization");
+        }
+        
+        if (result.startsWith(".") || result.endsWith(".") || result.contains("..")) {
+            throw new IOException("Invalid package name: contains empty segments");
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Checks if a string is a Java keyword.
+     */
+    private boolean isJavaKeyword(String word) {
+        String[] keywords = {
+            "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char",
+            "class", "const", "continue", "default", "do", "double", "else", "enum",
+            "extends", "final", "finally", "float", "for", "goto", "if", "implements",
+            "import", "instanceof", "int", "interface", "long", "native", "new",
+            "package", "private", "protected", "public", "return", "short", "static",
+            "strictfp", "super", "switch", "synchronized", "this", "throw", "throws",
+            "transient", "try", "void", "volatile", "while", "true", "false", "null"
+        };
+        
+        for (String keyword : keywords) {
+            if (keyword.equals(word)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
