@@ -1,9 +1,7 @@
 rootProject.name = 'transmute'
 
 include 'transmute-core'
-include 'transmute-starter'
 include 'transmute-cli'
 
 project(':transmute-core').projectDir = file('packages/core')
-project(':transmute-starter').projectDir = file('packages/starter')
 project(':transmute-cli').projectDir = file('packages/cli')

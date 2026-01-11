@@ -32,10 +32,16 @@ TransmuteCore is a lightweight, high-performance 2D pixel game engine written in
 
 ### Installation
 
-#### Option 1: Using the Starter Template (Recommended)
+#### Option 1: Using the CLI Generator (Recommended)
 
 ```bash
-git clone https://github.com/transmute-games/transmute-starter my-game
+# Install the CLI
+git clone https://github.com/transmute-games/transmute-core
+cd transmute-core
+./gradlew :transmute-cli:install
+
+# Create a new project
+transmute new my-game
 cd my-game
 ./gradlew run
 ```
@@ -184,9 +190,11 @@ Input input = manager.getInput();
 2. **Hardware Acceleration** - VolatileImage for GPU acceleration
 3. **BufferStrategy** - Configurable double/triple buffering
 
-## Example Projects
+## Project Generator
 
-- **[transmute-starter](https://github.com/transmute-games/transmute-starter)** - Production-ready starter template with working examples
+- **[transmute-cli](packages/cli/README.md)** - CLI tool for scaffolding new projects
+- Multiple templates: basic, platformer, rpg
+- Interactive project setup
 
 ## Roadmap
 
@@ -255,4 +263,4 @@ This project is licensed under the MIT License - see the [LICENSE](.github/LICEN
 
 Made with ❤️ by the Transmute Games team
 
-[Website](https://github.com/transmute-games) • [Documentation](docs/GETTING_STARTED.md) • [Examples](https://github.com/transmute-games/transmute-starter)
+[Website](https://github.com/transmute-games) • [Documentation](docs/GETTING_STARTED.md) • [CLI Tool](packages/cli/README.md)

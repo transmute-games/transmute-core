@@ -17,27 +17,28 @@ TransmuteCore is a Java-based 2D pixel game engine designed for high-performance
 The project uses Gradle for builds. Source files are in `TransmuteCore/src/` with compiled output managed by Gradle.
 
 ```
-transmute-core/
-├── build.gradle                # Build configuration
-├── TransmuteCore/
-│   └── src/
-│       └── TransmuteCore/
-│           ├── GameEngine/     # Core game loop and engine
-│           ├── Graphics/       # Rendering and visual systems
-│           ├── Input/          # Keyboard and mouse handling
-│           ├── Objects/        # Game entities and objects
-│           ├── States/         # State management system
-│           ├── Level/          # Level and tile systems
-│           ├── Serialization/  # Save/load functionality
-│           └── System/         # Utilities, logging, exceptions
-└── docs/                       # Documentation
-    ├── tutorials/              # Step-by-step tutorials (01-07)
-    ├── GETTING_STARTED.md      # Initial setup guide
-    ├── COOKBOOK.md             # Code recipes and patterns
-    ├── SERIALIZATION.md        # Save/load system guide
-    ├── DEPLOYMENT.md           # Build and distribution
-    ├── TROUBLESHOOTING.md      # Common issues and solutions
-    └── DX_FEATURES.md          # Developer experience features
+transmute/
+├── packages/
+│   ├── core/                   # TransmuteCore engine
+│   │   ├── TransmuteCore/
+│   │   │   └── src/
+│   │   │       └── TransmuteCore/
+│   │   │           ├── GameEngine/     # Core game loop and engine
+│   │   │           ├── Graphics/       # Rendering and visual systems
+│   │   │           ├── Input/          # Keyboard and mouse handling
+│   │   │           ├── Objects/        # Game entities and objects
+│   │   │           ├── States/         # State management system
+│   │   │           ├── Level/          # Level and tile systems
+│   │   │           ├── Serialization/  # Save/load functionality
+│   │   │           └── System/         # Utilities, logging, exceptions
+│   │   ├── docs/               # Documentation
+│   │   └── build.gradle
+│   └── cli/                    # Project generator CLI
+│       ├── src/
+│       ├── bin/                # Shell wrappers
+│       └── build.gradle
+├── build.gradle                # Root build configuration
+└── settings.gradle             # Multi-project configuration
 ```
 
 ### Building
@@ -58,10 +59,10 @@ Build the project using Gradle:
 
 ### Creating a Game
 This is a library/engine project. To create a game:
-1. Extend the `TransmuteCore` class
-2. Implement the required methods from the `Cortex` interface
-3. See the [transmute-starter](https://github.com/transmute-games/transmute-starter) repository for working examples
-4. Follow the [tutorials](docs/tutorials/) for step-by-step guidance
+1. Use the CLI generator: `./gradlew :transmute-cli:install && transmute new my-game`
+2. Or extend the `TransmuteCore` class manually
+3. Implement the required methods from the `Cortex` interface
+4. Follow the [tutorials](packages/core/docs/tutorials/) for step-by-step guidance
 
 ## Core Architecture
 
@@ -227,8 +228,8 @@ When helping users or making code changes, reference these documentation resourc
 - `docs/TROUBLESHOOTING.md` - Solutions to common problems
 - `docs/DX_FEATURES.md` - Developer experience features
 
-### Example Projects
-- [transmute-starter](https://github.com/transmute-games/transmute-starter) - Production starter template
+### Project Generator
+- `packages/cli/` - CLI tool for scaffolding new projects with multiple templates
 
 ## Common Issues
 
