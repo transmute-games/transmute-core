@@ -1,0 +1,83 @@
+plugins {
+    id 'application'
+}
+
+// Group inherited from root, but starter uses its own version scheme
+version = '1.0.0'
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['transmute-starter/src']
+        }
+        resources {
+            srcDirs = ['transmute-starter/res']
+        }
+    }
+}
+
+dependencies {
+    // Depend on the core package in the monorepo
+    implementation project(':transmute-core')
+}
+
+application {
+    // Set this to your main game class
+    mainClass = 'GameEngine.Game'
+}
+
+// Task to run the game
+run {
+    // Set working directory to project root so resources are found
+    workingDir = projectDir
+}
+
+// Task to create a distributable JAR with all dependencies
+task fatJar(type: Jar) {
+    manifest {
+        attributes(
+            'Main-Class': application.mainClass.get(),
+            'Implementation-Title': 'TransmuteCore Game',
+            'Implementation-Version': version
+        )
+    }
+    archiveBaseName = "${project.name}-all"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    
+    with jar
+}
+
+// Task to copy resources to build directory (for IDE compatibility)
+task copyResources(type: Copy) {
+    from 'transmute-starter/res'
+    into "$buildDir/resources/main"
+}
+
+processResources.dependsOn copyResources
+
+// Custom clean task
+task cleanAll(type: Delete) {
+    delete 'transmute-starter/bin'
+    delete buildDir
+}
+
+clean.dependsOn cleanAll
+
+// Development task - builds and runs the game
+task dev {
+    dependsOn build, run
+    description = 'Builds and runs the game in development mode'
+}
+
+// Distribution task - creates a runnable JAR
+task dist {
+    dependsOn fatJar
+    description = 'Creates a distributable JAR with all dependencies'
+    doLast {
+        println "Distribution JAR created: ${fatJar.archiveFile.get()}"
+    }
+}

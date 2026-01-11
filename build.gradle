@@ -1,129 +1,62 @@
-plugins {
-    id 'java-library'
-    id 'maven-publish'
-}
+// Root project configuration
+// Plugins are applied in subprojects as needed
 
-group = 'games.transmute'
-version = '0.1.0-ALPHA'
-
-repositories {
-    mavenCentral()
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-    
-    withSourcesJar()
-    withJavadocJar()
-}
-
-sourceSets {
-    main {
-        java {
-            srcDirs = ['TransmuteCore/src']
-        }
-        resources {
-            srcDirs = ['TransmuteCore/res']
-        }
-    }
-}
-
-dependencies {
-    // No external dependencies for core engine
-    testImplementation 'junit:junit:4.13.2'
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-javadoc {
-    options.encoding = 'UTF-8'
-    options.charSet = 'UTF-8'
-    options.links 'https://docs.oracle.com/en/java/javase/17/docs/api/'
-    // Don't fail build on Javadoc warnings
-    failOnError = false
-    options.addStringOption('Xdoclint:none', '-quiet')
-}
-
-jar {
-    manifest {
-        attributes(
-            'Implementation-Title': 'TransmuteCore',
-            'Implementation-Version': version,
-            'Implementation-Vendor': 'Transmute Games'
-        )
-    }
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = 'games.transmute'
-            artifactId = 'transmute-core'
-            version = version
-            
-            from components.java
-            
-            pom {
-                name = 'TransmuteCore'
-                description = 'A high-performance 2D pixel game engine for Java'
-                url = 'https://github.com/transmute-games/transmute-core'
-                
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://opensource.org/licenses/MIT'
-                    }
-                }
-                
-                developers {
-                    developer {
-                        name = 'Transmute Games'
-                        url = 'https://github.com/transmute-games'
-                    }
-                }
-                
-                scm {
-                    connection = 'scm:git:git://github.com/transmute-games/transmute-core.git'
-                    developerConnection = 'scm:git:ssh://github.com/transmute-games/transmute-core.git'
-                    url = 'https://github.com/transmute-games/transmute-core'
-                }
-            }
-        }
-    }
+allprojects {
+    group = 'games.transmute'
+    version = '0.1.0-ALPHA'
     
     repositories {
-        mavenLocal()
+        mavenCentral()
     }
 }
 
-// Task to run tests
-test {
-    testLogging {
-        events "passed", "skipped", "failed"
-        exceptionFormat "full"
+subprojects {
+    apply plugin: 'java'
+    
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+    
+    dependencies {
+        testImplementation 'junit:junit:4.13.2'
+    }
+    
+    test {
+        testLogging {
+            events "passed", "skipped", "failed"
+            exceptionFormat "full"
+        }
     }
 }
 
-// Custom task to clean bin directory
-task cleanBin(type: Delete) {
-    delete 'TransmuteCore/bin'
+// Root-level tasks
+task build {
+    dependsOn gradle.includedBuilds*.task(':build')
+    dependsOn subprojects*.build
+    description = 'Builds all packages in the monorepo'
 }
 
-clean.dependsOn cleanBin
-
-// Task to copy resources to bin directory (for IDE compatibility)
-task copyResources(type: Copy) {
-    from 'TransmuteCore/res'
-    into 'TransmuteCore/bin'
+task clean {
+    dependsOn subprojects*.clean
+    description = 'Cleans all packages in the monorepo'
 }
 
-// Task for development builds
-task devBuild {
-    dependsOn build, publishToMavenLocal
+task test {
+    dependsOn subprojects*.test
+    description = 'Runs tests for all packages in the monorepo'
+}
+
+// Helper task to show all packages
+task listPackages {
     doLast {
-        println "TransmuteCore ${version} built and published to Maven Local"
+        println "\nTransmute Monorepo Packages:"
+        subprojects.each { project ->
+            println "  - ${project.name} (${project.path})"
+        }
     }
 }
