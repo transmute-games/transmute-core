@@ -4,7 +4,7 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Project Overview
 
-TransmuteCore is a Java-based 2D pixel game engine designed for high-performance game development. The engine uses Java AWT for rendering with custom pixel-level manipulation through BufferedImage and DataBufferInt for maximum performance.
+Transmute Core is a Java-based 2D pixel game engine designed for high-performance game development. The engine uses Java AWT for rendering with custom pixel-level manipulation through BufferedImage and DataBufferInt for maximum performance.
 
 ## Build & Development
 
@@ -21,7 +21,7 @@ transmute-core/
 ├── build.gradle                # Root build configuration
 ├── settings.gradle             # Multi-project configuration
 ├── packages/
-│   ├── core/                   # TransmuteCore engine
+│   ├── core/                   # Transmute Core engine
 │   │   ├── TransmuteCore/
 │   │   │   └── src/
 │   │   │       └── TransmuteCore/
@@ -110,7 +110,7 @@ Asset keys are type-prefixed and lowercase (e.g., "image:player", "audio:music")
 ### Input Handling
 The `Input` class provides three input states:
 - `isKeyPressed()` / `isButtonPressed()` - Single frame press detection
-- `isKeyHeld()` / `isButtonHeld()` - Continuous hold detection  
+- `isKeyHeld()` / `isButtonHeld()` - Continuous hold detection
 - `isKeyReleased()` / `isButtonReleased()` - Single frame release detection
 
 Mouse coordinates are automatically scaled by game window scale factor.
@@ -144,7 +144,7 @@ The engine includes a custom binary serialization system ("TinyDatabase"):
 
 ## Code Patterns
 
-### Extending TransmuteCore
+### Extending Transmute Core
 ```java
 import TransmuteCore.core.TransmuteCore;
 import TransmuteCore.core.GameConfig;
@@ -158,7 +158,7 @@ public class MyGame extends TransmuteCore {
     public MyGame(GameConfig config) {
         super(config);
     }
-    
+
     @Override
     public void init() {
         // Initialize managers, load assets
@@ -166,14 +166,14 @@ public class MyGame extends TransmuteCore {
         getManager().setStateManager(sm);
         AssetManager.getGlobalInstance().load();
     }
-    
+
     @Override
     public void update(Manager manager, double delta) {
         if (manager.getStateManager() != null) {
             manager.getStateManager().update(manager, delta);
         }
     }
-    
+
     @Override
     public void render(Manager manager, IRenderer renderer) {
         Context ctx = (Context) renderer;
@@ -181,7 +181,7 @@ public class MyGame extends TransmuteCore {
             manager.getStateManager().render(manager, ctx);
         }
     }
-    
+
     public static void main(String[] args) {
         GameConfig config = new GameConfig.Builder()
             .title("Game Title")
@@ -189,7 +189,7 @@ public class MyGame extends TransmuteCore {
             .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
             .scale(3)
             .build();
-        
+
         MyGame game = new MyGame(config);
         game.start();
     }

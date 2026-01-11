@@ -58,46 +58,46 @@ import TransmuteCore.math.Tuple2i;
 import java.awt.event.KeyEvent;
 
 public class Player extends Object {
-    
+
     // Movement properties
     private float velocityX = 0;
     private float velocityY = 0;
     private final float acceleration = 0.5f;
     private final float friction = 0.85f;
     private final float maxSpeed = 4.0f;
-    
+
     // Rendering properties
     private Animation currentAnimation;
     private Animation idleAnimation;
     private Animation walkAnimation;
     private boolean facingRight = true;
-    
+
     // Screen bounds
     private int screenWidth;
     private int screenHeight;
-    
-    public Player(Manager manager, Tuple2i location, 
+
+    public Player(Manager manager, Tuple2i location,
                   Animation idleAnim, Animation walkAnim,
                   int screenWidth, int screenHeight) {
         super(manager, "player", Object.ANIMATABLE, location, 1.0f);
-        
+
         this.idleAnimation = idleAnim;
         this.walkAnimation = walkAnim;
         this.currentAnimation = idleAnimation;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
     }
-    
+
     @Override
     public void update(Manager manager, double delta) {
         handleInput();
         applyPhysics(delta);
         updateAnimation();
         constrainToBounds();
-        
+
         super.update(manager, delta);
     }
-    
+
     private void handleInput() {
         // Horizontal movement
         if (manager.getInput().isKeyHeld(KeyEvent.VK_LEFT) || manager.getInput().isKeyHeld(KeyEvent.VK_A)) {
@@ -108,7 +108,7 @@ public class Player extends Object {
             velocityX += acceleration;
             facingRight = true;
         }
-        
+
         // Vertical movement
         if (manager.getInput().isKeyHeld(KeyEvent.VK_UP) || manager.getInput().isKeyHeld(KeyEvent.VK_W)) {
             velocityY -= acceleration;
@@ -117,32 +117,32 @@ public class Player extends Object {
             velocityY += acceleration;
         }
     }
-    
+
     private void applyPhysics(double delta) {
         // Apply friction
         velocityX *= friction;
         velocityY *= friction;
-        
+
         // Limit to max speed
         float speed = (float) Math.sqrt(velocityX * velocityX + velocityY * velocityY);
         if (speed > maxSpeed) {
             velocityX = (velocityX / speed) * maxSpeed;
             velocityY = (velocityY / speed) * maxSpeed;
         }
-        
+
         // Update position (delta makes it frame-independent)
         location.x += (int)(velocityX * delta);
         location.y += (int)(velocityY * delta);
-        
+
         // Stop if moving very slowly
         if (Math.abs(velocityX) < 0.1f) velocityX = 0;
         if (Math.abs(velocityY) < 0.1f) velocityY = 0;
     }
-    
+
     private void updateAnimation() {
         // Switch animation based on movement
         boolean isMoving = Math.abs(velocityX) > 0.5f || Math.abs(velocityY) > 0.5f;
-        
+
         if (isMoving) {
             if (currentAnimation != walkAnimation) {
                 currentAnimation = walkAnimation;
@@ -152,10 +152,10 @@ public class Player extends Object {
                 currentAnimation = idleAnimation;
             }
         }
-        
+
         currentAnimation.update();
     }
-    
+
     private void constrainToBounds() {
         // Keep player on screen
         if (location.x < 0) location.x = 0;
@@ -163,7 +163,7 @@ public class Player extends Object {
         if (location.x > screenWidth - 16) location.x = screenWidth - 16;
         if (location.y > screenHeight - 16) location.y = screenHeight - 16;
     }
-    
+
     @Override
     public void render(Manager manager, Context ctx) {
         // Render the current animation
@@ -175,15 +175,15 @@ public class Player extends Object {
             currentAnimation.render(ctx, location.x, location.y);
         }
     }
-    
+
     public float getVelocityX() {
         return velocityX;
     }
-    
+
     public float getVelocityY() {
         return velocityY;
     }
-    
+
     public boolean isMoving() {
         return Math.abs(velocityX) > 0.5f || Math.abs(velocityY) > 0.5f;
     }
@@ -216,29 +216,29 @@ import TransmuteCore.input.Input;
 import java.awt.event.KeyEvent;
 
 public class Game extends TransmuteCore {
-    
+
     private Player player;
     private int screenWidth = 320;
     private int screenHeight = 240;
-    
+
     public Game(GameConfig config) {
         super(config);
     }
-    
+
     @Override
     public void init() {
         // Set logging level
         Logger.setLevel(Logger.Level.INFO);
-        
+
         // Initialize font
         Font.initializeDefaultFont("fonts/font.png");
-        
+
         // Register player sprite
         new Image("player", "images/player.png");
-        
+
         // Load assets
         AssetManager.getGlobalInstance().load();
-        
+
         // Create sprite sheet
         Bitmap playerBitmap = AssetManager.getGlobalInstance().getImage("player");
         Spritesheet playerSheet = new Spritesheet(
@@ -247,13 +247,13 @@ public class Game extends TransmuteCore {
             new Tuple2i(0, 0),
             0, 0
         );
-        
+
         // Create animations
         Sprite[] idleFrames = new Sprite[] {
             playerSheet.crop(0, 0)
         };
         Animation idleAnimation = new Animation("idle", idleFrames, 500);
-        
+
         Sprite[] walkFrames = new Sprite[] {
             playerSheet.crop(0, 0),
             playerSheet.crop(1, 0),
@@ -261,7 +261,7 @@ public class Game extends TransmuteCore {
             playerSheet.crop(3, 0)
         };
         Animation walkAnimation = new Animation("walk", walkFrames, 150);
-        
+
         // Create player at center of screen
         player = new Player(
             manager,
@@ -271,10 +271,10 @@ public class Game extends TransmuteCore {
             screenWidth,
             screenHeight
         );
-        
+
         Logger.info("Game initialized successfully");
     }
-    
+
     @Override
     public void update(Manager manager, double delta) {
         // Exit on ESC
@@ -282,41 +282,41 @@ public class Game extends TransmuteCore {
             Logger.info("Exiting game");
             System.exit(0);
         }
-        
+
         // Update player
         player.update(manager, delta);
     }
-    
+
     @Override
     public void render(Manager manager, IRenderer renderer) {
         Context ctx = (Context) renderer;
-        
+
         // Background
         ctx.setClearColor(Color.toPixelInt(32, 48, 64, 255));
-        
+
         // Render player
         player.render(manager, ctx);
-        
+
         // Draw UI
         int white = Color.toPixelInt(255, 255, 255, 255);
         int yellow = Color.toPixelInt(255, 255, 0, 255);
-        
+
         ctx.renderText("WASD or Arrow Keys to move", 10, 10, white);
         ctx.renderText("ESC to exit", 10, 20, white);
-        
+
         // Show velocity
         String velocityText = String.format("Velocity: %.1f, %.1f",
                                            player.getVelocityX(),
                                            player.getVelocityY());
         ctx.renderText(velocityText, 10, screenHeight - 20, yellow);
-        
+
         // Show position
         String posText = String.format("Position: %d, %d",
                                       player.getX(),
                                       player.getY());
         ctx.renderText(posText, 10, screenHeight - 30, yellow);
     }
-    
+
     public static void main(String[] args) {
         GameConfig config = new GameConfig.Builder()
             .title("Movement Demo")
@@ -324,7 +324,7 @@ public class Game extends TransmuteCore {
             .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
             .scale(3)
             .build();
-        
+
         Game game = new Game(config);
         game.start();
     }
@@ -380,10 +380,10 @@ private void applyPhysics(double delta) {
     if (!isGrounded) {
         velocityY += gravity;
     }
-    
+
     // Update position
     location.y += (int)(velocityY * delta);
-    
+
     // Ground collision
     if (location.y >= groundLevel) {
         location.y = groundLevel;
@@ -408,7 +408,7 @@ private void handleInput() {
         lastDashTime = System.currentTimeMillis();
         canDash = false;
     }
-    
+
     // Cooldown check
     if (!canDash && System.currentTimeMillis() - lastDashTime > dashCooldown) {
         canDash = true;
@@ -422,12 +422,12 @@ private void handleInput() {
 private void handleMouseMovement(Input input) {
     int targetX = input.getMouseX();
     int targetY = input.getMouseY();
-    
+
     // Calculate direction to mouse
     float dx = targetX - location.x;
     float dy = targetY - location.y;
     float distance = (float) Math.sqrt(dx * dx + dy * dy);
-    
+
     // Move towards mouse if far enough away
     if (distance > 5) {
         velocityX += (dx / distance) * acceleration;
@@ -442,19 +442,19 @@ private void handleMouseMovement(Input input) {
 private void handleInput() {
     float inputX = 0;
     float inputY = 0;
-    
+
     if (manager.getInput().isKeyHeld(KeyEvent.VK_LEFT)) inputX -= 1;
     if (manager.getInput().isKeyHeld(KeyEvent.VK_RIGHT)) inputX += 1;
     if (manager.getInput().isKeyHeld(KeyEvent.VK_UP)) inputY -= 1;
     if (manager.getInput().isKeyHeld(KeyEvent.VK_DOWN)) inputY += 1;
-    
+
     // Normalize diagonal movement
     if (inputX != 0 && inputY != 0) {
         float length = (float) Math.sqrt(inputX * inputX + inputY * inputY);
         inputX /= length;
         inputY /= length;
     }
-    
+
     velocityX += inputX * acceleration;
     velocityY += inputY * acceleration;
 }
@@ -469,9 +469,9 @@ public void handleMouseClick(Input input) {
     if (manager.getInput().isButtonPressed(MouseEvent.BUTTON1)) {
         int mouseX = input.getMouseX();
         int mouseY = input.getMouseY();
-        
+
         Logger.info("Clicked at: " + mouseX + ", " + mouseY);
-        
+
         // Could shoot projectile, place object, etc.
     }
 }
@@ -494,8 +494,8 @@ public void update(Manager manager, double delta) {
 Hold SHIFT to move faster:
 
 ```java
-float currentMaxSpeed = manager.getInput().isKeyHeld(KeyEvent.VK_SHIFT) 
-                        ? maxSpeed * 2.0f 
+float currentMaxSpeed = manager.getInput().isKeyHeld(KeyEvent.VK_SHIFT)
+                        ? maxSpeed * 2.0f
                         : maxSpeed;
 ```
 
@@ -542,7 +542,7 @@ Make sure to normalize diagonal input (see eight-directional movement above).
 
 ## What's Next?
 
-You now have a solid foundation for game development with TransmuteCore! Next steps:
+You now have a solid foundation for game development with Transmute Core! Next steps:
 
 - **Collision Detection** - Detect and respond to collisions between objects
 - **Level Design** - Create tile-based levels
@@ -558,4 +558,4 @@ You now have a solid foundation for game development with TransmuteCore! Next st
 
 ---
 
-Congratulations! You've completed the core tutorials. You're now ready to build your own games with TransmuteCore! 🎮
+Congratulations! You've completed the core tutorials. You're now ready to build your own games with Transmute Core! 🎮

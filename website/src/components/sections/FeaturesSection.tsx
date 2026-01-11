@@ -52,7 +52,7 @@ export function FeaturesSection() {
             Everything You Need
           </h2>
           <p className="text-xl text-cream/60 max-w-3xl mx-auto">
-            TransmuteCore comes packed with features to help you build retro-style
+            Transmute Core comes packed with features to help you build retro-style
             2D games quickly and efficiently.
           </p>
         </div>

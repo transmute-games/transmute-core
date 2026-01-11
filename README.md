@@ -1,4 +1,4 @@
-# 🧙🏼 TransmuteCore Game Engine
+# 🧙🏼 Transmute Core Game Engine
 
 ![](assets/og-image.svg)
 
@@ -12,7 +12,7 @@ A high-performance 2D pixel game engine for Java
 
 ## Overview
 
-TransmuteCore is a lightweight, high-performance 2D pixel game engine written in Java. It features custom pixel-level rendering with BufferedImage and DataBufferInt for maximum performance, making it ideal for retro-style games, pixel art projects, and educational purposes.
+Transmute Core is a lightweight, high-performance 2D pixel game engine written in Java. It features custom pixel-level rendering with BufferedImage and DataBufferInt for maximum performance, making it ideal for retro-style games, pixel art projects, and educational purposes.
 
 ### Key Features
 
@@ -148,7 +148,7 @@ public class MyGame extends TransmuteCore {
 
 ### Getting Started
 - **[Getting Started Guide](docs/GETTING_STARTED.md)** - Complete setup and first steps
-- **[Hello World Tutorial](docs/tutorials/01-hello-world.md)** - Your first TransmuteCore game
+- **[Hello World Tutorial](docs/tutorials/01-hello-world.md)** - Your first Transmute Core game
 
 ### Tutorials
 Progressive, hands-on tutorials covering all engine features:
@@ -219,7 +219,7 @@ transmute-core/
 
 ### Game Loop
 
-TransmuteCore uses a fixed timestep game loop:
+Transmute Core uses a fixed timestep game loop:
 
 1. **init()** - One-time initialization
 2. **update(Manager, delta)** - Game logic updates (60 times per second)
@@ -262,7 +262,7 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 
 ## Performance
 
-TransmuteCore is designed for performance:
+Transmute Core is designed for performance:
 
 - Direct pixel manipulation via `DataBufferInt`
 - Hardware-accelerated rendering with `VolatileImage`

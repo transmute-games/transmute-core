@@ -59,35 +59,35 @@ import TransmuteCore.assets.AssetManager;
 import TransmuteCore.assets.types.Font;
 
 public class Game extends TransmuteCore {
-    
+
     public Game(GameConfig config) {
         super(config);
     }
-    
+
     @Override
     public void init() {
         // Initialize the default font
         Font.initializeDefaultFont("fonts/font.png");
         AssetManager.getGlobalInstance().load();
     }
-    
+
     @Override
     public void update(Manager manager, double delta) {
         // No game logic yet - we'll add this in future tutorials
     }
-    
+
     @Override
     public void render(Manager manager, IRenderer renderer) {
         Context ctx = (Context) renderer;
-        
+
         // Clear the screen to black
         ctx.setClearColor(Color.toPixelInt(0, 0, 0, 255));
-        
+
         // Draw "Hello, World!" in white at position (50, 100)
         int white = Color.toPixelInt(255, 255, 255, 255);
         ctx.renderText("Hello, World!", 50, 100, white);
     }
-    
+
     public static void main(String[] args) {
         GameConfig config = new GameConfig.Builder()
             .title("Hello World")
@@ -95,7 +95,7 @@ public class Game extends TransmuteCore {
             .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
             .scale(3)
             .build();
-        
+
         Game game = new Game(config);
         game.start();
     }
@@ -184,7 +184,7 @@ Called after update, also 60 times per second. This is where you:
 
 ## Working with Colors
 
-Colors in TransmuteCore use RGBA values (0-255 for each channel):
+Colors in Transmute Core use RGBA values (0-255 for each channel):
 
 ```java
 // Red, Green, Blue, Alpha (0-255)
@@ -270,7 +270,7 @@ public void update(Manager manager, double delta) {
 
 Adjust the scale parameter:
 - Scale 1 = 320x240 window
-- Scale 2 = 640x480 window  
+- Scale 2 = 640x480 window
 - Scale 3 = 960x720 window
 
 ### Text doesn't appear
@@ -307,45 +307,45 @@ import TransmuteCore.input.Input;
 import java.awt.event.KeyEvent;
 
 public class Game extends TransmuteCore {
-    
+
     private int textY = 100;
-    
+
     public Game(GameConfig config) {
         super(config);
     }
-    
+
     @Override
     public void init() {
         Font.initializeDefaultFont("fonts/font.png");
         AssetManager.getGlobalInstance().load();
     }
-    
+
     @Override
     public void update(Manager manager, double delta) {
         // Exit on ESC
         if (manager.getInput().isKeyPressed(KeyEvent.VK_ESCAPE)) {
             System.exit(0);
         }
-        
+
         // Animate text position
         textY++;
         if (textY > 300) textY = 0;
     }
-    
+
     @Override
     public void render(Manager manager, IRenderer renderer) {
         Context ctx = (Context) renderer;
-        
+
         // Dark blue background
         ctx.setClearColor(Color.toPixelInt(0, 0, 64, 255));
-        
+
         // White text
         int white = Color.toPixelInt(255, 255, 255, 255);
         ctx.renderText("Hello, World!", 50, textY, white);
         ctx.renderText("Welcome to TransmuteCore!", 50, textY + 20, white);
         ctx.renderText("Press ESC to exit", 50, textY + 40, white);
     }
-    
+
     public static void main(String[] args) {
         GameConfig config = new GameConfig.Builder()
             .title("Hello World")
@@ -353,7 +353,7 @@ public class Game extends TransmuteCore {
             .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
             .scale(3)
             .build();
-        
+
         Game game = new Game(config);
         game.start();
     }

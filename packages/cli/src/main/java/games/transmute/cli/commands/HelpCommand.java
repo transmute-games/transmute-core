@@ -6,11 +6,11 @@ import static games.transmute.cli.CliConstants.*;
  * Command to display help information.
  */
 public class HelpCommand implements Command {
-    
+
     @Override
     public void execute(String[] args) {
         System.out.println("Transmute CLI v" + CLI_VERSION);
-        System.out.println("Project Generator for TransmuteCore Engine");
+        System.out.println("Project Generator for Transmute Core Engine");
         System.out.println("\nUSAGE:");
         System.out.println("  transmute <command> [options]");
         System.out.println("\nCOMMANDS:");
@@ -31,17 +31,17 @@ public class HelpCommand implements Command {
         System.out.println("\nFor more information, visit:");
         System.out.println("  " + REPOSITORY_URL);
     }
-    
+
     @Override
     public String getName() {
         return "help";
     }
-    
+
     @Override
     public String[] getAliases() {
         return new String[]{"--help", "-h"};
     }
-    
+
     @Override
     public String getDescription() {
         return "Show help information";

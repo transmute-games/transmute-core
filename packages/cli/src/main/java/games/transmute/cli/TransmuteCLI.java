@@ -11,18 +11,18 @@ import java.util.Arrays;
  * Delegates to command implementations for clean separation of concerns.
  */
 public class TransmuteCLI {
-    
+
     private static final CommandRegistry commandRegistry = new CommandRegistry();
-    
+
     public static void main(String[] args) {
         if (args.length == 0) {
             printUsage();
             System.exit(0);
         }
-        
+
         String commandName = args[0];
         Command command = commandRegistry.getCommand(commandName);
-        
+
         if (command != null) {
             // Extract command arguments (everything after the command name)
             String[] commandArgs = Arrays.copyOfRange(args, 1, args.length);
@@ -33,9 +33,9 @@ public class TransmuteCLI {
             System.exit(1);
         }
     }
-    
+
     private static void printUsage() {
-        System.out.println("Transmute CLI - Project Generator for TransmuteCore Engine");
+        System.out.println("Transmute CLI - Project Generator for Transmute Core Engine");
         System.out.println("\nUsage:");
         System.out.println("  transmute new <project-name> [options]");
         System.out.println("  transmute templates");

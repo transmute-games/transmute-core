@@ -43,7 +43,7 @@ export function HeroSection({ onLearnMore }: HeroSectionProps) {
 
         {/* Subtitle */}
         <p className="text-xl sm:text-2xl text-cream/70 max-w-3xl mx-auto mb-12 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          TransmuteCore is a high-performance 2D pixel game engine for Java with
+          Transmute Core is a high-performance 2D pixel game engine for Java with
           custom rendering, fixed 60 FPS game loop, and zero reflection overhead.
         </p>
 
@@ -85,7 +85,7 @@ export function HeroSection({ onLearnMore }: HeroSectionProps) {
           </div>
           <div className="font-mono text-sm space-y-1">
             <div className="text-transmute-cyan">$ transmute new my-game</div>
-            <div className="text-cream/60">Creating new TransmuteCore project...</div>
+            <div className="text-cream/60">Creating new Transmute Core project...</div>
             <div className="text-transmute-lime">✓ Project created successfully!</div>
           </div>
         </div>

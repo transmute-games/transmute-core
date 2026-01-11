@@ -36,11 +36,11 @@ export function MarketingNav({ transparent = false }: MarketingNavProps) {
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <img
               src="/favicon.svg"
-              alt="TransmuteCore Logo"
+              alt="Transmute Core Logo"
               className="w-10 h-10"
             />
             <span className="text-xl font-bold text-gradient">
-              TransmuteCore
+              Transmute Core
             </span>
           </Link>
 
@@ -161,11 +161,11 @@ export function MarketingFooter() {
             <div className="flex items-center gap-3 mb-4">
               <img
                 src="/favicon.svg"
-                alt="TransmuteCore Logo"
+                alt="Transmute Core Logo"
                 className="w-10 h-10"
               />
               <span className="text-xl font-bold text-gradient">
-                TransmuteCore
+                Transmute Core
               </span>
             </div>
             <p className="text-cream/60 max-w-md">

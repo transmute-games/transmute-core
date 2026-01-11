@@ -1,6 +1,6 @@
-# 🧙🏼 TransmuteCore Engine
+# 🧙🏼 Transmute Core Engine
 
-The core TransmuteCore 2D pixel game engine library. This package contains the complete game engine implementation.
+The core Transmute Core 2D pixel game engine library. This package contains the complete game engine implementation.
 
 ## Maven Coordinates
 

@@ -1,6 +1,6 @@
 # 🧙🏼 Transmute CLI
 
-Command-line tool for scaffolding new TransmuteCore game projects.
+Command-line tool for scaffolding new Transmute Core game projects.
 
 ## Installation
 
@@ -158,9 +158,9 @@ cd my-game
 ## Requirements
 
 - Java 17 or higher
-- Internet connection (for downloading TransmuteCore from JitPack)
+- Internet connection (for downloading Transmute Core from JitPack)
 
-Generated projects automatically download TransmuteCore from [JitPack](https://jitpack.io) - no manual setup required!
+Generated projects automatically download Transmute Core from [JitPack](https://jitpack.io) - no manual setup required!
 
 ## Development
 

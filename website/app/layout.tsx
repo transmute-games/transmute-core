@@ -2,19 +2,19 @@ import type { Metadata } from 'next';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'TransmuteCore - High-Performance 2D Pixel Game Engine for Java',
-  description: 'Build retro-style 2D games with TransmuteCore, a high-performance Java game engine featuring custom pixel rendering, fixed timestep game loop, built-in animation system, and comprehensive documentation.',
+  title: 'Transmute Core - High-Performance 2D Pixel Game Engine for Java',
+  description: 'Build retro-style 2D games with Transmute Core, a high-performance Java game engine featuring custom pixel rendering, fixed timestep game loop, built-in animation system, and comprehensive documentation.',
   openGraph: {
-    title: 'TransmuteCore - High-Performance 2D Pixel Game Engine for Java',
-    description: 'Build retro-style 2D games with TransmuteCore, a high-performance Java game engine featuring custom pixel rendering, fixed timestep game loop, built-in animation system, and comprehensive documentation.',
+    title: 'Transmute Core - High-Performance 2D Pixel Game Engine for Java',
+    description: 'Build retro-style 2D games with Transmute Core, a high-performance Java game engine featuring custom pixel rendering, fixed timestep game loop, built-in animation system, and comprehensive documentation.',
     url: 'https://transmute-games.github.io/transmute-core',
-    siteName: 'TransmuteCore',
+    siteName: 'Transmute Core',
     images: [
       {
         url: '/og-image.svg',
         width: 1200,
         height: 630,
-        alt: 'TransmuteCore - High-Performance 2D Pixel Game Engine',
+        alt: 'Transmute Core - High-Performance 2D Pixel Game Engine',
       },
     ],
     locale: 'en_US',
@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TransmuteCore - High-Performance 2D Pixel Game Engine for Java',
-    description: 'Build retro-style 2D games with TransmuteCore, a high-performance Java game engine featuring custom pixel rendering, fixed timestep game loop, built-in animation system, and comprehensive documentation.',
+    title: 'Transmute Core - High-Performance 2D Pixel Game Engine for Java',
+    description: 'Build retro-style 2D games with Transmute Core, a high-performance Java game engine featuring custom pixel rendering, fixed timestep game loop, built-in animation system, and comprehensive documentation.',
     images: ['/og-image.svg'],
   },
   icons: {

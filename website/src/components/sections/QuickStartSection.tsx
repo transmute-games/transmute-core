@@ -37,7 +37,7 @@ export function QuickStartSection() {
             Get Started in Minutes
           </h2>
           <p className="text-xl text-cream/60 max-w-3xl mx-auto">
-            Create your first TransmuteCore game with just three simple commands.
+            Create your first Transmute Core game with just three simple commands.
           </p>
         </div>
 

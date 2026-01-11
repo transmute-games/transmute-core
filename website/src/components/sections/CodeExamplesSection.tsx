@@ -29,7 +29,7 @@ public class MyGame extends TransmuteCore {
     @Override
     public void render(Manager manager, IRenderer renderer) {
         Context ctx = (Context) renderer;
-        ctx.renderText("Hello, TransmuteCore!", 50, 100,
+        ctx.renderText("Hello, Transmute Core!", 50, 100,
                       Color.toPixelInt(255, 255, 255, 255));
     }
 
@@ -55,7 +55,7 @@ public class MyGame extends TransmuteCore {
             Simple & Powerful API
           </h2>
           <p className="text-xl text-cream/60 max-w-3xl mx-auto">
-            Get started with just a few lines of code. TransmuteCore&apos;s API is
+            Get started with just a few lines of code. Transmute Core&apos;s API is
             designed to be intuitive and easy to learn.
           </p>
         </div>

@@ -4,7 +4,7 @@ This directory contains assets shared across multiple parts of the project (docs
 
 ## Files
 
-- `favicon.svg` - TransmuteCore game controller logo (used as favicon and in navigation)
+- `favicon.svg` - Transmute Core game controller logo (used as favicon and in navigation)
 - `og-image.svg` - Open Graph image used for social media previews
 
 ## Usage
@@ -30,7 +30,7 @@ We use build-time copying instead of symlinks to ensure compatibility with all d
 
 ## Brand Colors
 
-The TransmuteCore brand uses the following colors from the Transmute Games logo:
+The Transmute Core brand uses the following colors from the Transmute Games logo:
 
 - **Cyan**: #00d9ff - Primary accent
 - **Lime**: #b4ff39 - Secondary accent

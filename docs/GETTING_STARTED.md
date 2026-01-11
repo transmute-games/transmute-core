@@ -173,7 +173,7 @@ If you get this error, the CLI installation directory is not in your PATH. See S
 ### "Could not resolve: com.github.transmute-games.transmute-core:transmute-core"
 
 This usually means:
-1. **No internet connection** - Generated projects download TransmuteCore from JitPack, which requires an internet connection
+1. **No internet connection** - Generated projects download Transmute Core from JitPack, which requires an internet connection
 2. **First-time build** - JitPack builds artifacts on-demand the first time they're requested (can take 1-2 minutes)
 3. **Invalid version** - The specified version doesn't exist. Check [available releases](https://github.com/transmute-games/transmute-core/releases)
 
@@ -181,7 +181,7 @@ You can check JitPack build status at: `https://jitpack.io/#transmute-games/tran
 
 ### Building from Source (For Contributors)
 
-If you want to contribute to TransmuteCore development:
+If you want to contribute to Transmute Core development:
 
 ```bash
 # Clone the repository
@@ -197,7 +197,7 @@ cd transmute-core
 # Install CLI locally
 ./gradlew :transmute-cli:install
 
-This means TransmuteCore isn't published to your local Maven repository. Run:
+This means Transmute Core isn't published to your local Maven repository. Run:
 
 ```bash
 cd /path/to/transmute-core
@@ -298,11 +298,11 @@ If you run into issues:
 
 ## What You've Learned
 
-✅ Installed Java and verified the installation  
-✅ Cloned and built TransmuteCore  
-✅ Installed the Transmute CLI  
-✅ Created and ran your first game project  
-✅ Understood the project structure  
+✅ Installed Java and verified the installation
+✅ Cloned and built TransmuteCore
+✅ Installed the Transmute CLI
+✅ Created and ran your first game project
+✅ Understood the project structure
 
 ## Ready to Build?
 

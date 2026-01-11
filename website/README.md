@@ -1,6 +1,6 @@
-# TransmuteCore Marketing Website
+# Transmute Core Marketing Website
 
-Official marketing website for TransmuteCore, a high-performance 2D pixel game engine for Java.
+Official marketing website for Transmute Core, a high-performance 2D pixel game engine for Java.
 
 ## 🚀 Features
 

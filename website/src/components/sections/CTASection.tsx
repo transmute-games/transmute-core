@@ -29,7 +29,7 @@ export function CTASection() {
         </h2>
 
         <p className="text-xl text-cream/70 max-w-2xl mx-auto mb-12">
-          Join developers worldwide using TransmuteCore to create amazing retro-style
+          Join developers worldwide using Transmute Core to create amazing retro-style
           2D games. Open source, MIT licensed, and free forever.
         </p>
 
@@ -56,7 +56,7 @@ export function CTASection() {
 
         <div className="mt-12 pt-12 border-t border-transmute-cyan/20">
           <p className="text-cream/60 text-sm">
-            TransmuteCore is maintained by <a href="https://github.com/transmute-games" target="_blank" rel="noopener noreferrer" className="text-transmute-cyan hover:text-transmute-lime transition-colors">Transmute Games</a> and the open source community.
+            Transmute Core is maintained by <a href="https://github.com/transmute-games" target="_blank" rel="noopener noreferrer" className="text-transmute-cyan hover:text-transmute-lime transition-colors">Transmute Games</a> and the open source community.
           </p>
         </div>
       </div>
