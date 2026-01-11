@@ -4,41 +4,64 @@ Command-line tool for scaffolding new TransmuteCore game projects.
 
 ## Installation
 
-### Build from Source
+### Quick Install (Recommended)
 
 ```bash
 # From the monorepo root
-./gradlew :transmute-cli:fatJar
-
-# The distributable JAR will be in packages/cli/build/libs/
+./gradlew :transmute-cli:install
 ```
 
-### Create Alias (Optional)
+This installs the CLI to:
+- **macOS/Linux**: `~/.local/bin/`
+- **Windows**: `%USERPROFILE%\bin\`
+
+Make sure the install directory is in your PATH:
 
 ```bash
-# macOS/Linux
-alias transmute='java -jar /path/to/transmute-cli-all.jar'
+# macOS/Linux (Bash/Zsh)
+export PATH="$PATH:$HOME/.local/bin"
 
-# Or add to ~/.bashrc, ~/.zshrc, or ~/.config/fish/config.fish
+# macOS/Linux (Fish)
+set -U fish_user_paths $HOME/.local/bin $fish_user_paths
+
+# Windows
+set PATH=%PATH%;%USERPROFILE%\bin
+```
+
+### Manual Installation
+
+If you prefer manual installation:
+
+```bash
+# Build the JAR
+./gradlew :transmute-cli:fatJar
+
+# Use directly
+java -jar packages/cli/build/libs/transmute-cli-0.1.0-ALPHA-all.jar new my-game
+
+# Or create an alias
+alias transmute='java -jar /path/to/transmute-cli-0.1.0-ALPHA-all.jar'
 ```
 
 ## Usage
+
+After installation, use the `transmute` command directly:
 
 ### Create a New Project
 
 Interactive mode (recommended):
 ```bash
-java -jar transmute-cli-all.jar new my-game
+transmute new my-game
 ```
 
 Non-interactive with defaults:
 ```bash
-java -jar transmute-cli-all.jar new my-game -y
+transmute new my-game -y
 ```
 
 Specify a template:
 ```bash
-java -jar transmute-cli-all.jar new my-game --template platformer
+transmute new my-game --template platformer
 ```
 
 ### Available Commands
@@ -147,7 +170,7 @@ cd my-game
 
 ```bash
 # Generate a test project
-java -jar packages/cli/build/libs/transmute-cli-all.jar new test-game -y
+transmute new test-game -y
 
 # Build and run it
 cd test-game
@@ -183,14 +206,42 @@ cd quest
 ./gradlew run
 ```
 
+## Uninstallation
+
+```bash
+./gradlew :transmute-cli:uninstall
+```
+
 ## Troubleshooting
 
 ### "Command not found: transmute"
 
-If using an alias, make sure it's in your shell's configuration file and reload:
-```bash
-source ~/.bashrc  # or ~/.zshrc, ~/.config/fish/config.fish
-```
+1. Make sure you've installed the CLI:
+   ```bash
+   ./gradlew :transmute-cli:install
+   ```
+
+2. Verify the install directory is in your PATH:
+   ```bash
+   # Check current PATH
+   echo $PATH  # Unix/macOS
+   echo %PATH%  # Windows
+   ```
+
+3. If not in PATH, add it to your shell configuration:
+   ```bash
+   # Bash/Zsh (~/.bashrc or ~/.zshrc)
+   export PATH="$PATH:$HOME/.local/bin"
+   
+   # Fish (~/.config/fish/config.fish)
+   set -U fish_user_paths $HOME/.local/bin $fish_user_paths
+   ```
+
+4. Reload your shell:
+   ```bash
+   source ~/.bashrc  # or ~/.zshrc
+   # Or just open a new terminal
+   ```
 
 ### "Could not find games.transmute:transmute-core"
 

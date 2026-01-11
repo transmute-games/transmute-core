@@ -43,8 +43,116 @@ task dist {
         println "Location: ${fatJar.archiveFile.get()}"
         println "\nUsage:"
         println "  java -jar ${fatJar.archiveFile.get().asFile.name} new <project-name>"
-        println "\nOr create an alias:"
-        println "  alias transmute='java -jar ${fatJar.archiveFile.get().asFile.absolutePath}'"
+        println "\nOr install globally:"
+        println "  ./gradlew :transmute-cli:install"
+    }
+}
+
+// Task to install CLI to user's local bin directory
+task install {
+    dependsOn fatJar
+    description = 'Installs the CLI to ~/.local/bin (Unix/macOS) or %USERPROFILE%\\bin (Windows)'
+    
+    doLast {
+        def os = System.getProperty('os.name').toLowerCase()
+        def isWindows = os.contains('windows')
+        
+        // Determine install directory
+        def installDir
+        if (isWindows) {
+            installDir = new File(System.getenv('USERPROFILE'), 'bin')
+        } else {
+            installDir = new File(System.getProperty('user.home'), '.local/bin')
+        }
+        
+        // Create install directory if it doesn't exist
+        installDir.mkdirs()
+        
+        // Copy JAR
+        def jarFile = fatJar.archiveFile.get().asFile
+        def targetJar = new File(installDir, 'transmute-cli.jar')
+        copy {
+            from jarFile
+            into installDir
+            rename { 'transmute-cli.jar' }
+        }
+        
+        // Copy wrapper scripts
+        def wrapperScript
+        if (isWindows) {
+            wrapperScript = new File(projectDir, 'bin/transmute.bat')
+            def targetScript = new File(installDir, 'transmute.bat')
+            copy {
+                from wrapperScript
+                into installDir
+            }
+            println "\n✓ Transmute CLI installed to: ${installDir.absolutePath}"
+            println "\nAdd to PATH if not already present:"
+            println "  set PATH=%PATH%;${installDir.absolutePath}"
+            println "\nThen use:"
+            println "  transmute new my-game"
+        } else {
+            wrapperScript = new File(projectDir, 'bin/transmute')
+            def targetScript = new File(installDir, 'transmute')
+            copy {
+                from wrapperScript
+                into installDir
+            }
+            // Make executable
+            targetScript.setExecutable(true)
+            
+            println "\n✓ Transmute CLI installed to: ${installDir.absolutePath}"
+            
+            // Check if directory is in PATH
+            def path = System.getenv('PATH')
+            if (!path.contains(installDir.absolutePath)) {
+                println "\n⚠ Add to PATH (add to ~/.bashrc, ~/.zshrc, or ~/.config/fish/config.fish):"
+                println "  export PATH=\"\$PATH:${installDir.absolutePath}\""
+                println "\nOr for fish shell:"
+                println "  set -U fish_user_paths ${installDir.absolutePath} \$fish_user_paths"
+            }
+            
+            println "\nThen use:"
+            println "  transmute new my-game"
+        }
+    }
+}
+
+// Task to uninstall CLI
+task uninstall {
+    description = 'Uninstalls the CLI from ~/.local/bin (Unix/macOS) or %USERPROFILE%\\bin (Windows)'
+    
+    doLast {
+        def os = System.getProperty('os.name').toLowerCase()
+        def isWindows = os.contains('windows')
+        
+        // Determine install directory
+        def installDir
+        if (isWindows) {
+            installDir = new File(System.getenv('USERPROFILE'), 'bin')
+        } else {
+            installDir = new File(System.getProperty('user.home'), '.local/bin')
+        }
+        
+        // Remove files
+        def jarFile = new File(installDir, 'transmute-cli.jar')
+        def scriptFile = new File(installDir, isWindows ? 'transmute.bat' : 'transmute')
+        
+        def removed = false
+        if (jarFile.exists()) {
+            jarFile.delete()
+            removed = true
+        }
+        if (scriptFile.exists()) {
+            scriptFile.delete()
+            removed = true
+        }
+        
+        if (removed) {
+            println "\n✓ Transmute CLI uninstalled from: ${installDir.absolutePath}"
+        } else {
+            println "\n⚠ Transmute CLI not found in: ${installDir.absolutePath}"
+        }
     }
 }
 

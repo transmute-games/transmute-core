@@ -1,0 +1,26 @@
+#!/bin/sh
+# Transmute CLI Wrapper
+# This script wraps the Java JAR to provide a cleaner CLI experience
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Path to the JAR file (relative to script location)
+JAR_FILE="$SCRIPT_DIR/transmute-cli.jar"
+
+# Check if JAR exists
+if [ ! -f "$JAR_FILE" ]; then
+    echo "Error: transmute-cli.jar not found at $JAR_FILE"
+    echo "Please run: ./gradlew :transmute-cli:install"
+    exit 1
+fi
+
+# Check if Java is installed
+if ! command -v java >/dev/null 2>&1; then
+    echo "Error: Java is not installed or not in PATH"
+    echo "Please install Java 17 or higher"
+    exit 1
+fi
+
+# Execute the JAR with all arguments passed through
+exec java -jar "$JAR_FILE" "$@"
