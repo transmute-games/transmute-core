@@ -9,8 +9,8 @@ import javax.sound.sampled.Clip;
 
 import TransmuteCore.Graphics.Bitmap;
 import TransmuteCore.Graphics.Sprites.Spritesheet;
-import TransmuteCore.System.Error;
-import TransmuteCore.System.Util;
+import TransmuteCore.System.Logger;
+import TransmuteCore.System.Exceptions.AssetLoadException;
 import TransmuteCore.System.Asset.Type.Audio.Audio;
 import TransmuteCore.System.Asset.Type.Fonts.Font;
 import TransmuteCore.System.Asset.Type.Images.Image;
@@ -21,13 +21,18 @@ import TransmuteCore.System.Asset.Type.Images.Image;
  * Actual loading of assets is done in the loading menu.
  * </p>
  * <p>
- * <p>
  * Asset loading done in the same thread causes startup latency.
  * Larger assets (such as background music) will take significant
  * processing power. By utilizing deferred resource loading, the
  * resource reference can be declared prior to resource loading,
  * ensuring that the program launches responsively and in a more
  * user-friendly manner by showing a loading screen.
+ * </p>
+ * <p>
+ * <strong>IMPORTANT: Asset keys are case-insensitive.</strong>
+ * All asset names are automatically converted to lowercase when stored and retrieved.
+ * For example, "PlayerSprite" and "playersprite" will refer to the same asset.
+ * This ensures consistent asset retrieval regardless of name casing.
  * </p>
  */
 public class AssetManager
@@ -69,13 +74,13 @@ public class AssetManager
         //Reject duplicate assets
         if (containsKey(asset.getType(), asset.getName()))
         {
-            new Error(Error.KeyAlreadyExistsException(AssetManager.CLASS_NAME, asset.getKey(), AssetManager.MAP_NAME));
+            Logger.warn("Asset with key '%s' already exists in '%s'. Skipping registration.", asset.getKey(), AssetManager.MAP_NAME);
             return false;
         } else
         {
             //Register a new asset
             REGISTRAR.put(asset.getKey(), asset);
-            Util.logAdd(AssetManager.CLASS_NAME, asset.getKey(), AssetManager.MAP_NAME);
+            Logger.logAssetAdd(AssetManager.CLASS_NAME, asset.getKey(), AssetManager.MAP_NAME);
             if (!asset.isLoaded()) LOAD_QUEUE.add(asset);
             return true;
         }
@@ -91,8 +96,9 @@ public class AssetManager
         while (!isLoaded())
         {
             Asset asset = LOAD_QUEUE.peek();
-            assert asset != null; asset.load();
-            Util.logCached(AssetManager.CLASS_NAME, asset.getFileName());
+            assert asset != null;
+            asset.load();
+            Logger.logAssetCached(AssetManager.CLASS_NAME, asset.getFileName());
             LOAD_QUEUE.remove(asset);
         }
     }
@@ -154,8 +160,10 @@ public class AssetManager
         if (REGISTRAR.containsKey(key))
         {
             REGISTRAR.remove(key);
-            Util.logRemove(AssetManager.CLASS_NAME, key, AssetManager.MAP_NAME);
-        } else new Error(Error.KeyNotFoundException(AssetManager.CLASS_NAME, key, AssetManager.MAP_NAME));
+            Logger.logAssetRemove(AssetManager.CLASS_NAME, key, AssetManager.MAP_NAME);
+        } else {
+            Logger.warn("Asset with key '%s' not found in '%s'. Cannot remove.", key, AssetManager.MAP_NAME);
+        }
     }
 
     /**

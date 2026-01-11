@@ -18,8 +18,8 @@ import TransmuteCore.Graphics.Bitmap;
 import TransmuteCore.Graphics.Context;
 import TransmuteCore.Graphics.Sprites.Sprite;
 import TransmuteCore.Graphics.Sprites.Spritesheet;
-import TransmuteCore.System.Error;
 import TransmuteCore.System.Asset.Asset;
+import TransmuteCore.System.Exceptions.AssetLoadException;
 import TransmuteCore.System.Asset.Type.Fonts.Font;
 import TransmuteCore.Units.Tuple2i;
 
@@ -40,8 +40,7 @@ public class Image extends Asset
     {
         if (filePath == null)
         {
-            new Error(Error.filePathException(Image.TYPE));
-            return;
+            throw new AssetLoadException(Image.TYPE, "null", "File path cannot be null");
         }
 
         BufferedImage image = null;
@@ -49,13 +48,14 @@ public class Image extends Asset
         try
         {
             image = load(getClass().getClassLoader().getResourceAsStream(filePath));
+            if (image == null) {
+                throw new AssetLoadException(Image.TYPE, filePath, "Failed to load image - resource not found or stream is null");
+            }
         } catch (IOException e)
         {
-            e.printStackTrace();
-            new Error(Error.FileNotFoundException(Image.TYPE, filePath));
+            throw new AssetLoadException(Image.TYPE, filePath, "IOException while loading image", e);
         }
 
-        assert image != null;
         image = convertTo(BufferedImage.TYPE_INT_ARGB, image);
         target = image;
     }
@@ -64,23 +64,22 @@ public class Image extends Asset
     {
         if (filePath == null)
         {
-            new Error(Error.filePathException(Image.TYPE));
+            throw new AssetLoadException(Image.TYPE, "null", "File path cannot be null");
         }
 
         BufferedImage image = null;
 
         try
         {
-            assert filePath != null;
-
             image = ImageIO.read(className.getClassLoader().getResourceAsStream(filePath));
+            if (image == null) {
+                throw new AssetLoadException(Image.TYPE, filePath, "Failed to load image - resource not found or stream is null");
+            }
         } catch (IOException e)
         {
-            e.printStackTrace();
-            new Error(Error.FileNotFoundException(Font.TYPE, filePath));
+            throw new AssetLoadException(Image.TYPE, filePath, "IOException while loading image", e);
         }
 
-        assert image != null;
         image = convertTo(BufferedImage.TYPE_INT_ARGB, image);
         return image;
     }
@@ -138,7 +137,7 @@ public class Image extends Asset
     {
         if (target == null)
         {
-            new Error("[" + Image.TYPE + "]: [" + fileName + "] has not been loaded.");
+            throw new AssetLoadException(Image.TYPE, fileName, "Image has not been loaded yet. Call AssetManager.load() first.");
         }
 
         return (BufferedImage) target;

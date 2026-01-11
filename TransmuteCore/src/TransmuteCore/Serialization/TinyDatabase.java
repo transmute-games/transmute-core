@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-class TinyDatabase extends TinyBase
+public class TinyDatabase extends TinyBase
 {
 
     static final byte[] HEADER = "TDB".getBytes();

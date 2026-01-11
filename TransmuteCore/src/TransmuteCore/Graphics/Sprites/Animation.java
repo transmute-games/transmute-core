@@ -78,12 +78,35 @@ public class Animation
      */
     public Animation(String name, Sprite[] animation, int[] duration)
     {
-        this.name = name;
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Animation name cannot be null or empty");
+        }
+        if (animation == null || animation.length == 0) {
+            throw new IllegalArgumentException("Animation frames cannot be null or empty");
+        }
+        if (duration == null) {
+            throw new IllegalArgumentException("Duration array cannot be null");
+        }
+        if (animation.length != duration.length) {
+            throw new IllegalArgumentException(
+                String.format("Animation frames (%d) and delay time (%d) length mismatch!", 
+                            animation.length, duration.length)
+            );
+        }
 
-        if (animation.length != duration.length)
-            throw new IllegalArgumentException("Animation frames and delay time length mismatch!");
+        this.name = name;
         for (int i = 0; i < animation.length; i++)
         {
+            if (animation[i] == null) {
+                throw new IllegalArgumentException(
+                    String.format("Animation frame at index %d cannot be null", i)
+                );
+            }
+            if (duration[i] <= 0) {
+                throw new IllegalArgumentException(
+                    String.format("Frame duration at index %d must be positive. Got: %d", i, duration[i])
+                );
+            }
             frames.add(new Frame(animation[i], duration[i] * 1000));
         }
     }
@@ -96,10 +119,27 @@ public class Animation
      */
     public Animation(String name, Sprite[] animation, int duration)
     {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Animation name cannot be null or empty");
+        }
+        if (animation == null || animation.length == 0) {
+            throw new IllegalArgumentException("Animation frames cannot be null or empty");
+        }
+        if (duration <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Duration must be positive. Got: %d", duration)
+            );
+        }
+        
         this.name = name;
 
         for (int i = 0; i < animation.length; i++)
         {
+            if (animation[i] == null) {
+                throw new IllegalArgumentException(
+                    String.format("Animation frame at index %d cannot be null", i)
+                );
+            }
             frames.add(new Frame(animation[i], duration * 1000));
         }
     }
@@ -153,6 +193,15 @@ public class Animation
      */
     public void render(Context ctx, int x, int y, float alpha, int tint)
     {
+        if (ctx == null) {
+            throw new IllegalArgumentException("Context cannot be null");
+        }
+        if (frames.isEmpty()) {
+            return; // Nothing to render
+        }
+        if (frame < 0 || frame >= frames.size()) {
+            return; // Invalid frame index, animation not started
+        }
         Frame f = frames.get(frame);
         ctx.renderBitmap(f.sprite.bitmap, x, y, alpha, tint);
     }
@@ -347,6 +396,11 @@ public class Animation
      */
     public void setSpeed(float speed)
     {
+        if (speed <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Animation speed must be positive. Got: %.2f", speed)
+            );
+        }
         this.speed = speed;
     }
 

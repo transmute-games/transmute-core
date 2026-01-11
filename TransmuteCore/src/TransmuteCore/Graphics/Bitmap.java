@@ -45,6 +45,11 @@ public class Bitmap
      */
     public Bitmap(int width, int height)
     {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Bitmap dimensions must be positive. Got width: %d, height: %d", width, height)
+            );
+        }
         this.width = width;
         this.height = height;
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -58,6 +63,9 @@ public class Bitmap
      */
     public Bitmap(Bitmap bitmap)
     {
+        if (bitmap == null) {
+            throw new IllegalArgumentException("Source bitmap cannot be null");
+        }
         this.width = bitmap.width;
         this.height = bitmap.height;
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -73,6 +81,9 @@ public class Bitmap
      */
     public Bitmap(BufferedImage image)
     {
+        if (image == null) {
+            throw new IllegalArgumentException("BufferedImage cannot be null");
+        }
         this.image = image;
         this.width = image.getWidth();
         this.height = image.getHeight();
@@ -90,6 +101,19 @@ public class Bitmap
      */
     public Bitmap(int[] data, int w, int h)
     {
+        if (data == null) {
+            throw new IllegalArgumentException("Pixel data cannot be null");
+        }
+        if (w <= 0 || h <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Bitmap dimensions must be positive. Got width: %d, height: %d", w, h)
+            );
+        }
+        if (data.length != w * h) {
+            throw new IllegalArgumentException(
+                String.format("Data array length (%d) must match width * height (%d)", data.length, w * h)
+            );
+        }
         this.width = w;
         this.height = h;
         this.data = new int[w * h];
@@ -106,6 +130,11 @@ public class Bitmap
      */
     public Bitmap getScaled(float scale)
     {
+        if (scale <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Scale must be positive. Got: %.2f", scale)
+            );
+        }
         return getScaled((int) ((float) width * scale), (int) ((float) height * scale));
     }
 
@@ -118,6 +147,11 @@ public class Bitmap
      */
     public Bitmap getScaled(int width, int height)
     {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Scaled dimensions must be positive. Got width: %d, height: %d", width, height)
+            );
+        }
         VolatileImage img = GraphicsEnvironment.getLocalGraphicsEnvironment()
                 .getDefaultScreenDevice().getDefaultConfiguration()
                 .createCompatibleVolatileImage(width, height, VolatileImage.TRANSLUCENT);

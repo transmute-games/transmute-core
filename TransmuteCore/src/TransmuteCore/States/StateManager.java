@@ -6,7 +6,7 @@ import TransmuteCore.GameEngine.TransmuteCore;
 import TransmuteCore.GameEngine.Manager;
 import TransmuteCore.GameEngine.Interfaces.Cortex;
 import TransmuteCore.Graphics.Context;
-import TransmuteCore.System.Error;
+import TransmuteCore.System.Exceptions.StateException;
 
 /**
  * {@code GameStateManager} is the state manager class.
@@ -27,6 +27,9 @@ public class StateManager implements Cortex
      */
     public StateManager(TransmuteCore gameEngine)
     {
+        if (gameEngine == null) {
+            throw new IllegalArgumentException("Game engine cannot be null");
+        }
         this.gameEngine = gameEngine;
     }
 
@@ -53,11 +56,23 @@ public class StateManager implements Cortex
      *
      * @return Current game state.
      */
-    private State peek()
+    public State peek()
     {
-        if (stateStack.size() == 0) new Error("[" + StateManager.CLASS_NAME + "]: The stack is empty.");
+        if (stateStack.size() == 0) {
+            throw StateException.emptyStack();
+        }
 
         return stateStack.peek();
+    }
+
+    /**
+     * Get the number of states in the stack.
+     *
+     * @return Size of the state stack
+     */
+    public int getStackSize()
+    {
+        return stateStack.size();
     }
 
     /**
@@ -67,9 +82,13 @@ public class StateManager implements Cortex
      */
     public void push(State newState)
     {
-        if (stateStack.size() != 0 && peek().getName().equalsIgnoreCase(newState.getName()))
-            new Error("[" + StateManager.CLASS_NAME + "]: The current state has the same name as the inputted state.");
-        else stateStack.push(newState);
+        if (newState == null) {
+            throw new IllegalArgumentException("Cannot push null state");
+        }
+        if (stateStack.size() != 0 && peek().getName().equalsIgnoreCase(newState.getName())) {
+            throw StateException.duplicateState(newState.getName());
+        }
+        stateStack.push(newState);
     }
 
     /**

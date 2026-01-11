@@ -272,4 +272,89 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
     {
         this.mousePosition.y = yMouse;
     }
+
+    /**
+     * Checks if any key is currently pressed.
+     *
+     * @return True if any key is pressed.
+     */
+    public static boolean isAnyKeyPressed()
+    {
+        for (Property property : keyMap.values())
+        {
+            if (property != null && !property.isReleased && property.isPressed) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if any key is currently held.
+     *
+     * @return True if any key is held.
+     */
+    public static boolean isAnyKeyHeld()
+    {
+        for (Property property : keyMap.values())
+        {
+            if (property != null && property.isPressed && property.isReleased) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if any mouse button is currently pressed.
+     *
+     * @return True if any mouse button is pressed.
+     */
+    public static boolean isAnyButtonPressed()
+    {
+        for (Property property : mouseMap.values())
+        {
+            if (property != null && !property.isReleased && property.isPressed) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if any mouse button is currently held.
+     *
+     * @return True if any mouse button is held.
+     */
+    public static boolean isAnyButtonHeld()
+    {
+        for (Property property : mouseMap.values())
+        {
+            if (property != null && property.isPressed && property.isReleased) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gets the mouse position as a Tuple2i.
+     *
+     * @return Mouse position.
+     */
+    public Tuple2i getMousePosition()
+    {
+        return mousePosition;
+    }
+
+    /**
+     * Sets the mouse position.
+     *
+     * @param x X position.
+     * @param y Y position.
+     */
+    public void setMousePosition(int x, int y)
+    {
+        this.mousePosition.setPositions(x, y);
+    }
 }

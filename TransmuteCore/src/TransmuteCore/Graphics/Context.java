@@ -51,6 +51,11 @@ public class Context
      */
     public Context(int width, int height)
     {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Context dimensions must be positive. Got width: %d, height: %d", width, height)
+            );
+        }
         this.width = width;
         this.height = height;
         this.data = new int[width * height];
@@ -76,6 +81,9 @@ public class Context
      */
     public void renderBitmap(Bitmap bitmap, int x, int y)
     {
+        if (bitmap == null) {
+            return; // Silently ignore null bitmaps
+        }
         renderBitmap(bitmap, x, y, 1.0f);
     }
 
@@ -90,6 +98,14 @@ public class Context
      */
     public void renderBitmap(Bitmap bitmap, int x, int y, float alpha)
     {
+        if (bitmap == null) {
+            return; // Silently ignore null bitmaps
+        }
+        if (alpha < 0 || alpha > 1) {
+            throw new IllegalArgumentException(
+                String.format("Alpha must be between 0 and 1. Got: %.2f", alpha)
+            );
+        }
         renderBitmap(bitmap, x, y, alpha, 1.0f);
     }
 
@@ -119,6 +135,19 @@ public class Context
      */
     public void renderBitmap(Bitmap bitmap, int x, int y, float alpha, float scale)
     {
+        if (bitmap == null) {
+            return; // Silently ignore null bitmaps
+        }
+        if (alpha < 0 || alpha > 1) {
+            throw new IllegalArgumentException(
+                String.format("Alpha must be between 0 and 1. Got: %.2f", alpha)
+            );
+        }
+        if (scale <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Scale must be positive. Got: %.2f", scale)
+            );
+        }
         renderBitmap(bitmap, x, y, alpha, scale, 0);
     }
 
@@ -420,6 +449,9 @@ public class Context
      */
     public void setFont(Font font)
     {
+        if (font == null) {
+            throw new IllegalArgumentException("Font cannot be null");
+        }
         this.font = font;
     }
 
@@ -472,5 +504,151 @@ public class Context
     public void setClearColor(int color)
     {
         this.clearColor = color;
+    }
+
+    /**
+     * Draws a centered bitmap on the context.
+     *
+     * @param bitmap Bitmap to be rendered.
+     * @param centerX X coordinate of the center position.
+     * @param centerY Y coordinate of the center position.
+     */
+    public void renderBitmapCentered(Bitmap bitmap, int centerX, int centerY)
+    {
+        if (bitmap == null) return;
+        int x = centerX - bitmap.getWidth() / 2;
+        int y = centerY - bitmap.getHeight() / 2;
+        renderBitmap(bitmap, x, y);
+    }
+
+    /**
+     * Draws a circle on the context (outline only).
+     *
+     * @param centerX X coordinate of the center.
+     * @param centerY Y coordinate of the center.
+     * @param radius  Radius of the circle.
+     * @param color   Color of the circle.
+     */
+    public void renderCircle(int centerX, int centerY, int radius, int color)
+    {
+        if (radius <= 0) return;
+        
+        int x = radius;
+        int y = 0;
+        int err = 0;
+
+        while (x >= y)
+        {
+            blitPixel(centerX + x, centerY + y, color);
+            blitPixel(centerX + y, centerY + x, color);
+            blitPixel(centerX - y, centerY + x, color);
+            blitPixel(centerX - x, centerY + y, color);
+            blitPixel(centerX - x, centerY - y, color);
+            blitPixel(centerX - y, centerY - x, color);
+            blitPixel(centerX + y, centerY - x, color);
+            blitPixel(centerX + x, centerY - y, color);
+
+            if (err <= 0)
+            {
+                y += 1;
+                err += 2 * y + 1;
+            }
+            if (err > 0)
+            {
+                x -= 1;
+                err -= 2 * x + 1;
+            }
+        }
+    }
+
+    /**
+     * Draws a filled circle on the context.
+     *
+     * @param centerX X coordinate of the center.
+     * @param centerY Y coordinate of the center.
+     * @param radius  Radius of the circle.
+     * @param color   Color of the circle.
+     */
+    public void renderFilledCircle(int centerX, int centerY, int radius, int color)
+    {
+        if (radius <= 0) return;
+        
+        for (int y = -radius; y <= radius; y++)
+        {
+            for (int x = -radius; x <= radius; x++)
+            {
+                if (x * x + y * y <= radius * radius)
+                {
+                    blitPixel(centerX + x, centerY + y, color);
+                }
+            }
+        }
+    }
+
+    /**
+     * Draws a line between two points using Bresenham's line algorithm.
+     *
+     * @param x1    Starting X coordinate.
+     * @param y1    Starting Y coordinate.
+     * @param x2    Ending X coordinate.
+     * @param y2    Ending Y coordinate.
+     * @param color Color of the line.
+     */
+    public void renderLine(int x1, int y1, int x2, int y2, int color)
+    {
+        int dx = Math.abs(x2 - x1);
+        int dy = Math.abs(y2 - y1);
+        int sx = x1 < x2 ? 1 : -1;
+        int sy = y1 < y2 ? 1 : -1;
+        int err = dx - dy;
+
+        while (true)
+        {
+            blitPixel(x1, y1, color);
+
+            if (x1 == x2 && y1 == y2) break;
+
+            int e2 = 2 * err;
+            if (e2 > -dy)
+            {
+                err -= dy;
+                x1 += sx;
+            }
+            if (e2 < dx)
+            {
+                err += dx;
+                y1 += sy;
+            }
+        }
+    }
+
+    /**
+     * Clears the context with a custom color.
+     *
+     * @param color Color to clear with.
+     */
+    public void clear(int color)
+    {
+        Arrays.fill(data, color);
+    }
+
+    /**
+     * Draws text centered on a position.
+     *
+     * @param text    Text to draw.
+     * @param centerX X coordinate of center.
+     * @param centerY Y coordinate of center.
+     * @param color   Text color.
+     */
+    public void renderTextCentered(String text, int centerX, int centerY, int color)
+    {
+        if (font == null || text == null || text.isEmpty()) return;
+        
+        int textWidth = font.getTextWidth(text);
+        int textHeight = font.getTextHeight(text);
+        int x = centerX - textWidth / 2;
+        int y = centerY - textHeight / 2;
+        
+        renderText(text, x, y, color);
     }
 }

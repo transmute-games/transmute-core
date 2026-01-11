@@ -8,10 +8,10 @@ abstract class TinyBase
 
     int size = 2 + 4;
 
-    String getName()
-    {
-        return new String(name, 0, nameLength);
-    }
+	public String getName()
+	{
+		return new String(name);
+	}
 
     void setName(String name)
     {

@@ -69,6 +69,23 @@ public class Font extends Asset
     {
         super(Font.TYPE, name, filePath);
 
+        if (glyphMap == null || glyphMap.isEmpty()) {
+            throw new IllegalArgumentException("Glyph map cannot be null or empty");
+        }
+        if (rows <= 0 || columns <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Rows and columns must be positive. Got rows: %d, columns: %d", rows, columns)
+            );
+        }
+        if (defaultGlyphSize == null) {
+            throw new IllegalArgumentException("Default glyph size cannot be null");
+        }
+        if (defaultGlyphSize.x <= 0 || defaultGlyphSize.y <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Glyph size must be positive. Got: %dx%d", defaultGlyphSize.x, defaultGlyphSize.y)
+            );
+        }
+
         this.glyphMap = glyphMap;
         this.rows = rows;
         this.columns = columns;
@@ -156,6 +173,23 @@ public class Font extends Asset
      */
     public void render(Context ctx, String text, int x, int y, int color, float scale, float alpha)
     {
+        if (ctx == null) {
+            throw new IllegalArgumentException("Context cannot be null");
+        }
+        if (text == null) {
+            return; // Silently ignore null text
+        }
+        if (scale <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Scale must be positive. Got: %.2f", scale)
+            );
+        }
+        if (alpha < 0 || alpha > 1) {
+            throw new IllegalArgumentException(
+                String.format("Alpha must be between 0 and 1. Got: %.2f", alpha)
+            );
+        }
+        
         int xRender = x, yRender = y;
 
         for (int i = 0; i < text.length(); i++)
@@ -206,6 +240,14 @@ public class Font extends Asset
      */
     public void addKerningRule(String glyphs, int glyphWidth, int glyphSink)
     {
+        if (glyphs == null || glyphs.isEmpty()) {
+            throw new IllegalArgumentException("Glyphs string cannot be null or empty");
+        }
+        if (glyphWidth < 0) {
+            throw new IllegalArgumentException(
+                String.format("Glyph width cannot be negative. Got: %d", glyphWidth)
+            );
+        }
         for (int i = 0; i < glyphs.length(); i++)
         {
             addKerningRule(glyphs.charAt(i), glyphWidth, glyphSink);
@@ -245,6 +287,14 @@ public class Font extends Asset
      */
     public int widthOf(String text, float scale)
     {
+        if (text == null) {
+            return 0;
+        }
+        if (scale <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Scale must be positive. Got: %.2f", scale)
+            );
+        }
         int width = 0;
         for (int i = 0; i < text.length(); i++)
         {
@@ -261,6 +311,38 @@ public class Font extends Asset
             width += glyphWidth;
         }
         return width;
+    }
+
+    /**
+     * Get the width of text rendered with this font.
+     *
+     * @param text Text to measure
+     * @return Width in pixels
+     */
+    public int getTextWidth(String text)
+    {
+        return widthOf(text);
+    }
+
+    /**
+     * Get the height of text rendered with this font.
+     *
+     * @param text Text to measure (unused, height is constant)
+     * @return Height in pixels
+     */
+    public int getTextHeight(String text)
+    {
+        return defaultGlyphSize.y;
+    }
+
+    /**
+     * Get the default font height.
+     *
+     * @return Height in pixels
+     */
+    public int getHeight()
+    {
+        return defaultGlyphSize.y;
     }
 
     /**

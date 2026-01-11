@@ -30,6 +30,11 @@ public abstract class Level implements Updatable, Renderable
      */
     protected Level(int width, int height)
     {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Level dimensions must be positive. Got: (%d, %d)", width, height)
+            );
+        }
         this.width = width;
         this.height = height;
     }
@@ -41,6 +46,9 @@ public abstract class Level implements Updatable, Renderable
      */
     protected Level(String filePath)
     {
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new IllegalArgumentException("File path cannot be null or empty");
+        }
         load(filePath);
     }
 
@@ -98,6 +106,9 @@ public abstract class Level implements Updatable, Renderable
      */
     public void add(Object obj)
     {
+        if (obj == null) {
+            throw new IllegalArgumentException("Cannot add null object to level");
+        }
         obj.init(this);
         objManager.add(obj);
     }
@@ -109,6 +120,9 @@ public abstract class Level implements Updatable, Renderable
      */
     public void remove(Object obj)
     {
+        if (obj == null) {
+            return; // Silently ignore null removal
+        }
         obj.remove();
         objManager.remove(obj);
     }
@@ -122,6 +136,14 @@ public abstract class Level implements Updatable, Renderable
      */
     public synchronized List<Mob> getMobs(Mob m, int radius)
     {
+        if (m == null) {
+            throw new IllegalArgumentException("Mob cannot be null");
+        }
+        if (radius < 0) {
+            throw new IllegalArgumentException(
+                String.format("Radius cannot be negative. Got: %d", radius)
+            );
+        }
         List<Mob> result = new ArrayList<>();
         int mx = m.getX();
         int my = m.getY();
@@ -156,6 +178,14 @@ public abstract class Level implements Updatable, Renderable
      */
     public synchronized List<Object> getObjects(Object obj, int radius)
     {
+        if (obj == null) {
+            throw new IllegalArgumentException("Object cannot be null");
+        }
+        if (radius < 0) {
+            throw new IllegalArgumentException(
+                String.format("Radius cannot be negative. Got: %d", radius)
+            );
+        }
         List<Object> result = new ArrayList<>();
         int ox = obj.getX();
         int oy = obj.getY();

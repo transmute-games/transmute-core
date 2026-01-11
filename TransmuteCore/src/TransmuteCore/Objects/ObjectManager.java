@@ -24,6 +24,9 @@ public class ObjectManager implements Updatable, Renderable
      */
     public void add(Object obj)
     {
+        if (obj == null) {
+            throw new IllegalArgumentException("Cannot add null object to ObjectManager");
+        }
         objectList.add(obj);
     }
 
@@ -34,24 +37,40 @@ public class ObjectManager implements Updatable, Renderable
      */
     public void remove(Object obj)
     {
+        if (obj == null) {
+            return; // Silently ignore null removal
+        }
         objectList.remove(obj);
     }
 
     @Override
     public void update(Manager manager, double delta)
     {
+        if (manager == null) {
+            throw new IllegalArgumentException("Manager cannot be null");
+        }
         for (Object obj : objectList)
         {
-            obj.update(manager, delta);
+            if (obj != null) {
+                obj.update(manager, delta);
+            }
         }
     }
 
     @Override
     public void render(Manager manager, Context ctx)
     {
+        if (manager == null) {
+            throw new IllegalArgumentException("Manager cannot be null");
+        }
+        if (ctx == null) {
+            throw new IllegalArgumentException("Context cannot be null");
+        }
         for (Object obj : objectList)
         {
-            obj.render(manager, ctx);
+            if (obj != null) {
+                obj.render(manager, ctx);
+            }
         }
     }
 }

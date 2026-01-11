@@ -35,6 +35,9 @@ public class TiledLevel extends Level
     @Override
     public void load(String filePath)
     {
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new IllegalArgumentException("File path cannot be null or empty");
+        }
         if (!Asset.cropFileExtension(filePath).equalsIgnoreCase(".png") ||
                 !Asset.cropFileExtension(filePath).equalsIgnoreCase(".jpg") ||
                 !Asset.cropFileExtension(filePath).equalsIgnoreCase(".jpeg"))
@@ -89,6 +92,9 @@ public class TiledLevel extends Level
 
     public void addTile(int index, Tile tile)
     {
+        if (tile == null) {
+            throw new IllegalArgumentException("Tile cannot be null");
+        }
         tileMap.put(index, tile);
     }
 
@@ -114,6 +120,11 @@ public class TiledLevel extends Level
 
     public void setTileSize(int tileSize)
     {
+        if (tileSize <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Tile size must be positive. Got: %d", tileSize)
+            );
+        }
         this.tileSize = tileSize;
     }
 

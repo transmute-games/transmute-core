@@ -71,6 +71,36 @@ public class Spritesheet extends Bitmap
     {
         super(image);
 
+        if (image == null) {
+            throw new IllegalArgumentException("Spritesheet image cannot be null");
+        }
+        if (cellSize == null) {
+            throw new IllegalArgumentException("Cell size cannot be null");
+        }
+        if (cellSize.x <= 0 || cellSize.y <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Cell size must be positive. Got: (%d, %d)", cellSize.x, cellSize.y)
+            );
+        }
+        if (startOffset == null) {
+            throw new IllegalArgumentException("Start offset cannot be null");
+        }
+        if (startOffset.x < 0 || startOffset.y < 0) {
+            throw new IllegalArgumentException(
+                String.format("Start offset cannot be negative. Got: (%d, %d)", startOffset.x, startOffset.y)
+            );
+        }
+        if (vertGap < 0) {
+            throw new IllegalArgumentException(
+                String.format("Vertical gap cannot be negative. Got: %d", vertGap)
+            );
+        }
+        if (horizGap < 0) {
+            throw new IllegalArgumentException(
+                String.format("Horizontal gap cannot be negative. Got: %d", horizGap)
+            );
+        }
+
         this.image = image;
         this.cellSize = cellSize;
         this.verticalGapSize = vertGap;
@@ -146,6 +176,12 @@ public class Spritesheet extends Bitmap
      */
     public Sprite crop(int x, int y)
     {
+        if (x < 0 || y < 0 || x >= sprites.length || y >= sprites[0].length) {
+            throw new IllegalArgumentException(
+                String.format("Invalid sprite coordinates (%d, %d). Valid range: [0-%d, 0-%d]",
+                    x, y, sprites.length - 1, sprites[0].length - 1)
+            );
+        }
         return sprites[x][y];
     }
 
@@ -158,6 +194,11 @@ public class Spritesheet extends Bitmap
     @Override
     public Spritesheet getScaled(float scale)
     {
+        if (scale <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Scale must be positive. Got: %.2f", scale)
+            );
+        }
         int newWidth = (int) (getWidth() * scale);
         int newHeight = (int) (getHeight() * scale);
         BufferedImage scaledImage = Image.getScaledImage(image, newWidth, newHeight);
@@ -181,6 +222,17 @@ public class Spritesheet extends Bitmap
      */
     public Animation generateAnimation(String name, int duration, Tuple2i... spriteLoc)
     {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Animation name cannot be null or empty");
+        }
+        if (spriteLoc == null || spriteLoc.length == 0) {
+            throw new IllegalArgumentException("Sprite locations cannot be null or empty");
+        }
+        if (duration <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Duration must be positive. Got: %d", duration)
+            );
+        }
         Sprite[] sprites = new Sprite[spriteLoc.length];
         int i = 0;
         for (Tuple2i loc : spriteLoc)
@@ -204,8 +256,21 @@ public class Spritesheet extends Bitmap
      */
     public Animation generateAnimation(String name, int[] duration, Tuple2i[] spriteLoc)
     {
-        if (duration.length != spriteLoc.length)
-            throw new IllegalArgumentException("Frame time array size should have the same length as spriteLoc array size!");
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Animation name cannot be null or empty");
+        }
+        if (duration == null) {
+            throw new IllegalArgumentException("Duration array cannot be null");
+        }
+        if (spriteLoc == null) {
+            throw new IllegalArgumentException("Sprite locations array cannot be null");
+        }
+        if (duration.length != spriteLoc.length) {
+            throw new IllegalArgumentException(
+                String.format("Frame time array size (%d) should have the same length as spriteLoc array size (%d)!",
+                    duration.length, spriteLoc.length)
+            );
+        }
         Sprite[] sprites = new Sprite[spriteLoc.length];
         int i = 0;
         for (Tuple2i p : spriteLoc)
@@ -228,6 +293,20 @@ public class Spritesheet extends Bitmap
      */
     public Animation generateAnimation(String name, int sequenceOrientation, int duration)
     {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Animation name cannot be null or empty");
+        }
+        if (duration <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Duration must be positive. Got: %d", duration)
+            );
+        }
+        if (sequenceOrientation != ORIENTATION_HORIZONTAL && sequenceOrientation != ORIENTATION_VERTICAL) {
+            throw new IllegalArgumentException(
+                String.format("Invalid orientation: %d. Use ORIENTATION_HORIZONTAL or ORIENTATION_VERTICAL", 
+                    sequenceOrientation)
+            );
+        }
         Sprite[] sprites;
         Animation animation = null;
         switch (sequenceOrientation)

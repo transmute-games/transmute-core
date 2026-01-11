@@ -65,6 +65,28 @@ public abstract class TransmuteCore implements Runnable, Cortex
     {
         printStartScreen();
 
+        if (gameTitle == null || gameTitle.trim().isEmpty()) {
+            throw new IllegalArgumentException("Game title cannot be null or empty");
+        }
+        if (gameVersion == null || gameVersion.trim().isEmpty()) {
+            throw new IllegalArgumentException("Game version cannot be null or empty");
+        }
+        if (gameWidth <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Game width must be positive. Got: %d", gameWidth)
+            );
+        }
+        if (gameRatio != WideScreen && gameRatio != Square) {
+            throw new IllegalArgumentException(
+                String.format("Game ratio must be TransmuteCore.WideScreen or TransmuteCore.Square. Got: 0x%X", gameRatio)
+            );
+        }
+        if (gameScale <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Game scale must be positive. Got: %d", gameScale)
+            );
+        }
+
         this.gameTitle = gameTitle;
         this.gameVersion = gameVersion;
         this.gameWidth = gameWidth;
@@ -272,6 +294,16 @@ public abstract class TransmuteCore implements Runnable, Cortex
      */
     public void setTargetFPS(int target)
     {
+        if (target <= 0) {
+            throw new IllegalArgumentException(
+                String.format("Target FPS must be positive. Got: %d", target)
+            );
+        }
+        if (target > 1000) {
+            throw new IllegalArgumentException(
+                String.format("Target FPS seems unreasonably high: %d. Maximum allowed is 1000.", target)
+            );
+        }
         this.targetFPS = target;
     }
 
