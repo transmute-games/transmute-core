@@ -162,7 +162,7 @@ public class ProjectGenerator {
             "import TransmuteCore.core.GameConfig;\n" +
             "import TransmuteCore.core.Manager;\n" +
             "import TransmuteCore.core.TransmuteCore;\n" +
-            "import TransmuteCore.core.Interfaces.Services.IRenderer;\n" +
+            "import TransmuteCore.core.interfaces.services.IRenderer;\n" +
             "import TransmuteCore.graphics.Color;\n" +
             "import TransmuteCore.graphics.Context;\n\n" +
             "public class Game extends TransmuteCore {\n\n" +
