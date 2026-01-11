@@ -34,9 +34,9 @@ export function MarketingNav({ transparent = false }: MarketingNavProps) {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <img 
-              src="/favicon.svg" 
-              alt="TransmuteCore Logo" 
+            <img
+              src="/favicon.svg"
+              alt="TransmuteCore Logo"
               className="w-10 h-10"
             />
             <span className="text-xl font-bold text-gradient">
@@ -159,9 +159,9 @@ export function MarketingFooter() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <img 
-                src="/favicon.svg" 
-                alt="TransmuteCore Logo" 
+              <img
+                src="/favicon.svg"
+                alt="TransmuteCore Logo"
                 className="w-10 h-10"
               />
               <span className="text-xl font-bold text-gradient">
@@ -207,16 +207,6 @@ export function MarketingFooter() {
                   className="text-cream/60 hover:text-transmute-cyan transition-colors"
                 >
                   Tutorials
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/transmute-games/transmute-core/blob/master/docs/COOKBOOK.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cream/60 hover:text-transmute-cyan transition-colors"
-                >
-                  Cookbook
                 </a>
               </li>
               <li>
