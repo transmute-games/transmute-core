@@ -1,7 +1,10 @@
 # TransmuteCore Game Engine
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Java](https://img.shields.io/badge/Java-17%2B-blue)](https://adoptium.net/)
+[![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?logo=openjdk&logoColor=white)](https://adoptium.net/)
+[![JitPack](https://jitpack.io/v/transmute-games/transmute-core.svg)](https://jitpack.io/#transmute-games/transmute-core)
+[![CLI Release](https://img.shields.io/github/v/release/transmute-games/transmute-core?filter=cli-*&label=CLI&color=success)](https://github.com/transmute-games/transmute-core/releases/latest)
+[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/transmute-games/transmute-core/release-cli.yml?label=CLI%20Build)](https://github.com/transmute-games/transmute-core/actions)
 
 A high-performance 2D pixel game engine for Java
 
