@@ -3,8 +3,8 @@
 
 allprojects {
     group = 'games.transmute'
-    version = '0.2.0-ALPHA'
-    
+    version = '1.0.0'
+
     repositories {
         mavenCentral()
     }
@@ -12,20 +12,20 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-    
+
     java {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    
+
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
     }
-    
+
     dependencies {
         testImplementation 'junit:junit:4.13.2'
     }
-    
+
     test {
         testLogging {
             events "passed", "skipped", "failed"

@@ -38,66 +38,28 @@ You should see output indicating Java 17 or higher is installed.
 
 ## Installation
 
-### Step 1: Clone the TransmuteCore Repository
+### Install the Transmute CLI
+
+The Transmute CLI is a project generator that creates new games with templates and configurations.
+
+#### Unix/macOS
 
 ```bash
-git clone https://github.com/transmute-games/transmute-core
-cd transmute-core
+curl -fsSL https://raw.githubusercontent.com/transmute-games/transmute-core/master/scripts/install-cli.sh | sh
 ```
 
-### Step 2: Publish TransmuteCore to Local Maven
+#### Windows (PowerShell)
 
-Before you can use TransmuteCore, you need to publish it to your local Maven repository:
-
-```bash
-./gradlew :transmute-core:publishToMavenLocal
+```powershell
+irm https://raw.githubusercontent.com/transmute-games/transmute-core/master/scripts/install-cli.ps1 | iex
 ```
 
-This makes the engine available as a dependency for your projects.
+The installer will:
+- Download the latest CLI from GitHub Releases
+- Install it to `~/.local/bin` (Unix/macOS) or `%USERPROFILE%\bin` (Windows)
+- Guide you through adding it to your PATH if needed
 
-### Step 3: Install the Transmute CLI
-
-The Transmute CLI is a project generator that scaffolds new games with templates and configurations:
-
-```bash
-./gradlew :transmute-cli:install
-```
-
-This installs the `transmute` command to:
-- **macOS/Linux**: `~/.local/bin/`
-- **Windows**: `%USERPROFILE%\bin\`
-
-### Step 4: Add CLI to Your PATH
-
-Make sure the install directory is in your PATH so you can run `transmute` from anywhere.
-
-#### macOS/Linux (Bash/Zsh)
-
-Add this line to your `~/.bashrc` or `~/.zshrc`:
-
-```bash
-export PATH="$PATH:$HOME/.local/bin"
-```
-
-Then reload your shell:
-
-```bash
-source ~/.bashrc  # or ~/.zshrc
-```
-
-#### macOS/Linux (Fish Shell)
-
-```fish
-set -U fish_user_paths $HOME/.local/bin $fish_user_paths
-```
-
-#### Windows
-
-```cmd
-set PATH=%PATH%;%USERPROFILE%\bin
-```
-
-### Step 5: Verify Installation
+#### Verify Installation
 
 Check that the CLI is installed correctly:
 
@@ -106,6 +68,17 @@ transmute version
 ```
 
 You should see the version information for the Transmute CLI.
+
+### Manual Installation (Alternative)
+
+If you prefer manual installation:
+
+1. Visit [GitHub Releases](https://github.com/transmute-games/transmute-core/releases)
+2. Download the latest CLI release:
+   - `transmute-cli.jar`
+   - `transmute` (Unix/macOS) or `transmute.bat` (Windows)
+3. Place them in a directory on your PATH
+4. Make executable (Unix/macOS): `chmod +x transmute`
 
 ## Creating Your First Game
 
@@ -197,7 +170,32 @@ We've created a series of progressive tutorials that cover all engine features:
 
 If you get this error, the CLI installation directory is not in your PATH. See Step 4 above to add it.
 
-### "Could not find games.transmute:transmute-core"
+### "Could not resolve: com.github.transmute-games.transmute-core:transmute-core"
+
+This usually means:
+1. **No internet connection** - Generated projects download TransmuteCore from JitPack, which requires an internet connection
+2. **First-time build** - JitPack builds artifacts on-demand the first time they're requested (can take 1-2 minutes)
+3. **Invalid version** - The specified version doesn't exist. Check [available releases](https://github.com/transmute-games/transmute-core/releases)
+
+You can check JitPack build status at: `https://jitpack.io/#transmute-games/transmute-core`
+
+### Building from Source (For Contributors)
+
+If you want to contribute to TransmuteCore development:
+
+```bash
+# Clone the repository
+git clone https://github.com/transmute-games/transmute-core
+cd transmute-core
+
+# Build the entire project
+./gradlew build
+
+# Publish to local Maven for development
+./gradlew :transmute-core:publishToMavenLocal
+
+# Install CLI locally
+./gradlew :transmute-cli:install
 
 This means TransmuteCore isn't published to your local Maven repository. Run:
 

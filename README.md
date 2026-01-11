@@ -24,50 +24,74 @@ TransmuteCore is a lightweight, high-performance 2D pixel game engine written in
 
 ## Quick Start
 
-### Prerequisites
+### Get the CLI
 
-- Java Development Kit (JDK) 17 or higher
-- Gradle (wrapper included)
-- An IDE (IntelliJ IDEA, Eclipse, or VS Code recommended)
+The fastest way to get started is with the Transmute CLI:
 
-### Installation
+#### Unix/macOS
+```bash
+curl -fsSL https://raw.githubusercontent.com/transmute-games/transmute-core/master/scripts/install-cli.sh | sh
+```
 
-#### Option 1: Using the CLI Generator (Recommended)
+#### Windows (PowerShell)
+```powershell
+irm https://raw.githubusercontent.com/transmute-games/transmute-core/master/scripts/install-cli.ps1 | iex
+```
+
+#### Manual Installation
+Download the latest release from [GitHub Releases](https://github.com/transmute-games/transmute-core/releases) and follow the installation instructions.
+
+### Create Your First Game
 
 ```bash
-# Clone and set up TransmuteCore
-git clone https://github.com/transmute-games/transmute-core
-cd transmute-core
-
-# Publish the engine to local Maven
-./gradlew :transmute-core:publishToMavenLocal
-
-# Install the CLI
-./gradlew :transmute-cli:install
-
 # Create a new project
 transmute new my-game
 cd my-game
+
+# Run your game
 ./gradlew run
 ```
 
-#### Option 2: Add to Existing Project
+### Prerequisites
 
-First, build and publish TransmuteCore locally:
+- Java Development Kit (JDK) 17 or higher
+- Internet connection (for downloading dependencies via JitPack)
+
+### For Contributors
+
+If you want to contribute to TransmuteCore development:
 
 ```bash
+# Clone the repository
 git clone https://github.com/transmute-games/transmute-core
 cd transmute-core
+
+# Build the entire project
+./gradlew build
+
+# Publish the engine to local Maven (for local development)
 ./gradlew :transmute-core:publishToMavenLocal
+
+# Install the CLI locally
+./gradlew :transmute-cli:install
 ```
 
-Then add to your `build.gradle`:
+### Add to Existing Project
+
+To use TransmuteCore in an existing Gradle project, add to your `build.gradle`:
 
 ```gradle
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
 dependencies {
-    implementation 'games.transmute:transmute-core:0.1.0-ALPHA'
+    implementation 'com.github.transmute-games.transmute-core:transmute-core:v1.0.0'
 }
 ```
+
+Replace `v1.0.0` with the [latest release version](https://github.com/transmute-games/transmute-core/releases).
 
 ### Hello World Example
 

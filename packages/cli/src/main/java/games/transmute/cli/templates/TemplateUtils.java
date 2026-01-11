@@ -32,8 +32,8 @@ public class TemplateUtils {
             version = '%s'
             
             repositories {
-                mavenLocal()
                 mavenCentral()
+                maven { url 'https://jitpack.io' }
             }
             
             java {
@@ -42,7 +42,7 @@ public class TemplateUtils {
             }
             
             dependencies {
-                implementation 'games.transmute:transmute-core:%s'
+                implementation 'com.github.transmute-games.transmute-core:transmute-core:%s'
             }
             
             application {
@@ -92,6 +92,12 @@ public class TemplateUtils {
             
             - `src/main/java` - Java source files
             - `src/main/resources` - Game assets (images, sounds, etc.)
+            
+            ## Dependencies
+            
+            This project uses TransmuteCore via [JitPack](https://jitpack.io). The dependency is automatically
+            configured in `build.gradle`. JitPack builds artifacts directly from GitHub releases, so no
+            additional authentication or setup is required.
             
             ## Documentation
             

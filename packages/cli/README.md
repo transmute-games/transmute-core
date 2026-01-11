@@ -6,41 +6,51 @@ Command-line tool for scaffolding new TransmuteCore game projects.
 
 ### Quick Install (Recommended)
 
+#### Unix/macOS
 ```bash
-# From the monorepo root
-./gradlew :transmute-cli:install
+curl -fsSL https://raw.githubusercontent.com/transmute-games/transmute-core/master/scripts/install-cli.sh | sh
 ```
 
-This installs the CLI to:
-- **macOS/Linux**: `~/.local/bin/`
-- **Windows**: `%USERPROFILE%\bin\`
-
-Make sure the install directory is in your PATH:
-
-```bash
-# macOS/Linux (Bash/Zsh)
-export PATH="$PATH:$HOME/.local/bin"
-
-# macOS/Linux (Fish)
-set -U fish_user_paths $HOME/.local/bin $fish_user_paths
-
-# Windows
-set PATH=%PATH%;%USERPROFILE%\bin
+#### Windows (PowerShell)
+```powershell
+irm https://raw.githubusercontent.com/transmute-games/transmute-core/master/scripts/install-cli.ps1 | iex
 ```
+
+The installer will:
+- Download the latest CLI release
+- Install to `~/.local/bin` (Unix/macOS) or `%USERPROFILE%\bin` (Windows)
+- Guide you through PATH setup if needed
 
 ### Manual Installation
 
-If you prefer manual installation:
+1. Download the latest release from [GitHub Releases](https://github.com/transmute-games/transmute-core/releases)
+2. Download `transmute-cli.jar` and the appropriate wrapper script:
+   - Unix/macOS: `transmute`
+   - Windows: `transmute.bat`
+3. Place them in a directory on your PATH (e.g., `~/.local/bin`)
+4. Make the script executable (Unix/macOS only): `chmod +x transmute`
+
+### Install Specific Version
 
 ```bash
-# Build the JAR
+# Unix/macOS
+TRANSMUTE_CLI_VERSION=0.1.0-ALPHA curl -fsSL https://raw.githubusercontent.com/transmute-games/transmute-core/master/scripts/install-cli.sh | sh
+
+# Windows PowerShell
+$env:TRANSMUTE_CLI_VERSION="0.1.0-ALPHA"; irm https://raw.githubusercontent.com/transmute-games/transmute-core/master/scripts/install-cli.ps1 | iex
+```
+
+### For Contributors
+
+If you're developing the CLI itself:
+
+```bash
+# From the monorepo root
+./gradlew :transmute-cli:install
+
+# Or build the fat JAR manually
 ./gradlew :transmute-cli:fatJar
-
-# Use directly
 java -jar packages/cli/build/libs/transmute-cli-0.1.0-ALPHA-all.jar new my-game
-
-# Or create an alias
-alias transmute='java -jar /path/to/transmute-cli-0.1.0-ALPHA-all.jar'
 ```
 
 ## Usage
@@ -148,11 +158,9 @@ cd my-game
 ## Requirements
 
 - Java 17 or higher
-- TransmuteCore published to Maven Local
-  ```bash
-  # From monorepo root
-  ./gradlew :transmute-core:publishToMavenLocal
-  ```
+- Internet connection (for downloading TransmuteCore from JitPack)
+
+Generated projects automatically download TransmuteCore from [JitPack](https://jitpack.io) - no manual setup required!
 
 ## Development
 
@@ -243,13 +251,14 @@ cd quest
    # Or just open a new terminal
    ```
 
-### "Could not find games.transmute:transmute-core"
+### "Could not resolve: com.github.transmute-games.transmute-core:transmute-core"
 
-Make sure TransmuteCore is published to Maven Local:
-```bash
-cd /path/to/transmute-core
-./gradlew :transmute-core:publishToMavenLocal
-```
+This usually means:
+1. No internet connection (JitPack requires internet to download dependencies)
+2. The specified version doesn't exist - check [available releases](https://github.com/transmute-games/transmute-core/releases)
+3. JitPack is building the artifact for the first time (can take 1-2 minutes)
+
+You can check the build status at: `https://jitpack.io/#transmute-games/transmute-core`
 
 ### Permission Denied (gradlew)
 

@@ -3,7 +3,7 @@ plugins {
 }
 
 // CLI uses its own version scheme
-version = '0.1.0-ALPHA'
+version = '1.0.0'
 
 application {
     mainClass = 'games.transmute.cli.TransmuteCLI'
