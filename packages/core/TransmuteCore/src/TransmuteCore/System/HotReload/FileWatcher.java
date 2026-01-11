@@ -1,6 +1,6 @@
 package TransmuteCore.System.HotReload;
 
-import TransmuteCore.System.Logger;
+import TransmuteCore.util.Logger;
 
 import java.io.File;
 import java.nio.file.*;

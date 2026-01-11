@@ -1,12 +1,12 @@
 package TransmuteCore.System.HotReload;
 
-import TransmuteCore.System.Asset.AssetManager;
-import TransmuteCore.System.Asset.Asset;
-import TransmuteCore.System.Asset.Type.Images.Image;
-import TransmuteCore.System.Asset.Type.Audio.Audio;
-import TransmuteCore.System.Asset.Type.Fonts.Font;
-import TransmuteCore.System.Logger;
-import TransmuteCore.Graphics.Bitmap;
+import TransmuteCore.assets.AssetManager;
+import TransmuteCore.assets.Asset;
+import TransmuteCore.assets.types.Image;
+import TransmuteCore.assets.types.Audio;
+import TransmuteCore.assets.types.Font;
+import TransmuteCore.util.Logger;
+import TransmuteCore.graphics.Bitmap;
 
 import java.nio.file.Path;
 import java.util.*;

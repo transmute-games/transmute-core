@@ -1,7 +1,7 @@
 package TransmuteCore.System.HotReload;
 
-import TransmuteCore.System.Logger;
-import TransmuteCore.GameEngine.Manager;
+import TransmuteCore.util.Logger;
+import TransmuteCore.core.Manager;
 
 import java.nio.file.Paths;
 import java.util.*;

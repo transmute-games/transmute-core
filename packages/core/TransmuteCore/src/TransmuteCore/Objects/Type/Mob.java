@@ -1,9 +1,9 @@
 package TransmuteCore.Objects.Type;
 
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Level.TiledLevel;
-import TransmuteCore.Objects.Object;
-import TransmuteCore.Units.Tuple2i;
+import TransmuteCore.core.Manager;
+import TransmuteCore.level.TiledLevel;
+import TransmuteCore.ecs.Object;
+import TransmuteCore.math.Tuple2i;
 
 public abstract class Mob extends Object
 {

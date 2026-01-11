@@ -159,12 +159,12 @@ public class ProjectGenerator {
     private String generateBasicGameClass(Map<String, String> vars) {
         return String.format(
             "package %s;\n\n" +
-            "import TransmuteCore.GameEngine.GameConfig;\n" +
-            "import TransmuteCore.GameEngine.Manager;\n" +
-            "import TransmuteCore.GameEngine.TransmuteCore;\n" +
-            "import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;\n" +
-            "import TransmuteCore.Graphics.Color;\n" +
-            "import TransmuteCore.Graphics.Context;\n\n" +
+            "import TransmuteCore.core.GameConfig;\n" +
+            "import TransmuteCore.core.Manager;\n" +
+            "import TransmuteCore.core.TransmuteCore;\n" +
+            "import TransmuteCore.core.Interfaces.Services.IRenderer;\n" +
+            "import TransmuteCore.graphics.Color;\n" +
+            "import TransmuteCore.graphics.Context;\n\n" +
             "public class Game extends TransmuteCore {\n\n" +
             "    public Game(GameConfig config) {\n" +
             "        super(config);\n" +
@@ -214,8 +214,8 @@ public class ProjectGenerator {
     private String generatePlayerClass(Map<String, String> vars) {
         return String.format(
             "package %s;\n\n" +
-            "import TransmuteCore.Graphics.Color;\n" +
-            "import TransmuteCore.Graphics.Context;\n\n" +
+            "import TransmuteCore.graphics.Color;\n" +
+            "import TransmuteCore.graphics.Context;\n\n" +
             "public class Player {\n" +
             "    private int x, y;\n" +
             "    private int velocityY = 0;\n" +
@@ -253,8 +253,8 @@ public class ProjectGenerator {
     private String generatePlatformClass(Map<String, String> vars) {
         return String.format(
             "package %s;\n\n" +
-            "import TransmuteCore.Graphics.Color;\n" +
-            "import TransmuteCore.Graphics.Context;\n\n" +
+            "import TransmuteCore.graphics.Color;\n" +
+            "import TransmuteCore.graphics.Context;\n\n" +
             "public class Platform {\n" +
             "    private int x, y, width, height;\n\n" +
             "    public Platform(int x, int y, int width, int height) {\n" +
@@ -275,7 +275,7 @@ public class ProjectGenerator {
     private String generateEntityClass(Map<String, String> vars) {
         return String.format(
             "package %s;\n\n" +
-            "import TransmuteCore.Graphics.Context;\n\n" +
+            "import TransmuteCore.graphics.Context;\n\n" +
             "public abstract class Entity {\n" +
             "    protected int x, y;\n" +
             "    protected int health;\n\n" +
@@ -296,7 +296,7 @@ public class ProjectGenerator {
     private String generateTileMapClass(Map<String, String> vars) {
         return String.format(
             "package %s;\n\n" +
-            "import TransmuteCore.Graphics.Context;\n\n" +
+            "import TransmuteCore.graphics.Context;\n\n" +
             "public class TileMap {\n" +
             "    private int[][] tiles;\n" +
             "    private int tileSize;\n\n" +

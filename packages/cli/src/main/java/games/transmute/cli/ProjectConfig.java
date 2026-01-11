@@ -9,7 +9,7 @@ public class ProjectConfig {
     public int screenWidth = 640;
     public int screenScale = 2;
     public String packageName = "com.example.game";
-    public String transmuteVersion = "0.1.0-ALPHA";
+    public String transmuteVersion = "0.2.0-ALPHA";
     
     public int getScreenHeight() {
         return screenWidth * 3 / 4; // 4:3 aspect ratio

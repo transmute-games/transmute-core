@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class TransmuteCLI {
     
-    private static final String VERSION = "0.1.0-ALPHA";
+    private static final String VERSION = "0.2.0-ALPHA";
     private static final List<String> AVAILABLE_TEMPLATES = Arrays.asList("basic", "platformer", "rpg");
     
     public static void main(String[] args) {
@@ -211,7 +211,7 @@ public class TransmuteCLI {
     
     private static void printVersion() {
         System.out.println("Transmute CLI v" + VERSION);
-        System.out.println("TransmuteCore Engine v0.1.0-ALPHA");
+        System.out.println("TransmuteCore Engine v0.2.0-ALPHA");
     }
     
     private static void listTemplates() {
