@@ -1,4 +1,4 @@
-# TransmuteCore Game Engine
+# 🧙🏼 TransmuteCore Game Engine
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?logo=openjdk&logoColor=white)](https://adoptium.net/)
