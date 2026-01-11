@@ -2,8 +2,8 @@ package TransmuteCore.Objects;
 
 import TransmuteCore.GameEngine.Interfaces.Renderable;
 import TransmuteCore.GameEngine.Interfaces.Updatable;
+import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;
 import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,18 +58,18 @@ public class ObjectManager implements Updatable, Renderable
     }
 
     @Override
-    public void render(Manager manager, Context ctx)
+    public void render(Manager manager, IRenderer renderer)
     {
         if (manager == null) {
             throw new IllegalArgumentException("Manager cannot be null");
         }
-        if (ctx == null) {
-            throw new IllegalArgumentException("Context cannot be null");
+        if (renderer == null) {
+            throw new IllegalArgumentException("Renderer cannot be null");
         }
         for (Object obj : objectList)
         {
             if (obj != null) {
-                obj.render(manager, ctx);
+                obj.render(manager, renderer);
             }
         }
     }

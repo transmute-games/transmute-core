@@ -2,7 +2,7 @@ package TransmuteCore.Objects;
 
 import TransmuteCore.GameEngine.Interfaces.Cortex;
 import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
+import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;
 import TransmuteCore.Graphics.Rectangle;
 import TransmuteCore.Units.Dimension2f;
 import TransmuteCore.Units.Tuple2i;
@@ -115,17 +115,17 @@ public class Bounds implements Cortex
     }
 
     /**
-     * Method that MUST be called {@code super.render(manager, ctx);} in order for the collision bounds to be rendered.
+     * Method that MUST be called {@code super.render(manager, renderer);} in order for the collision bounds to be rendered.
      *
-     * @param manager The engine manager object.
-     * @param ctx     The Game render 'canvas'.
+     * @param manager  The engine manager object.
+     * @param renderer The renderer interface.
      */
     @Override
-    public void render(Manager manager, Context ctx)
+    public void render(Manager manager, IRenderer renderer)
     {
         if (shouldDisplay)
         {
-            ctx.renderRectangle(bounds.x - offsets.x, bounds.y - offsets.y, bounds.width, bounds.height, color);
+            renderer.renderRectangle(bounds.x - offsets.x, bounds.y - offsets.y, (int)bounds.width, (int)bounds.height, color);
         }
     }
 

@@ -1,9 +1,15 @@
 package TransmuteCore.GameEngine;
 
+import TransmuteCore.GameEngine.Interfaces.Services.IGameWindow;
+import TransmuteCore.GameEngine.Interfaces.WindowEventCallbacks;
+
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
@@ -13,7 +19,7 @@ import javax.swing.JFrame;
  * <br>
  * This class should be used for handling the creation of a window.
  */
-public class GameWindow
+public class GameWindow implements IGameWindow
 {
     private JFrame frame; //The game window object
     private Canvas canvas; //The canvas element holds all the items in the window
@@ -23,16 +29,7 @@ public class GameWindow
     private int windowWidth; //The width of the game window
     private int windowHeight; //The height of the game window
     private int windowScale; //The scale of the game window
-
-    /**
-     * Creates the game window object.
-     *
-     * @param gameEngine The game-engine class.
-     */
-    public GameWindow(TransmuteCore gameEngine)
-    {
-        createWindow(gameEngine);
-    }
+    private WindowEventCallbacks windowEventCallbacks; //Optional window event callbacks
 
     /**
      * Creates the game window object with given
@@ -52,16 +49,27 @@ public class GameWindow
     }
 
     /**
-     * Method used to create a window based on the
-     * title, width, height, and scale.
+     * Sets the window event callbacks.
      *
-     * @param gameEngine The game-engine class.
+     * @param callbacks The callback handler for window events
      */
-    @SuppressWarnings("static-access")
-    public void createWindow(TransmuteCore gameEngine)
+    public void setWindowEventCallbacks(WindowEventCallbacks callbacks)
     {
-        frame = new JFrame(gameEngine.getTitle());
-        Dimension wDimension = new Dimension(gameEngine.getScaledWidth(), gameEngine.getScaledHeight());
+        this.windowEventCallbacks = callbacks;
+    }
+    
+    /**
+     * Method used to create a window using the internal window properties.
+     *
+     * @param config The game configuration (used for buffer strategy setup).
+     */
+    public void createWindow(GameConfig config)
+    {
+        if (config == null) {
+            throw new IllegalArgumentException("GameConfig cannot be null");
+        }
+        frame = new JFrame(windowTitle);
+        Dimension wDimension = new Dimension(windowWidth * windowScale, windowHeight * windowScale);
         frame.setMinimumSize(wDimension);
         frame.setMaximumSize(wDimension);
         frame.setPreferredSize(wDimension);
@@ -75,7 +83,35 @@ public class GameWindow
         frame.add(canvas, BorderLayout.CENTER);
         frame.pack();
 
-        canvas.createBufferStrategy(gameEngine.getNumBuffers());
+        // Add window event listeners
+        if (windowEventCallbacks != null)
+        {
+            frame.addWindowFocusListener(new WindowFocusListener()
+            {
+                @Override
+                public void windowGainedFocus(WindowEvent e)
+                {
+                    windowEventCallbacks.onWindowFocusGained();
+                }
+                
+                @Override
+                public void windowLostFocus(WindowEvent e)
+                {
+                    windowEventCallbacks.onWindowFocusLost();
+                }
+            });
+            
+            frame.addWindowListener(new WindowAdapter()
+            {
+                @Override
+                public void windowClosing(WindowEvent e)
+                {
+                    windowEventCallbacks.onWindowClosing();
+                }
+            });
+        }
+        
+        canvas.createBufferStrategy(config.getBufferCount());
         bs = canvas.getBufferStrategy();
         canvas.requestFocus();
         g = bs.getDrawGraphics();
@@ -85,6 +121,7 @@ public class GameWindow
      * Method used to clean up memory used by
      * certain processes.
      */
+    @Override
     public void cleanUp()
     {
         g.dispose();
@@ -95,6 +132,7 @@ public class GameWindow
     /**
      * @return The game title.
      */
+    @Override
     public String getTitle()
     {
         return windowTitle;
@@ -103,7 +141,8 @@ public class GameWindow
     /**
      * @return The game window's width.
      */
-    int getWidth()
+    @Override
+    public int getWidth()
     {
         return windowWidth;
     }
@@ -111,7 +150,8 @@ public class GameWindow
     /**
      * @return The game window's height.
      */
-    int getHeight()
+    @Override
+    public int getHeight()
     {
         return windowHeight;
     }
@@ -135,7 +175,8 @@ public class GameWindow
     /**
      * @return The game window's scale.
      */
-    int getScale()
+    @Override
+    public int getScale()
     {
         return windowScale;
     }
@@ -151,6 +192,7 @@ public class GameWindow
     /**
      * @return The game window's buffer strategy.
      */
+    @Override
     public BufferStrategy getBufferStrategy()
     {
         return bs;
@@ -167,6 +209,7 @@ public class GameWindow
     /**
      * @return The canvas object.
      */
+    @Override
     public Canvas getCanvas()
     {
         return canvas;

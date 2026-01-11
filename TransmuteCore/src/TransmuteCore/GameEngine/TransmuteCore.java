@@ -1,15 +1,13 @@
 package TransmuteCore.GameEngine;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
-import java.awt.image.BufferStrategy;
-import java.awt.image.VolatileImage;
-
 import TransmuteCore.GameEngine.Interfaces.Cortex;
+import TransmuteCore.GameEngine.Interfaces.LifecycleCallbacks;
+import TransmuteCore.GameEngine.Interfaces.WindowEventCallbacks;
+import TransmuteCore.GameEngine.Interfaces.Services.IAssetManager;
+import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;
 import TransmuteCore.Graphics.Context;
 import TransmuteCore.Input.Input;
-import TransmuteCore.System.Error;
+import TransmuteCore.System.Logger;
 import TransmuteCore.System.Util;
 import TransmuteCore.System.Asset.AssetManager;
 
@@ -17,128 +15,133 @@ import TransmuteCore.System.Asset.AssetManager;
  * {@code TransmuteCore} is the main game engine class.
  * <br>
  * This class should be used as an extension to make, making games easier.
+ * <p>
+ * <b>Thread Safety:</b>
+ * <ul>
+ *   <li>{@link #start()}, {@link #shutdown()}, {@link #isRunning()} are thread-safe</li>
+ *   <li>Getters ({@link #getConfig()}, {@link #getContext()}, {@link #getManager()}, etc.) should only be called from the game thread or after proper synchronization</li>
+ *   <li>{@link #getManager()} creates the Manager lazily and is safe to call concurrently</li>
+ * </ul>
+ * <p>
+ * <b>Lifecycle Hooks:</b>
+ * Override methods from {@link LifecycleCallbacks} to hook into engine lifecycle events:
+ * <ul>
+ *   <li>{@link #onEngineStart()} - after construction, before game loop starts</li>
+ *   <li>{@link #onGameLoopStart()} - when game loop thread starts</li>
+ *   <li>{@link #onPause()} - when game is paused</li>
+ *   <li>{@link #onResume()} - when game resumes</li>
+ *   <li>{@link #onShutdown()} - before cleanup</li>
+ * </ul>
+ * <p>
+ * <b>Window Event Hooks:</b>
+ * Override methods from {@link WindowEventCallbacks} to respond to window events:
+ * <ul>
+ *   <li>{@link #onWindowFocusLost()} - when window loses focus</li>
+ *   <li>{@link #onWindowFocusGained()} - when window gains focus</li>
+ *   <li>{@link #onWindowClosing()} - before window closes</li>
+ * </ul>
  */
-public abstract class TransmuteCore implements Runnable, Cortex
+public abstract class TransmuteCore implements Cortex, LifecycleCallbacks, WindowEventCallbacks
 {
     public static final String ENGINE_TITLE = "TransmuteCore"; //The game engine title
     private static final String ENGINE_VERSION = "0.1a"; //The game engine version
-
-    private static int gameWidth; //Width of the game window
-    private static int gameHeight; //Height of the game window
-    private static int gameScale; //The scale of the game window
-    @SuppressWarnings("unused")
-    private int gameRatio; //The aspect ratio of the game window
-    private static String gameTitle; //The title of the game window
-    private static String gameVersion; //The version of the game
-    private static final int WideScreen = 0x0; //16 x 9 Aspect Ratio
+    
+    // Aspect ratio constants
+    public static final int WideScreen = 0x0; // 16 x 9 Aspect Ratio
     public static final int Square = 0x1; // 4 x 3 Aspect Ratio
 
-    private boolean isRunning = false; //The variable that controls if game is running or not
-    private static final String ERROR_MESSAGE = "Failed to Load " + gameTitle + " " + gameVersion; //Basic error message
-    @SuppressWarnings("unused")
-    private long start = System.currentTimeMillis(); //The tile timer
-
-    private boolean fpsVerbose = false; //The global debug mode variable
-
-    private TransmuteCore gameEngine; //The game object
+    private GameConfig gameConfig; //The game configuration
+    private GameContext gameContext; //The game context with services
     private GameWindow gameWindow; //The game window handler
     private Context ctx; //Game render 'canvas'
-    private VolatileImage nativeImage; //Native hardware accelerated canvas image
-    private int numBuffers = 3; //Number of BufferStrategy to use (higher prevents flicker, but slows performance)
-    private int targetFPS = 60; //Desired FPS performance (Default Value = 60 FPS)
-    private double delta = 0d; //Time elapsed between each frame
     private Input input; //The game input handler
-
-    protected static Manager manager; //handler for all game object's
-
-    /**
-     * Creates the game engine instance.
-     *
-     * @param gameTitle   The title of the game.
-     * @param gameVersion The version of the game.
-     * @param gameWidth   The width of the game window.
-     * @param gameRatio   The aspect ratio of the game window based on the {@code gameWidth}.
-     * @param gameScale   The scale of the game window.
-     */
-    @SuppressWarnings("static-access")
-    public TransmuteCore(String gameTitle, String gameVersion, int gameWidth, int gameRatio, int gameScale)
-    {
-        printStartScreen();
-
-        if (gameTitle == null || gameTitle.trim().isEmpty()) {
-            throw new IllegalArgumentException("Game title cannot be null or empty");
-        }
-        if (gameVersion == null || gameVersion.trim().isEmpty()) {
-            throw new IllegalArgumentException("Game version cannot be null or empty");
-        }
-        if (gameWidth <= 0) {
-            throw new IllegalArgumentException(
-                String.format("Game width must be positive. Got: %d", gameWidth)
-            );
-        }
-        if (gameRatio != WideScreen && gameRatio != Square) {
-            throw new IllegalArgumentException(
-                String.format("Game ratio must be TransmuteCore.WideScreen or TransmuteCore.Square. Got: 0x%X", gameRatio)
-            );
-        }
-        if (gameScale <= 0) {
-            throw new IllegalArgumentException(
-                String.format("Game scale must be positive. Got: %d", gameScale)
-            );
-        }
-
-        this.gameTitle = gameTitle;
-        this.gameVersion = gameVersion;
-        this.gameWidth = gameWidth;
-        this.gameRatio = gameRatio;
-        this.gameScale = gameScale;
-        if (gameRatio == WideScreen) this.gameHeight = gameWidth / 16 * 9;
-        else this.gameHeight = gameWidth / 4 * 3;
-
-        ctx = new Context(gameWidth / gameScale, gameHeight / gameScale);
-
-        this.gameEngine = this;
-        gameWindow = new GameWindow(this);
-        input = new Input(this);
-
-        manager = new Manager(this);
-        manager.setGameWindow(gameWindow);
-        manager.setInput(input);
-
-        start();
-    }
+    protected volatile Manager manager; //handler for all game object's (backward compatibility, lazy-loaded)
+    private final Object managerLock = new Object(); //Lock for thread-safe Manager initialization
+    
+    private GameLoop gameLoop; //The game loop handler
+    private RenderPipeline renderPipeline; //The render pipeline
 
     /**
-     * Creates the game engine instance.
+     * Creates the game engine instance with a GameConfig.
+     * This constructor does NOT automatically start the game loop.
+     * Call {@link #start()} explicitly when ready.
      *
-     * @param window      The window object or gameWindow of the game.
-     * @param gameVersion The version of the game.
+     * @param config The game configuration.
      */
-    @SuppressWarnings("static-access")
-    public TransmuteCore(GameWindow window, String gameVersion)
+    protected TransmuteCore(GameConfig config)
     {
-        printStartScreen();
-
-        this.gameWindow = window;
-        this.gameTitle = window.getTitle();
-        this.gameVersion = gameVersion;
-        this.gameWidth = window.getWidth();
-        this.gameHeight = window.getHeight();
-        this.gameScale = window.getScale();
-
-        ctx = new Context(gameWidth / gameScale, gameHeight / gameScale);
-
-        this.gameEngine = this;
-        gameWindow.createWindow(this);
-        input = new Input(this);
-
-        manager = new Manager(this);
-        manager.setGameWindow(gameWindow);
-        manager.setInput(input);
-
-        start();
+        if (config == null) {
+            throw new IllegalArgumentException("GameConfig cannot be null");
+        }
+        
+        this.gameConfig = config;
+        
+        if (config.isShowStartScreen()) {
+            printStartScreen();
+        }
+        
+        ctx = new Context(config.getWidth() / config.getScale(), config.getHeight() / config.getScale());
+        
+        // Only create window and input if not in headless mode
+        if (!config.isHeadless()) {
+            gameWindow = new GameWindow(config.getTitle(), config.getWidth(), config.getHeight(), config.getScale());
+            gameWindow.setWindowEventCallbacks(this); // Register for window events
+            gameWindow.createWindow(config);
+            input = new Input(gameWindow.getCanvas(), config.getScale());
+        } else {
+            Logger.info("Running in headless mode (no window or input)");
+            gameWindow = null;
+            input = null;
+        }
+        
+        // Create GameContext
+        IAssetManager assetManager = AssetManager.getGlobalInstance();
+        if (assetManager == null) {
+            Logger.warn("AssetManager global instance is null. Asset loading may not work correctly.");
+        }
+        
+        gameContext = new GameContext.Builder()
+            .config(config)
+            .assetManager(assetManager)
+            .inputHandler(input)
+            .renderer((IRenderer)ctx)
+            .gameWindow(gameWindow)
+            .build();
+        
+        // Create render pipeline with lazy Manager provider (only if not headless)
+        if (!config.isHeadless()) {
+            renderPipeline = new RenderPipeline(
+                this,
+                (IRenderer)ctx,
+                gameWindow,
+                this::getManager, // Method reference for lazy Manager access
+                config.getBufferCount(),
+                config.getWidth(),
+                config.getHeight(),
+                config.getScale()
+            );
+        } else {
+            renderPipeline = null;
+        }
+        
+        // Create game loop with callbacks and lazy Manager provider
+        // Default exception handler: logs to console and uses stopOnException config
+        gameLoop = new GameLoop(
+            this,
+            gameContext,
+            this::getManager, // Method reference for lazy Manager access
+            this, // Lifecycle callbacks
+            null, // Default exception handler (logs and uses stopOnException)
+            config.isStopOnException(),
+            this::updateCallback,
+            this::renderCallback
+        );
+        gameLoop.setTargetFPS(config.getTargetFPS());
+        gameLoop.setFpsVerbose(config.isFpsVerbose());
+        
+        // Call lifecycle hook after engine initialization
+        onEngineStart();
     }
-
 
     /**
      * Starts the game loop by creating a new thread which starts
@@ -146,122 +149,87 @@ public abstract class TransmuteCore implements Runnable, Cortex
      */
     public synchronized void start()
     {
-        if (isRunning) return;
-        isRunning = true;
-        Thread gameThread = new Thread(this, gameTitle + " " + gameVersion);
-        gameThread.setPriority(Thread.MAX_PRIORITY);
-        gameThread.start();
+        if (gameLoop.isRunning()) return;
+        gameLoop.start(gameConfig.getTitle() + " " + gameConfig.getVersion());
     }
 
     /**
-     * Stops the game loop by setting the {@code isRunning} variable
-     * to false.
+     * Checks if the game loop is currently running.
+     * This method is thread-safe.
+     *
+     * @return True if the game loop is running, false otherwise.
      */
-    private synchronized void stop()
+    public synchronized boolean isRunning()
     {
-        if (!isRunning) return;
-        isRunning = false;
+        return gameLoop.isRunning();
+    }
+    
+    /**
+     * Pauses the game loop.
+     * The game thread continues running but update/render are not called.
+     * This method is thread-safe.
+     */
+    public synchronized void pause()
+    {
+        gameLoop.pause();
+    }
+    
+    /**
+     * Resumes the game loop from a paused state.
+     * This method is thread-safe.
+     */
+    public synchronized void resume()
+    {
+        gameLoop.resume();
+    }
+    
+    /**
+     * Checks if the game loop is currently paused.
+     * This method is thread-safe.
+     *
+     * @return True if the game loop is paused, false otherwise.
+     */
+    public synchronized boolean isPaused()
+    {
+        return gameLoop.isPaused();
     }
 
     /**
-     * The game loop handles the frame rate of the game.
+     * Gracefully shuts down the game loop and cleans up resources.
+     * This method is thread-safe.
      */
-    @Override
-    public void run()
+    public synchronized void shutdown()
     {
-        init();
-
-        long then = System.nanoTime();
-        double unprocessed = 0;
-        double nsPerFrame = 1000000000.0d / targetFPS;
-        int frames = 0, updates = 0;
-        long lastVerbose = System.currentTimeMillis();
-
-        while (isRunning)
-        {
-            long now = System.nanoTime();
-            delta = unprocessed += (now - then) / nsPerFrame;
-            then = now;
-            boolean shouldRender = false;
-
-            while (unprocessed >= 1)
-            {
-                update();
-                updates++;
-
-                unprocessed -= 1;
-                shouldRender = true;
-            }
-
-            try
-            {
-                Thread.sleep(2);
-            } catch (InterruptedException e)
-            {
-                new Error(ERROR_MESSAGE);
-            }
-
-            if (shouldRender)
-            {
-                render();
-                frames++;
-            }
-
-            if (fpsVerbose && System.currentTimeMillis() - lastVerbose > 1000)
-            {
-                System.out.printf("[%d fps, %d updates]\n", frames, updates);
-                lastVerbose += 1000;
-                frames = 0;
-                updates = 0;
-            }
-        }
-
+        if (!gameLoop.isRunning()) return;
+        gameLoop.stop();
+        
+        // Call lifecycle hook before cleanup
+        onShutdown();
+        
         cleanUp();
-        stop();
+    }
+
+
+    /**
+     * Callback invoked after each game update.
+     * Updates input state (if not in headless mode).
+     */
+    private void updateCallback()
+    {
+        if (input != null) {
+            input.update();
+        }
     }
 
     /**
-     * The parent update method which handles internal engine
-     * object updates before invoking <pre>update()</pre>.
+     * Callback invoked for each render frame.
+     * Delegates to the render pipeline (if not in headless mode).
      */
-    private void update()
+    private void renderCallback()
     {
-        update(manager, delta);
-        input.update();
-    }
-
-    /**
-     * The parent render method which handles internal engine
-     * component rendering before invoking <pre>render()</pre>.
-     */
-    private void render()
-    {
-        int ctxWidth = ctx.getWidth(), ctxHeight = ctx.getHeight();
-        if (nativeImage == null)
-        {
-            nativeImage = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
-                    .getDefaultConfiguration().createCompatibleVolatileImage(ctxWidth, ctxHeight, VolatileImage.TRANSLUCENT);
+        if (renderPipeline != null) {
+            renderPipeline.render();
         }
-
-        BufferStrategy bs = this.gameWindow.getBufferStrategy();
-        if (bs == null)
-        {
-            this.gameWindow.getCanvas().createBufferStrategy(numBuffers);
-            this.gameWindow.getCanvas().requestFocus();
-            return;
-        }
-
-        Graphics g = bs.getDrawGraphics();
-        ctx.clear();
-
-        render(manager, ctx);
-
-        Graphics2D _g = nativeImage.createGraphics();
-        _g.drawImage(ctx.getImage(), 0, 0, null);
-        _g.dispose();
-        g.drawImage(nativeImage, 0, 0, getWidth() * getScale(), getHeight() * getScale(), null);
-        g.dispose();
-        bs.show();
     }
 
     /**
@@ -270,8 +238,18 @@ public abstract class TransmuteCore implements Runnable, Cortex
      */
     private void cleanUp()
     {
-        gameWindow.cleanUp();
-        AssetManager.cleanUp();
+        if (renderPipeline != null) {
+            renderPipeline.cleanUp();
+        }
+        if (gameWindow != null) {
+            gameWindow.cleanUp();
+        }
+        // Clean up via global instance if available
+        AssetManager globalAssetManager = AssetManager.getGlobalInstance();
+        if (globalAssetManager != null)
+        {
+            globalAssetManager.cleanUp();
+        }
     }
 
     /**
@@ -279,7 +257,7 @@ public abstract class TransmuteCore implements Runnable, Cortex
      */
     private void printStartScreen()
     {
-        Util.log(
+        Logger.info(
                 "\t\t-[" + ENGINE_TITLE + "]-" +
                         "\n[Engine Version]: " + ENGINE_VERSION +
                         "\n[Unique Build Number]: " + Util.generateCode(16) +
@@ -287,119 +265,26 @@ public abstract class TransmuteCore implements Runnable, Cortex
         );
     }
 
+
     /**
-     * Sets the desired FPS.
-     *
-     * @param target Desired FPS.
+     * @return The game configuration.
      */
-    public void setTargetFPS(int target)
+    public GameConfig getConfig()
     {
-        if (target <= 0) {
-            throw new IllegalArgumentException(
-                String.format("Target FPS must be positive. Got: %d", target)
-            );
-        }
-        if (target > 1000) {
-            throw new IllegalArgumentException(
-                String.format("Target FPS seems unreasonably high: %d. Maximum allowed is 1000.", target)
-            );
-        }
-        this.targetFPS = target;
+        return gameConfig;
     }
 
     /**
-     * @return The current desired FPS.
+     * @return The game context with all services.
      */
-    public int getTargetFPS()
+    public GameContext getContext()
     {
-        return targetFPS;
+        return gameContext;
     }
 
 
     /**
-     * Sets the output of FPS value per second.
-     *
-     * @param verbose FPS verbose flag.
-     */
-    public void setFPSVerbose(boolean verbose)
-    {
-        this.fpsVerbose = verbose;
-    }
-
-    /**
-     * @return FPS verbose flag.
-     */
-    public boolean isFPSVerbose()
-    {
-        return fpsVerbose;
-    }
-
-    /**
-     * @return The game title.
-     */
-    public static String getTitle()
-    {
-        return gameTitle;
-    }
-
-    /**
-     * @return The game window's width.
-     */
-    public static int getWidth()
-    {
-        return gameWidth;
-    }
-
-    /**
-     * @return The game window's height.
-     */
-    public static int getHeight()
-    {
-        return gameHeight;
-    }
-
-    /**
-     * @return The game window's scale.
-     */
-    public static int getScale()
-    {
-        return gameScale;
-    }
-
-    /**
-     * @return The game window's scaled width.
-     */
-    public static int getScaledWidth()
-    {
-        return gameWidth * gameScale;
-    }
-
-    /**
-     * @return The game window's scaled height.
-     */
-    public static int getScaledHeight()
-    {
-        return gameHeight * gameScale;
-    }
-
-    /**
-     * @return The number of BufferStrategy to use (higher prevents flicker but slows performance).
-     */
-    public int getNumBuffers()
-    {
-        return numBuffers;
-    }
-
-    /**
-     * @return The game version.
-     */
-    public static String getVersion()
-    {
-        return gameVersion;
-    }
-
-    /**
-     * @return The game window object.
+     * @return The game window object, or null if running in headless mode.
      */
     public GameWindow getGameWindow()
     {
@@ -407,7 +292,7 @@ public abstract class TransmuteCore implements Runnable, Cortex
     }
 
     /**
-     * @return The input object.
+     * @return The input object, or null if running in headless mode.
      */
     public Input getInput()
     {
@@ -415,18 +300,58 @@ public abstract class TransmuteCore implements Runnable, Cortex
     }
 
     /**
-     * @return The game-engine object.
+     * @return The system manager object (for backward compatibility).
+     * It is recommended to use {@link #getContext()} for accessing services.
+     * The Manager is created lazily on first access.
+     * This method is thread-safe using double-checked locking.
      */
-    public TransmuteCore getMeteor()
+    public Manager getManager()
     {
-        return gameEngine;
+        // First check without synchronization (fast path)
+        if (manager == null)
+        {
+            synchronized (managerLock)
+            {
+                // Second check with synchronization (slow path)
+                if (manager == null)
+                {
+                    Manager temp = new Manager(this);
+                    if (gameWindow != null) {
+                        temp.setGameWindow(gameWindow);
+                    }
+                    if (input != null) {
+                        temp.setInput(input);
+                    }
+                    manager = temp; // Assign only after full initialization
+                }
+            }
+        }
+        return manager;
     }
 
     /**
-     * @return The system manager object.
+     * @return The game loop instance. Useful for advanced customization.
      */
-    public static Manager getManager()
+    protected GameLoop getGameLoop()
     {
-        return manager;
+        return gameLoop;
+    }
+
+    /**
+     * @return The render pipeline instance, or null if running in headless mode.
+     * Useful for advanced customization.
+     */
+    protected RenderPipeline getRenderPipeline()
+    {
+        return renderPipeline;
+    }
+    
+    /**
+     * @return The frame metrics tracker for performance monitoring.
+     * Provides FPS, UPS, and timing information to identify bottlenecks.
+     */
+    public FrameMetrics getFrameMetrics()
+    {
+        return gameLoop.getFrameMetrics();
     }
 }

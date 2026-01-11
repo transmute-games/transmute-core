@@ -6,7 +6,7 @@ import java.util.List;
 
 import TransmuteCore.GameEngine.Manager;
 import TransmuteCore.GameEngine.Interfaces.Updatable;
-import TransmuteCore.Graphics.Context;
+import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;
 import TransmuteCore.Graphics.Sprites.Animation;
 import TransmuteCore.Graphics.Sprites.Sprite;
 import TransmuteCore.System.Asset.Type.Images.Image;
@@ -93,15 +93,15 @@ public class Tile implements Updatable
      * Renders the tile to the screen at a given x and y coordinate.
      * Method that MUST be called in order for the tile to be rendered.
      *
-     * @param manager The game manager object.
-     * @param ctx     The Game render 'canvas'.
-     * @param x       The x-coordinate.
-     * @param y       The y-coordinate.
+     * @param manager  The game manager object.
+     * @param renderer The renderer interface.
+     * @param x        The x-coordinate.
+     * @param y        The y-coordinate.
      */
-    public void render(Manager manager, Context ctx, int x, int y)
+    public void render(Manager manager, IRenderer renderer, int x, int y)
     {
-        if (isAnimated()) Image.render(ctx, animation.getBitmap(), x, y);
-        else Image.render(ctx, sprite.getImage(), x, y);
+        if (isAnimated()) Image.render(renderer, animation.getBitmap(), x, y);
+        else Image.render(renderer, sprite.getImage(), x, y);
     }
 
     /**

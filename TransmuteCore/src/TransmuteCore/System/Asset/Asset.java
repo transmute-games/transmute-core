@@ -1,6 +1,6 @@
 package TransmuteCore.System.Asset;
 
-import TransmuteCore.System.Util;
+import TransmuteCore.System.Logger;
 
 /**
  * <p>An abstract representation of a resource. An abstract asset used for deferred resource loading.
@@ -52,6 +52,18 @@ public abstract class Asset
 
     /**
      * Creates a deferrable asset.
+     * <p>
+     * <strong>IMPORTANT:</strong> Assets are no longer auto-registered.
+     * You must manually register assets with an AssetManager instance:
+     * <pre>{@code
+     * AssetManager assetManager = new AssetManager();
+     * Image myImage = new Image("player", "path/to/player.png");
+     * assetManager.register(myImage);
+     * }</pre>
+     * Or use the global instance for backward compatibility:
+     * <pre>{@code
+     * AssetManager.getGlobalInstance().register(myImage);
+     * }</pre>
      *
      * @param type     Asset type prefix (to avoid ID clash).
      * @param name     Unique identifier name.
@@ -68,7 +80,12 @@ public abstract class Asset
         this.fileName = Asset.crop("fileName", this.filePath);
         this.fileType = Asset.crop("fileType", this.filePath);
 
-        AssetManager.register(this);
+        // Auto-register with global instance if available (backward compatibility)
+        AssetManager globalInstance = AssetManager.getGlobalInstance();
+        if (globalInstance != null)
+        {
+            globalInstance.register(this);
+        }
     }
 
     /**
@@ -88,7 +105,7 @@ public abstract class Asset
     public void flush()
     {
         target = null;
-        Util.log("[" + getType() + "]: [" + getKey() + "] was flushed from memory.");
+        Logger.debug("[%s]: [%s] was flushed from memory", getType(), getKey());
     }
 
     /**

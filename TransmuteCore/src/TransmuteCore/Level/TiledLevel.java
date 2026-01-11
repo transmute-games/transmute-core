@@ -5,8 +5,8 @@ import java.util.Map;
 
 import TransmuteCore.GameEngine.TransmuteCore;
 import TransmuteCore.GameEngine.Manager;
+import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;
 import TransmuteCore.Graphics.Bitmap;
-import TransmuteCore.Graphics.Context;
 import TransmuteCore.System.Asset.Asset;
 import TransmuteCore.System.Asset.Type.Images.Image;
 
@@ -68,12 +68,16 @@ public class TiledLevel extends Level
     }
 
     @Override
-    public void render(Manager manager, Context ctx)
+    public void render(Manager manager, IRenderer renderer)
     {
+        // Use renderer dimensions for viewport culling
+        int viewportWidth = renderer.getWidth();
+        int viewportHeight = renderer.getHeight();
+        
         int xStart = Math.max(0, xOffset / tileSize);
-        int xEnd = Math.min(width, xOffset + TransmuteCore.getWidth() / TransmuteCore.getScale() / tileSize + 2);
+        int xEnd = Math.min(width, xOffset + viewportWidth / tileSize + 2);
         int yStart = Math.max(0, yOffset / tileSize);
-        int yEnd = Math.min(height, yOffset + TransmuteCore.getHeight() / TransmuteCore.getScale() / tileSize + 2);
+        int yEnd = Math.min(height, yOffset + viewportHeight / tileSize + 2);
 
         for (int x = xStart; x < xEnd; x++)
         {
@@ -83,11 +87,11 @@ public class TiledLevel extends Level
 
                 Tile tile = getTile(x, y);
                 if (tile == null) continue;
-                tile.render(manager, ctx, x * tile.getWidth() - xOffset, y * tile.getHeight() - yOffset);
+                tile.render(manager, renderer, x * tile.getWidth() - xOffset, y * tile.getHeight() - yOffset);
             }
         }
 
-        super.render(manager, ctx);
+        super.render(manager, renderer);
     }
 
     public void addTile(int index, Tile tile)

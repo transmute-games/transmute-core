@@ -1,6 +1,10 @@
 package TransmuteCore.System.HotReload;
 
 import TransmuteCore.System.Asset.AssetManager;
+import TransmuteCore.System.Asset.Asset;
+import TransmuteCore.System.Asset.Type.Images.Image;
+import TransmuteCore.System.Asset.Type.Audio.Audio;
+import TransmuteCore.System.Asset.Type.Fonts.Font;
 import TransmuteCore.System.Logger;
 import TransmuteCore.Graphics.Bitmap;
 
@@ -268,31 +272,70 @@ public class AssetReloader {
     }
     
     private void reloadImage(AssetInfo info) {
-        // Reload the image through AssetManager
-        // Note: This requires AssetManager to support reloading
-        // For now, we'll just log - actual implementation would need
-        // AssetManager modifications to replace existing assets
-        
         Logger.info("Image reload: %s from %s", info.name, info.filePath);
         
-        // TODO: Implement actual image reloading
-        // This would require:
-        // 1. Load new Bitmap from file
-        // 2. Replace existing Bitmap in AssetManager's cache
-        // 3. Update all references (or use a proxy pattern)
+        AssetManager assetManager = AssetManager.getGlobalInstance();
+        if (assetManager == null) {
+            Logger.warn("Cannot reload image: AssetManager global instance is null");
+            return;
+        }
+        
+        try {
+            // Create new Image asset and load it
+            Image newImage = new Image(info.name, info.filePath);
+            newImage.load();
+            
+            // The asset will automatically re-register with AssetManager,
+            // replacing the old one due to the same key
+            Logger.debug("Successfully reloaded image: %s", info.name);
+        } catch (Exception e) {
+            Logger.error("Failed to reload image %s: %s", info.name, e.getMessage());
+            throw e;
+        }
     }
     
     private void reloadAudio(AssetInfo info) {
         Logger.info("Audio reload: %s from %s", info.name, info.filePath);
         
-        // TODO: Implement actual audio reloading
-        // Similar to image reloading but for Clip objects
+        AssetManager assetManager = AssetManager.getGlobalInstance();
+        if (assetManager == null) {
+            Logger.warn("Cannot reload audio: AssetManager global instance is null");
+            return;
+        }
+        
+        try {
+            // Get existing clip and stop it if playing
+            javax.sound.sampled.Clip oldClip = assetManager.getAudio(info.name);
+            if (oldClip != null && oldClip.isRunning()) {
+                oldClip.stop();
+            }
+            
+            // Create new Audio asset and load it
+            Audio newAudio = new Audio(info.name, info.filePath);
+            newAudio.load();
+            
+            Logger.debug("Successfully reloaded audio: %s", info.name);
+        } catch (Exception e) {
+            Logger.error("Failed to reload audio %s: %s", info.name, e.getMessage());
+            throw e;
+        }
     }
     
     private void reloadFont(AssetInfo info) {
         Logger.info("Font reload: %s from %s", info.name, info.filePath);
         
-        // TODO: Implement actual font reloading
+        AssetManager assetManager = AssetManager.getGlobalInstance();
+        if (assetManager == null) {
+            Logger.warn("Cannot reload font: AssetManager global instance is null");
+            return;
+        }
+        
+        Logger.warn("Font hot-reloading is not yet fully supported - fonts require additional metadata (glyphMap, rows, columns, etc.)");
+        Logger.warn("To reload a font, you must manually recreate it with the same parameters and re-register it");
+        
+        // Note: Font reloading is complex because Font requires additional parameters
+        // (glyphMap, rows, columns, defaultGlyphSize) that aren't stored in AssetInfo.
+        // Users would need to extend AssetReloader to support custom Font reloading.
     }
     
     private String normalizePath(String path) {

@@ -1,7 +1,7 @@
 package TransmuteCore.GameEngine.Interfaces;
 
 import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
+import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;
 
 /**
  * {@code Renderable} is the main game engine's rendering interface class.
@@ -14,8 +14,8 @@ public interface Renderable
      * The required render() method for the {@code TransmuteCore} object.
      * Renders all of the game objects based on the back-end game clock.
      *
-     * @param manager The engine manager object.
-     * @param ctx     The Game render 'canvas'.
+     * @param manager  The engine manager object.
+     * @param renderer The renderer interface (Context implementation).
      */
-    void render(Manager manager, Context ctx);
+    void render(Manager manager, IRenderer renderer);
 }

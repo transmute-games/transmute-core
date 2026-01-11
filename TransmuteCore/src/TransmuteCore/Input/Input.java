@@ -1,8 +1,10 @@
 package TransmuteCore.Input;
 
+import java.awt.Canvas;
 import java.awt.event.*;
 import java.util.HashMap;
 
+import TransmuteCore.GameEngine.Interfaces.Services.IInputHandler;
 import TransmuteCore.GameEngine.TransmuteCore;
 import TransmuteCore.Units.Tuple2i;
 
@@ -11,12 +13,13 @@ import TransmuteCore.Units.Tuple2i;
  * <br>
  * This class should be used to handle both mouse and keyboard input.
  */
-public class Input implements KeyListener, MouseListener, MouseMotionListener
+public class Input implements KeyListener, MouseListener, MouseMotionListener, IInputHandler
 {
-    private static HashMap<Integer, Property> keyMap = new HashMap<>(); //The hash table of keys
-    private static HashMap<Integer, Property> mouseMap = new HashMap<>(); //The hash table of mouse buttons
+    private final HashMap<Integer, Property> keyMap = new HashMap<>(); //The hash table of keys
+    private final HashMap<Integer, Property> mouseMap = new HashMap<>(); //The hash table of mouse buttons
 
     private Tuple2i mousePosition = new Tuple2i(0, 0); //The x and y positions of the mouse
+    private int scale; //The window scale factor for mouse position scaling
 
     /**
      * {@code Property} is a property attached to a kind of input.
@@ -30,20 +33,31 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
     }
 
     /**
-     * The constructor that sets up input.
+     * Constructs an Input handler with the specified canvas and scale factor.
      *
-     * @param gameEngine The game engine object.
+     * @param canvas The canvas to attach input listeners to.
+     * @param scale  The window scale factor for mouse position scaling.
      */
-    public Input(TransmuteCore gameEngine)
+    public Input(Canvas canvas, int scale)
     {
-        gameEngine.getGameWindow().getCanvas().addKeyListener(this);
-        gameEngine.getGameWindow().getCanvas().addMouseListener(this);
-        gameEngine.getGameWindow().getCanvas().addMouseMotionListener(this);
+        if (canvas == null)
+        {
+            throw new IllegalArgumentException("Canvas cannot be null");
+        }
+        if (scale <= 0)
+        {
+            throw new IllegalArgumentException("Scale must be positive");
+        }
+        this.scale = scale;
+        canvas.addKeyListener(this);
+        canvas.addMouseListener(this);
+        canvas.addMouseMotionListener(this);
     }
 
     /**
      * Method used to correlate between keys pressed and keys released.
      */
+    @Override
     public void update()
     {
         for (Integer keyCode : keyMap.keySet())
@@ -65,7 +79,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
      * @param keyCode The key in question.
      * @return If a specific key is pressed.
      */
-    public static boolean isKeyPressed(int... keyCode)
+    @Override
+    public boolean isKeyPressed(int... keyCode)
     {
         for (int key : keyCode)
         {
@@ -82,7 +97,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
      * @param keyCode The key in question.
      * @return If a specific key is held.
      */
-    public static boolean isKeyHeld(int... keyCode)
+    @Override
+    public boolean isKeyHeld(int... keyCode)
     {
         for (int key : keyCode)
         {
@@ -99,7 +115,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
      * @param keyCode The key in question.
      * @return If a specific key was released.
      */
-    public static boolean isKeyReleased(int... keyCode)
+    @Override
+    public boolean isKeyReleased(int... keyCode)
     {
         for (int key : keyCode)
         {
@@ -143,7 +160,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
      * @param buttonCode The mouse button in question.
      * @return If a specific mouse button is pressed.
      */
-    public static boolean isButtonPressed(int... buttonCode)
+    @Override
+    public boolean isButtonPressed(int... buttonCode)
     {
         for (int key : buttonCode)
         {
@@ -160,6 +178,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
      * @param buttonCode The mouse button in question.
      * @return If a specific mouse button is held.
      */
+    @Override
     public boolean isButtonHeld(int... buttonCode)
     {
         for (int key : buttonCode)
@@ -177,7 +196,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
      * @param buttonCode The mouse button in question.
      * @return If a specific mouse button was just released.
      */
-    public static boolean isButtonReleased(int... buttonCode)
+    @Override
+    public boolean isButtonReleased(int... buttonCode)
     {
         for (int key : buttonCode)
         {
@@ -191,13 +211,13 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
     @Override
     public void mouseDragged(MouseEvent e)
     {
-        mousePosition.setPositions(e.getX() / TransmuteCore.getScale(), e.getY() / TransmuteCore.getScale());
+        mousePosition.setPositions(e.getX() / scale, e.getY() / scale);
     }
 
     @Override
     public void mouseMoved(MouseEvent e)
     {
-        mousePosition.setPositions(e.getX() / TransmuteCore.getScale(), e.getY() / TransmuteCore.getScale());
+        mousePosition.setPositions(e.getX() / scale, e.getY() / scale);
     }
 
     @Override
@@ -278,7 +298,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
      *
      * @return True if any key is pressed.
      */
-    public static boolean isAnyKeyPressed()
+    public boolean isAnyKeyPressed()
     {
         for (Property property : keyMap.values())
         {
@@ -294,7 +314,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
      *
      * @return True if any key is held.
      */
-    public static boolean isAnyKeyHeld()
+    public boolean isAnyKeyHeld()
     {
         for (Property property : keyMap.values())
         {
@@ -310,7 +330,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
      *
      * @return True if any mouse button is pressed.
      */
-    public static boolean isAnyButtonPressed()
+    public boolean isAnyButtonPressed()
     {
         for (Property property : mouseMap.values())
         {
@@ -326,7 +346,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
      *
      * @return True if any mouse button is held.
      */
-    public static boolean isAnyButtonHeld()
+    public boolean isAnyButtonHeld()
     {
         for (Property property : mouseMap.values())
         {
@@ -337,11 +357,13 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
         return false;
     }
 
+
     /**
      * Gets the mouse position as a Tuple2i.
      *
      * @return Mouse position.
      */
+    @Override
     public Tuple2i getMousePosition()
     {
         return mousePosition;

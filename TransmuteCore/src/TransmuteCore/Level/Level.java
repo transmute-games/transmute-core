@@ -6,7 +6,7 @@ import java.util.List;
 import TransmuteCore.GameEngine.Manager;
 import TransmuteCore.GameEngine.Interfaces.Renderable;
 import TransmuteCore.GameEngine.Interfaces.Updatable;
-import TransmuteCore.Graphics.Context;
+import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;
 import TransmuteCore.Objects.Object;
 import TransmuteCore.Objects.ObjectManager;
 import TransmuteCore.Objects.Type.Mob;
@@ -72,15 +72,15 @@ public abstract class Level implements Updatable, Renderable
     }
 
     /**
-     * Method that MUST be called {@code super.render(manager, ctx);} in order for the collision bounds to be rendered.
+     * Method that MUST be called {@code super.render(manager, renderer);} in order for the collision bounds to be rendered.
      *
-     * @param manager The engine manager object.
-     * @param ctx     The Game render 'canvas'.
+     * @param manager  The engine manager object.
+     * @param renderer The renderer interface.
      */
     @Override
-    public void render(Manager manager, Context ctx)
+    public void render(Manager manager, IRenderer renderer)
     {
-        objManager.render(manager, ctx);
+        objManager.render(manager, renderer);
     }
 
     /**

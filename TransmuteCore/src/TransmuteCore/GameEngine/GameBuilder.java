@@ -1,7 +1,7 @@
 package TransmuteCore.GameEngine;
 
 import TransmuteCore.GameEngine.Interfaces.Cortex;
-import TransmuteCore.Graphics.Context;
+import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;
 
 /**
  * Builder pattern for creating TransmuteCore game instances with a fluent API.
@@ -164,25 +164,36 @@ public class GameBuilder
 
     /**
      * Builds and returns a TransmuteCore game instance with a custom Cortex implementation.
+     * The game loop will automatically start after initialization.
      * <p>
      * This is an advanced method that allows you to provide custom game logic without
      * extending TransmuteCore directly.
      *
      * @param cortex The Cortex implementation containing game logic.
-     * @return A configured TransmuteCore instance.
+     * @return A configured and started TransmuteCore instance.
      * @throws IllegalStateException if required fields are not set.
      */
     public TransmuteCore build(final Cortex cortex)
     {
         validateRequiredFields();
+        
+        // Create GameConfig from builder parameters
+        GameConfig config = new GameConfig.Builder()
+            .title(gameTitle)
+            .version(gameVersion)
+            .dimensions(gameWidth, gameRatio)
+            .scale(gameScale)
+            .targetFPS(targetFPS)
+            .bufferCount(numBuffers)
+            .fpsVerbose(fpsVerbose)
+            .build();
 
-        return new TransmuteCore(gameTitle, gameVersion, gameWidth, gameRatio, gameScale)
+        // Create game instance with new constructor
+        TransmuteCore game = new TransmuteCore(config)
         {
             @Override
             public void init()
             {
-                setTargetFPS(targetFPS);
-                setFPSVerbose(fpsVerbose);
                 cortex.init();
             }
 
@@ -193,11 +204,15 @@ public class GameBuilder
             }
 
             @Override
-            public void render(Manager manager, Context ctx)
+            public void render(Manager manager, IRenderer renderer)
             {
-                cortex.render(manager, ctx);
+                cortex.render(manager, renderer);
             }
         };
+        
+        // Automatically start the game loop
+        game.start();
+        return game;
     }
 
     /**

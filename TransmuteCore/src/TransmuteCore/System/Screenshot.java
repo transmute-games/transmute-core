@@ -37,17 +37,31 @@ public class Screenshot
     
     /**
      * Updates screenshot capture logic. Call this in your update() method.
+     * 
+     * @param input The input handler instance.
      */
-    public static void update()
+    public static void update(Input input)
     {
+        if (input == null) return;
         // Check for F12 key press
-        boolean f12Pressed = Input.isKeyPressed(KeyEvent.VK_F12);
+        boolean f12Pressed = input.isKeyPressed(KeyEvent.VK_F12);
         if (f12Pressed && !lastF12State)
         {
             captureRequested = true;
             Logger.info("Screenshot capture requested");
         }
         lastF12State = f12Pressed;
+    }
+
+    /**
+     * Updates screenshot capture logic using TransmuteCore's manager.
+     * @deprecated Use update(Input) instead.
+     */
+    @Deprecated
+    public static void update()
+    {
+        // Backward compatibility - does nothing without Input instance
+        Logger.warn("Screenshot.update() called without Input parameter - use update(Input) instead");
     }
     
     /**

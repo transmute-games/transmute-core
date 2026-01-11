@@ -7,9 +7,13 @@ import TransmuteCore.States.StateManager;
 import TransmuteCore.System.Asset.AssetManager;
 
 /**
- * {@code Manager} is the main game manager class.
+ * {@code Manager} is a convenience class for accessing game services.
  * <br>
- * This class should be used to handle all of the game object's.
+ * This class acts as a service locator that aggregates various game subsystems.
+ * While functional, it is recommended to use {@link GameContext} directly for better
+ * testability and explicit dependency management.
+ * <p>
+ * This class is kept for backward compatibility and convenience during migration.
  */
 public class Manager
 {

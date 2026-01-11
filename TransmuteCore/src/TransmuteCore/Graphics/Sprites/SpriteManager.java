@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import TransmuteCore.GameEngine.TransmuteCore;
+import TransmuteCore.GameEngine.Interfaces.Services.ISpriteManager;
 import TransmuteCore.System.Error;
-import TransmuteCore.System.Util;
+import TransmuteCore.System.Logger;
 import TransmuteCore.Units.Tuple2i;
 import TransmuteCore.Units.Tuple4i;
 
@@ -15,14 +15,14 @@ import TransmuteCore.Units.Tuple4i;
  * <br>
  * This class is used to grab a sprite-sheet and split it up into individual sprite's.
  */
-public class SpriteManager
+public class SpriteManager implements ISpriteManager
 {
     public static final String CLASS_NAME = "spriteManager"; //The title of the class
     private static final String MAP_NAME = "spriteMap"; //The key of the hash map
 
     public Spritesheet spritesheet; //The main Spritesheet object
 
-    private static HashMap<String, Sprite[]> SPRITE_MAP = new HashMap<>(); //The {@code HashMap<>()} used to hold the sprite's
+    private final HashMap<String, Sprite[]> spriteMap = new HashMap<>(); //The {@code HashMap<>()} used to hold the sprite's
     private ArrayList<Pattern> regexList; //List of regex patterns used for key manipulation
 
     /**
@@ -39,7 +39,8 @@ public class SpriteManager
 
     private void init()
     {
-        TransmuteCore.getManager().setSpriteManager(this);
+        // Removed auto-registration with manager for decoupling
+        // Manager should be passed the SpriteManager instance explicitly
 
         regexList = new ArrayList<>();
         regexList.add(Pattern.compile("\\d"));
@@ -54,13 +55,13 @@ public class SpriteManager
      * @param key The lower-cased key attached to the sprite.
      * @return If the sprite with a given key exists in the hash table.
      */
-    private static boolean checkMap(String key)
+    private boolean checkMap(String key)
     {
-        return SPRITE_MAP.containsKey(key.toLowerCase());
+        return spriteMap.containsKey(key.toLowerCase());
     }
 
     /**
-     * Method used to get the array of sprite's attached to a given key from the {@code SPRITE_MAP}.
+     * Method used to get the array of sprite's attached to a given key from the {@code spriteMap}.
      *
      * @param key The lower-cased key attached to the sprite.
      * @return The array of sprite's attached to a given key.
@@ -69,13 +70,13 @@ public class SpriteManager
     {
         key = key.toLowerCase();
         Sprite[] spriteArray = null;
-        if (checkMap(key)) spriteArray = SPRITE_MAP.get(key);
+        if (checkMap(key)) spriteArray = spriteMap.get(key);
         else new Error(Error.KeyNotFoundException(SpriteManager.CLASS_NAME, key, SpriteManager.MAP_NAME));
         return spriteArray;
     }
 
     /**
-     * Method used to get a sprite from the {@code SPRITE_MAP}.
+     * Method used to get a sprite from the {@code spriteMap}.
      *
      * @param key   The lower-cased key attached to the sprite.
      * @param index The location of the sprite in the array of sprite's.
@@ -85,7 +86,7 @@ public class SpriteManager
     {
         key = key.toLowerCase();
         Sprite[] spriteArray = null;
-        if (checkMap(key)) spriteArray = SPRITE_MAP.get(key);
+        if (checkMap(key)) spriteArray = spriteMap.get(key);
         else new Error(Error.KeyNotFoundException(SpriteManager.CLASS_NAME, key, SpriteManager.MAP_NAME));
 
         Sprite sprite = null;
@@ -104,7 +105,7 @@ public class SpriteManager
     }
 
     /**
-     * Method used to add a sprite to the {@code SPRITE_MAP}.
+     * Method used to add a sprite to the {@code spriteMap}.
      *
      * @param key The lower-cased key attached to the sprite.
      * @param x   The x-coordinate of the sprite.
@@ -116,7 +117,7 @@ public class SpriteManager
     }
 
     /**
-     * Method used to add a sprite to the {@code SPRITE_MAP}.
+     * Method used to add a sprite to the {@code spriteMap}.
      *
      * @param key        The lower-cased key attached to the sprite.
      * @param x          The x-coordinate of the sprite.
@@ -130,11 +131,12 @@ public class SpriteManager
     }
 
     /**
-     * Method used to add a sprite to the {@code SPRITE_MAP}.
+     * Method used to add a sprite to the spriteMap.
      *
      * @param key      The lower-cased key attached to the sprite.
      * @param locArray The array of locations (x, y) of sprite's in the {@code Spritesheet > (Bitmap)}.
      */
+    @Override
     public void add(String key, Tuple2i... locArray)
     {
         for (Pattern regex : regexList) key = (key.replaceAll(regex.pattern(), "")).toLowerCase();
@@ -148,13 +150,13 @@ public class SpriteManager
                 spriteArray[i] = new Sprite(spritesheet.crop(loc.x, loc.y));
             }
 
-            SPRITE_MAP.put(key, spriteArray);
-            Util.logAdd(SpriteManager.CLASS_NAME, key, SpriteManager.MAP_NAME);
+            spriteMap.put(key, spriteArray);
+            Logger.logAssetAdd(SpriteManager.CLASS_NAME, key, SpriteManager.MAP_NAME);
         } else new Error(Error.KeyAlreadyExistsException(SpriteManager.CLASS_NAME, key, SpriteManager.MAP_NAME));
     }
 
     /**
-     * Method used to add a sprite to the {@code SPRITE_MAP}.
+     * Method used to add a sprite to the {@code spriteMap}.
      *
      * @param key             The lower-cased key attached to the sprite.
      * @param propertiesArray The array of  (x, y, width, height) of sprite's in the {@code Spritesheet > (BufferedImage)}.
@@ -172,8 +174,8 @@ public class SpriteManager
                 spriteArray[i] = new Sprite(spritesheet.crop(properties.getX(), properties.getY()));
             }
 
-            SPRITE_MAP.put(key, spriteArray);
-            Util.logAdd(SpriteManager.CLASS_NAME, key, SpriteManager.MAP_NAME);
+            spriteMap.put(key, spriteArray);
+            Logger.logAssetAdd(SpriteManager.CLASS_NAME, key, SpriteManager.MAP_NAME);
         } else new Error(Error.KeyAlreadyExistsException(SpriteManager.CLASS_NAME, key, SpriteManager.MAP_NAME));
     }
 
@@ -185,6 +187,7 @@ public class SpriteManager
      * @param spriteArray The list of sprites to animation.
      * @return Generated action with specified cells and provided time for all frames.
      */
+    @Override
     public Animation createAnimation(String name, int duration, Sprite... spriteArray)
     {
         return new Animation(name, spriteArray, duration);
@@ -193,6 +196,7 @@ public class SpriteManager
     /**
      * @return The main Spritesheet object
      */
+    @Override
     public Spritesheet getSpritesheet()
     {
         return spritesheet;

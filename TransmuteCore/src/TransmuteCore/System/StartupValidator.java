@@ -186,12 +186,21 @@ public class StartupValidator
      */
     private ValidationResult validateAssets()
     {
-        if (AssetManager.isLoaded())
+        AssetManager assetManager = AssetManager.getGlobalInstance();
+        if (assetManager == null)
+        {
+            List<String> warnings = new ArrayList<>();
+            warnings.add("No AssetManager instance available");
+            warnings.add("Create an AssetManager instance before validation");
+            return ValidationResult.warning("Asset Loading", warnings);
+        }
+        
+        if (assetManager.isLoaded())
         {
             return ValidationResult.success("Asset Loading");
         }
         
-        if (AssetManager.getLoadQueue().isEmpty())
+        if (assetManager.getLoadQueue().isEmpty())
         {
             List<String> warnings = new ArrayList<>();
             warnings.add("No assets have been registered");

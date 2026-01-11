@@ -2,9 +2,9 @@ package TransmuteCore.Graphics.Sprites;
 
 import java.util.*;
 
+import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;
 import TransmuteCore.Graphics.Bitmap;
 import TransmuteCore.Graphics.Color;
-import TransmuteCore.Graphics.Context;
 import TransmuteCore.System.Asset.Type.Images.Image;
 
 /**
@@ -158,43 +158,43 @@ public class Animation
     }
 
     /**
-     * Renders the action on a given context.
+     * Renders the action on a given renderer.
      *
-     * @param ctx Render context to be drawn on.
-     * @param x   x-coordinate on screen.
-     * @param y   y-coordinate on screen.
+     * @param renderer Renderer to be drawn on.
+     * @param x        x-coordinate on screen.
+     * @param y        y-coordinate on screen.
      */
-    public void render(Context ctx, int x, int y)
+    public void render(IRenderer renderer, int x, int y)
     {
-        render(ctx, x, y, 1.0f);
+        render(renderer, x, y, 1.0f);
     }
 
     /**
-     * Renders the action on a given context with specified transparency.
+     * Renders the action on a given renderer with specified transparency.
      *
-     * @param ctx   Render context to be drawn on.
-     * @param x     x-coordinate on screen.
-     * @param y     y-coordinate on screen.
-     * @param alpha Alpha transparency of the action.
+     * @param renderer Renderer to be drawn on.
+     * @param x        x-coordinate on screen.
+     * @param y        y-coordinate on screen.
+     * @param alpha    Alpha transparency of the action.
      */
-    public void render(Context ctx, int x, int y, float alpha)
+    public void render(IRenderer renderer, int x, int y, float alpha)
     {
-        render(ctx, x, y, alpha, Color.toPixelInt(0, 0, 0, 0));
+        render(renderer, x, y, alpha, Color.toPixelInt(0, 0, 0, 0));
     }
 
     /**
-     * Renders the action on a given context with specified transparency and tint color.
+     * Renders the action on a given renderer with specified transparency and tint color.
      *
-     * @param ctx   Render context to be drawn on.
-     * @param x     x-coordinate on screen.
-     * @param y     y-coordinate on screen.
-     * @param alpha Alpha transparency of the action.
-     * @param tint  Tint color of the action.
+     * @param renderer Renderer to be drawn on.
+     * @param x        x-coordinate on screen.
+     * @param y        y-coordinate on screen.
+     * @param alpha    Alpha transparency of the action.
+     * @param tint     Tint color of the action.
      */
-    public void render(Context ctx, int x, int y, float alpha, int tint)
+    public void render(IRenderer renderer, int x, int y, float alpha, int tint)
     {
-        if (ctx == null) {
-            throw new IllegalArgumentException("Context cannot be null");
+        if (renderer == null) {
+            throw new IllegalArgumentException("Renderer cannot be null");
         }
         if (frames.isEmpty()) {
             return; // Nothing to render
@@ -203,7 +203,7 @@ public class Animation
             return; // Invalid frame index, animation not started
         }
         Frame f = frames.get(frame);
-        ctx.renderBitmap(f.sprite.bitmap, x, y, alpha, tint);
+        renderer.renderBitmap(f.sprite.bitmap, x, y, alpha, tint);
     }
 
     /**

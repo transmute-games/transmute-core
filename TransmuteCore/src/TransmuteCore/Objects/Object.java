@@ -3,8 +3,8 @@ package TransmuteCore.Objects;
 
 import TransmuteCore.GameEngine.Interfaces.Renderable;
 import TransmuteCore.GameEngine.Interfaces.Updatable;
+import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;
 import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
 import TransmuteCore.Graphics.Sprites.Animation;
 import TransmuteCore.Graphics.Sprites.Sprite;
 import TransmuteCore.Level.Level;
@@ -91,30 +91,30 @@ public abstract class Object implements Updatable, Renderable
     }
 
     @Override
-    public void render(Manager manager, Context ctx)
+    public void render(Manager manager, IRenderer renderer)
     {
         if (type == Object.ANIMATABLE)
         {
             if (currentAnimation != null)
             {
                 setSprite(currentAnimation);
-                currentAnimation.render(ctx, location.x, location.y);
+                currentAnimation.render(renderer, location.x, location.y);
             }
 
             if (bounds != null)
             {
                 setBounds(sprite, location);
-                bounds.render(manager, ctx);
+                bounds.render(manager, renderer);
             }
         } else if (type == Object.STATIC)
         {
             if (bounds != null)
             {
                 setBounds(sprite, location);
-                bounds.render(manager, ctx);
+                bounds.render(manager, renderer);
             }
 
-            ctx.renderBitmap(sprite, location.x, location.y);
+            renderer.renderBitmap(sprite, location.x, location.y);
         }
     }
 

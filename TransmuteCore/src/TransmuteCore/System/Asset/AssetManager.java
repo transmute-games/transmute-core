@@ -7,6 +7,7 @@ import java.util.Queue;
 
 import javax.sound.sampled.Clip;
 
+import TransmuteCore.GameEngine.Interfaces.Services.IAssetManager;
 import TransmuteCore.Graphics.Bitmap;
 import TransmuteCore.Graphics.Sprites.Spritesheet;
 import TransmuteCore.System.Logger;
@@ -35,7 +36,7 @@ import TransmuteCore.System.Asset.Type.Images.Image;
  * This ensures consistent asset retrieval regardless of name casing.
  * </p>
  */
-public class AssetManager
+public class AssetManager implements IAssetManager
 {
     /**
      * The name of the class
@@ -50,26 +51,62 @@ public class AssetManager
     /**
      * Dictionary-equivalent registrar for all program resources
      */
-    private static final Map<String, Asset> REGISTRAR = new HashMap<>();
+    private final Map<String, Asset> registrar = new HashMap<>();
 
     /**
      * Indexing all deferred resource to be loaded during tile-up
      */
-    private static final Queue<Asset> LOAD_QUEUE = new ArrayDeque<>();
+    private final Queue<Asset> loadQueue = new ArrayDeque<>();
 
     /**
-     * An instance of AssetManager
+     * Global instance for backward compatibility with Asset constructor auto-registration.
+     * @deprecated Use dependency injection instead of static access.
      */
-    public static AssetManager instance = new AssetManager();
+    @Deprecated
+    private static AssetManager globalInstance = null;
+
+    /**
+     * Constructs a new AssetManager instance.
+     */
+    public AssetManager()
+    {
+        // Set as global instance if not already set (for backward compatibility)
+        if (globalInstance == null)
+        {
+            globalInstance = this;
+        }
+    }
+
+    /**
+     * Sets the global instance for backward compatibility.
+     * @param instance The AssetManager instance to set as global.
+     * @deprecated Use dependency injection instead.
+     */
+    @Deprecated
+    public static void setGlobalInstance(AssetManager instance)
+    {
+        globalInstance = instance;
+    }
+
+    /**
+     * Gets the global instance for backward compatibility.
+     * @return The global AssetManager instance.
+     * @deprecated Use dependency injection instead.
+     */
+    @Deprecated
+    public static AssetManager getGlobalInstance()
+    {
+        return globalInstance;
+    }
 
     /**
      * Puts an asset into the registrar and (if unloaded) indexed to the load queue.
-     * This method is invoked automatically in the `Asset` class.
      *
      * @param asset The asset to be registered.
      * @return Success indicator flag.
      */
-    public static boolean register(Asset asset)
+    @Override
+    public boolean register(Asset asset)
     {
         //Reject duplicate assets
         if (containsKey(asset.getType(), asset.getName()))
@@ -79,9 +116,9 @@ public class AssetManager
         } else
         {
             //Register a new asset
-            REGISTRAR.put(asset.getKey(), asset);
+            registrar.put(asset.getKey(), asset);
             Logger.logAssetAdd(AssetManager.CLASS_NAME, asset.getKey(), AssetManager.MAP_NAME);
-            if (!asset.isLoaded()) LOAD_QUEUE.add(asset);
+            if (!asset.isLoaded()) loadQueue.add(asset);
             return true;
         }
     }
@@ -91,15 +128,16 @@ public class AssetManager
      * <br>
      * Note: Must be called in load sequence or all assets will be null.
      */
-    public static void load()
+    @Override
+    public void load()
     {
         while (!isLoaded())
         {
-            Asset asset = LOAD_QUEUE.peek();
+            Asset asset = loadQueue.peek();
             assert asset != null;
             asset.load();
             Logger.logAssetCached(AssetManager.CLASS_NAME, asset.getFileName());
-            LOAD_QUEUE.remove(asset);
+            loadQueue.remove(asset);
         }
     }
 
@@ -110,17 +148,19 @@ public class AssetManager
      * @param name The name of the resource.
      * @return If the asset with a given key exists in the Registrar.
      */
-    public static boolean containsKey(String type, String name)
+    @Override
+    public boolean containsKey(String type, String name)
     {
-        return REGISTRAR.containsKey(createKey(type, name));
+        return registrar.containsKey(createKey(type, name));
     }
 
     /**
      * @return Weather or not the assets have been cached.
      */
-    public static boolean isLoaded()
+    @Override
+    public boolean isLoaded()
     {
-        return LOAD_QUEUE.isEmpty();
+        return loadQueue.isEmpty();
     }
 
     /**
@@ -128,7 +168,8 @@ public class AssetManager
      *
      * @param item The item to be removed.
      */
-    public static void remove(Object item)
+    @Override
+    public void remove(Object item)
     {
         String type = "";
 
@@ -152,14 +193,15 @@ public class AssetManager
      * @param type The type associated with the resource.
      * @param name The name of the resource.
      */
-    public static void remove(String type, String name)
+    @Override
+    public void remove(String type, String name)
     {
         String key = createKey(type, name);
 
         //Check if key associated with the asset is in the Registrar
-        if (REGISTRAR.containsKey(key))
+        if (registrar.containsKey(key))
         {
-            REGISTRAR.remove(key);
+            registrar.remove(key);
             Logger.logAssetRemove(AssetManager.CLASS_NAME, key, AssetManager.MAP_NAME);
         } else {
             Logger.warn("Asset with key '%s' not found in '%s'. Cannot remove.", key, AssetManager.MAP_NAME);
@@ -181,9 +223,10 @@ public class AssetManager
     /**
      * @return The asset load queue.
      */
-    public synchronized static Queue<Asset> getLoadQueue()
+    @Override
+    public synchronized Queue<Asset> getLoadQueue()
     {
-        return LOAD_QUEUE;
+        return loadQueue;
     }
 
     /**
@@ -192,9 +235,10 @@ public class AssetManager
      * @param name the unique identifier of the asset.
      * @return Audio resource.
      */
-    public synchronized static Clip getAudio(String name)
+    @Override
+    public synchronized Clip getAudio(String name)
     {
-        return (Clip) REGISTRAR.get(createKey(Audio.TYPE, name).toLowerCase()).getData();
+        return (Clip) registrar.get(createKey(Audio.TYPE, name).toLowerCase()).getData();
     }
 
     /**
@@ -203,9 +247,10 @@ public class AssetManager
      * @param name the unique identifier of the asset.
      * @return Image resource.
      */
-    public synchronized static Bitmap getImage(String name)
+    @Override
+    public synchronized Bitmap getImage(String name)
     {
-        return (Bitmap) REGISTRAR.get(createKey(Image.TYPE, name).toLowerCase()).getData();
+        return (Bitmap) registrar.get(createKey(Image.TYPE, name).toLowerCase()).getData();
     }
 
     /**
@@ -214,34 +259,29 @@ public class AssetManager
      * @param name the unique identifier of the asset.
      * @return Font resource.
      */
-    public synchronized static Spritesheet getFont(String name)
+    @Override
+    public synchronized Spritesheet getFont(String name)
     {
-        return (Spritesheet) REGISTRAR.get(createKey(Font.TYPE, name).toLowerCase()).getData();
+        return (Spritesheet) registrar.get(createKey(Font.TYPE, name).toLowerCase()).getData();
     }
 
     /**
      * @return The default font used by the engine.
      */
-    public synchronized static Font getDefaultFont()
+    @Override
+    public synchronized Font getDefaultFont()
     {
-        return (Font) REGISTRAR.get("$default");
+        return (Font) registrar.get("$default");
     }
 
     /**
      * Method used to clean up memory used by
      * certain processes.
      */
-    public synchronized static void cleanUp()
+    @Override
+    public synchronized void cleanUp()
     {
-        REGISTRAR.clear();
-        LOAD_QUEUE.clear();
-    }
-
-    /**
-     * @return An instance of AssetManager.
-     */
-    public synchronized static AssetManager getInstance()
-    {
-        return instance;
+        registrar.clear();
+        loadQueue.clear();
     }
 }

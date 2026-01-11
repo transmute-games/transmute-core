@@ -14,8 +14,8 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
+import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;
 import TransmuteCore.Graphics.Bitmap;
-import TransmuteCore.Graphics.Context;
 import TransmuteCore.Graphics.Sprites.Sprite;
 import TransmuteCore.Graphics.Sprites.Spritesheet;
 import TransmuteCore.System.Asset.Asset;
@@ -382,26 +382,26 @@ public class Image extends Asset
     /**
      * Method used to render an image to the screen or game window object.
      *
-     * @param ctx   The Game render 'canvas'.
-     * @param bmp   The bitmap form of the image.
-     * @param xPos  The x-coordinate relative to the screen to place the image.
-     * @param yPos  The y-coordinate relative to the screen to place the image.
+     * @param renderer The renderer interface.
+     * @param bmp      The bitmap form of the image.
+     * @param xPos     The x-coordinate relative to the screen to place the image.
+     * @param yPos     The y-coordinate relative to the screen to place the image.
      */
-    public static void render(Context ctx, Bitmap bmp, int xPos, int yPos)
+    public static void render(IRenderer renderer, Bitmap bmp, int xPos, int yPos)
     {
-        ctx.renderBitmap(bmp, xPos, yPos);
+        renderer.renderBitmap(bmp, xPos, yPos);
     }
 
     /**
      * Method used to render an image to the screen or game window object.
      *
-     * @param ctx   The Game render 'canvas'.
-     * @param image The image file.
-     * @param xPos  The x-coordinate relative to the screen to place the image.
-     * @param yPos  The y-coordinate relative to the screen to place the image.
+     * @param renderer The renderer interface.
+     * @param image    The image file.
+     * @param xPos     The x-coordinate relative to the screen to place the image.
+     * @param yPos     The y-coordinate relative to the screen to place the image.
      */
-    public static void render(Context ctx, BufferedImage image, int xPos, int yPos)
+    public static void render(IRenderer renderer, BufferedImage image, int xPos, int yPos)
     {
-        ctx.renderBitmap(getAsBitmap(image), xPos, yPos);
+        renderer.renderBitmap(getAsBitmap(image), xPos, yPos);
     }
 }

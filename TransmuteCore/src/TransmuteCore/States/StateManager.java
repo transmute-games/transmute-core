@@ -5,7 +5,7 @@ import java.util.Stack;
 import TransmuteCore.GameEngine.TransmuteCore;
 import TransmuteCore.GameEngine.Manager;
 import TransmuteCore.GameEngine.Interfaces.Cortex;
-import TransmuteCore.Graphics.Context;
+import TransmuteCore.GameEngine.Interfaces.Services.IRenderer;
 import TransmuteCore.System.Exceptions.StateException;
 
 /**
@@ -45,9 +45,9 @@ public class StateManager implements Cortex
     }
 
     @Override
-    public void render(Manager manager, Context context)
+    public void render(Manager manager, IRenderer renderer)
     {
-        peek().render(manager, context);
+        peek().render(manager, renderer);
     }
 
 

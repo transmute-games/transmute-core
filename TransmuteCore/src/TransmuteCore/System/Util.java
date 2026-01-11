@@ -9,50 +9,6 @@ import java.util.Random;
  */
 public class Util
 {
-    /**
-     * Method used to print a message to the console using {@code System.out.println()}.
-     *
-     * @param message The message to print to the console.
-     */
-    public static void log(String message)
-    {
-        System.out.println(message);
-    }
-
-    /**
-     * Method used to indicate a successful caching of a file.
-     *
-     * @param className     The name of the class.
-     * @param key           The key attached to the file.
-     * @param containerName Then name of the file container.
-     */
-    public static void logAdd(String className, String key, String containerName)
-    {
-        log("[" + className + "]: [" + key + "] was added to the [" + containerName + "].");
-    }
-
-    /**
-     * Method used to indicated that an item was successfully removed from a list.
-     *
-     * @param className     The name of the class.
-     * @param key           The key attached to the item.
-     * @param containerName The name of the container.
-     */
-    public static void logRemove(String className, String key, String containerName)
-    {
-        log("[" + className + "]:" + " [" + key + "] was removed from the [" + containerName + "].");
-    }
-
-    /**
-     * Method used to indicate a successful caching of a file.
-     *
-     * @param className The key of the class.
-     * @param filePath  The path to the file.
-     */
-    public static void logCached(String className, String filePath)
-    {
-        log("[" + className + "]: [" + filePath + "] has been cached.");
-    }
 
     /**
      * Method used to generate an alphanumeric code.

@@ -2,7 +2,7 @@ package TransmuteCore.System.Asset.Type.Audio;
 
 import javax.sound.sampled.Clip;
 
-import TransmuteCore.System.Util;
+import TransmuteCore.System.Logger;
 import TransmuteCore.System.Asset.AssetManager;
 
 /**
@@ -23,10 +23,12 @@ public class AudioPlayer
     public static void play(String name)
     {
         if (muteAudio) return;
-        Clip clip = AssetManager.getAudio(name);
+        AssetManager assetManager = AssetManager.getGlobalInstance();
+        if (assetManager == null) return;
+        Clip clip = assetManager.getAudio(name);
         if (clip == null) return;
         int gap = 0;
-        Util.log("[" + CLASS_NAME + "]: Playing [" + name + "].");
+        Logger.debug("[%s]: Playing [%s]", CLASS_NAME, name);
         play(clip, gap);
     }
 
@@ -52,9 +54,11 @@ public class AudioPlayer
      */
     private static void stop(String name)
     {
-        Clip clip = AssetManager.getAudio(name);
+        AssetManager assetManager = AssetManager.getGlobalInstance();
+        if (assetManager == null) return;
+        Clip clip = assetManager.getAudio(name);
         if (clip == null) return;
-        Util.log("[" + CLASS_NAME + "]: Stopping [" + name + "].");
+        Logger.debug("[%s]: Stopping [%s]", CLASS_NAME, name);
         if (clip.isRunning()) clip.stop();
     }
 
@@ -66,10 +70,12 @@ public class AudioPlayer
     public static void resume(String name)
     {
         if (muteAudio) return;
-        Clip clip = AssetManager.getAudio(name);
+        AssetManager assetManager = AssetManager.getGlobalInstance();
+        if (assetManager == null) return;
+        Clip clip = assetManager.getAudio(name);
         if (clip == null) return;
         if (clip.isRunning()) return;
-        Util.log("[" + CLASS_NAME + "]: Starting [" + name + "].");
+        Logger.debug("[%s]: Starting [%s]", CLASS_NAME, name);
         clip.start();
     }
 
@@ -80,11 +86,13 @@ public class AudioPlayer
      */
     public static void loop(String name)
     {
-        Clip clip = AssetManager.getAudio(name);
+        AssetManager assetManager = AssetManager.getGlobalInstance();
+        if (assetManager == null) return;
+        Clip clip = assetManager.getAudio(name);
         stop(name);
         if (muteAudio) return;
         if (clip == null) return;
-        Util.log("[" + CLASS_NAME + "]: Looping [" + name + "].");
+        Logger.debug("[%s]: Looping [%s]", CLASS_NAME, name);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
@@ -96,6 +104,8 @@ public class AudioPlayer
      */
     public static int getAudioFrames(String name)
     {
-        return AssetManager.getAudio(name).getFrameLength();
+        AssetManager assetManager = AssetManager.getGlobalInstance();
+        if (assetManager == null) return 0;
+        return assetManager.getAudio(name).getFrameLength();
     }
 }

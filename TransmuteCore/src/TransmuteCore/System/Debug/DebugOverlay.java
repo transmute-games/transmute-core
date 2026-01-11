@@ -54,8 +54,11 @@ public class DebugOverlay
      */
     public void update(Manager manager, double delta)
     {
+        Input input = manager != null ? manager.getInput() : null;
+        if (input == null) return;
+        
         // Toggle with F3
-        boolean f3Pressed = Input.isKeyPressed(KeyEvent.VK_F3);
+        boolean f3Pressed = input.isKeyPressed(KeyEvent.VK_F3);
         if (f3Pressed && !lastF3State)
         {
             enabled = !enabled;
