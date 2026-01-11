@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e27;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#050814;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d9ff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0066ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6b46ff;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d9ff;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#b4ff39;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#00d9ff;stop-opacity:0.3" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d9ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b4ff39;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+
+  <!-- Decorative grid pattern -->
+  <g opacity="0.05">
+    <line x1="0" y1="150" x2="1200" y2="150" stroke="#00d9ff" stroke-width="1"/>
+    <line x1="0" y1="315" x2="1200" y2="315" stroke="#b4ff39" stroke-width="1"/>
+    <line x1="0" y1="480" x2="1200" y2="480" stroke="#00d9ff" stroke-width="1"/>
+    <line x1="300" y1="0" x2="300" y2="630" stroke="#0066ff" stroke-width="1"/>
+    <line x1="600" y1="0" x2="600" y2="630" stroke="#b4ff39" stroke-width="1"/>
+    <line x1="900" y1="0" x2="900" y2="630" stroke="#0066ff" stroke-width="1"/>
+  </g>
+
+  <!-- Accent bar at top -->
+  <rect width="1200" height="6" fill="url(#accentGradient)"/>
+
+  <!-- Logo symbol (game controller) -->
+  <g transform="translate(100, 200)">
+    <rect width="100" height="100" rx="20" fill="url(#logoGradient)"/>
+    <g transform="translate(50, 50)">
+      <path d="M-25,-10 L-15,-15 L15,-15 L25,-10 L25,10 L15,15 L-15,15 L-25,10 Z" fill="white" opacity="0.95"/>
+      <rect x="-18" y="-3" width="8" height="2" fill="#00d9ff" rx="1"/>
+      <rect x="-15" y="-6" width="2" height="8" fill="#00d9ff" rx="1"/>
+      <circle cx="12" cy="-5" r="2.5" fill="#b4ff39"/>
+      <circle cx="18" cy="-2" r="2.5" fill="#0066ff"/>
+      <circle cx="12" cy="2" r="2.5" fill="#6b46ff"/>
+      <circle cx="6" cy="-2" r="2.5" fill="#b4ff39"/>
+      <circle cx="0" cy="0" r="3" fill="#00d9ff" opacity="0.6"/>
+    </g>
+  </g>
+
+  <!-- Main heading -->
+  <text x="240" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        font-size="56" font-weight="700" fill="white" letter-spacing="-1">
+    TransmuteCore
+  </text>
+
+  <!-- Subtitle with gradient -->
+  <text x="240" y="285" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        font-size="24" font-weight="400" fill="#94a3b8" letter-spacing="0">
+    High-Performance 2D Pixel Game Engine
+  </text>
+
+  <!-- Feature highlights -->
+  <g transform="translate(240, 315)">
+    <!-- Badge 1 -->
+    <rect x="0" y="0" width="150" height="40" rx="20" fill="#1a1d29" stroke="#00d9ff" stroke-width="2"/>
+    <text x="75" y="26" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="15" font-weight="600" fill="#00d9ff" text-anchor="middle">
+      Java 17+
+    </text>
+
+    <!-- Badge 2 -->
+    <rect x="165" y="0" width="180" height="40" rx="20" fill="#1a1d29" stroke="#b4ff39" stroke-width="2"/>
+    <text x="255" y="26" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="15" font-weight="600" fill="#b4ff39" text-anchor="middle">
+      60 FPS Stable
+    </text>
+
+    <!-- Badge 3 -->
+    <rect x="0" y="50" width="200" height="40" rx="20" fill="#1a1d29" stroke="#6b46ff" stroke-width="2"/>
+    <text x="100" y="76" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="15" font-weight="600" fill="#6b46ff" text-anchor="middle">
+      Pixel-Perfect
+    </text>
+  </g>
+
+  <!-- Code snippet decoration -->
+  <g transform="translate(700, 140)">
+    <rect width="420" height="310" rx="12" fill="#0a0e27" stroke="#2d3748" stroke-width="2"/>
+
+    <!-- Code header -->
+    <rect width="420" height="40" rx="12" fill="#1a1d29"/>
+    <circle cx="20" cy="20" r="5" fill="#ef4444" opacity="0.8"/>
+    <circle cx="40" cy="20" r="5" fill="#f59e0b" opacity="0.8"/>
+    <circle cx="60" cy="20" r="5" fill="#10b981" opacity="0.8"/>
+
+    <!-- Code content -->
+    <text x="30" y="75" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+          font-size="14" fill="#6b46ff" font-weight="500">public class</text>
+    <text x="140" y="75" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+          font-size="14" fill="#00d9ff">MyGame</text>
+
+    <text x="70" y="100" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+          font-size="14" fill="#e2e8f0">extends</text>
+    <text x="135" y="100" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+          font-size="14" fill="#94a3b8">TransmuteCore {</text>
+
+    <text x="70" y="135" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+          font-size="14" fill="#64748b">  // Fixed 60 FPS loop</text>
+    <text x="70" y="160" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+          font-size="14" fill="#64748b">  // Custom pixel rendering</text>
+    <text x="70" y="185" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+          font-size="14" fill="#64748b">  // Built-in animation</text>
+
+    <text x="70" y="215" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+          font-size="14" fill="#b4ff39" font-weight="500">@Override</text>
+    <text x="70" y="240" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+          font-size="14" fill="#6b46ff">  public void</text>
+    <text x="170" y="240" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+          font-size="14" fill="#00d9ff">update</text>
+    <text x="225" y="240" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+          font-size="14" fill="#e2e8f0">() {</text>
+    <text x="100" y="265" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+          font-size="14" fill="#64748b">    // Your game logic</text>
+  	<text x="100" y="290" font-family="'SF Mono', Monaco, 'Courier New', monospace"
+			font-size="14" fill="#64748b">    // . . .</text>
+  </g>
+
+  <!-- Pixel art decoration -->
+  <g transform="translate(50, 500)" opacity="0.4">
+    <rect x="0" y="0" width="8" height="8" fill="#00d9ff"/>
+    <rect x="12" y="0" width="8" height="8" fill="#b4ff39"/>
+    <rect x="24" y="0" width="8" height="8" fill="#0066ff"/>
+    <rect x="36" y="0" width="8" height="8" fill="#6b46ff"/>
+  </g>
+
+  <!-- Bottom accent -->
+  <rect y="624" width="1200" height="6" fill="url(#accentGradient)"/>
+</svg>

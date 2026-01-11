@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    @apply bg-dark-navy text-cream;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    @apply bg-transmute-cyan text-dark-navy;
+  }
+
+  ::-moz-selection {
+    @apply bg-transmute-cyan text-dark-navy;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-transmute-cyan via-transmute-blue to-transmute-lime;
+  }
+  
+  .text-gradient-alt {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-transmute-lime via-transmute-cyan to-transmute-purple;
+  }
+  
+  .border-gradient {
+    border-image: linear-gradient(to right, #00d9ff, #b4ff39) 1;
+  }
+}
