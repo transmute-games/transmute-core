@@ -8,7 +8,7 @@ import TransmuteCore.graphics.Bitmap;
 import TransmuteCore.graphics.Context;
 import TransmuteCore.graphics.sprites.Spritesheet;
 import TransmuteCore.assets.types.Image;
-import TransmuteCore.util.Error;
+import TransmuteCore.util.exceptions.Error;
 import TransmuteCore.assets.Asset;
 import TransmuteCore.math.Tuple2i;
 

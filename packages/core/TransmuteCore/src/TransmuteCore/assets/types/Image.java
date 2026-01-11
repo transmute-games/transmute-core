@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import TransmuteCore.core.interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.services.IRenderer;
 import TransmuteCore.graphics.Bitmap;
 import TransmuteCore.graphics.sprites.Sprite;
 import TransmuteCore.graphics.sprites.Spritesheet;

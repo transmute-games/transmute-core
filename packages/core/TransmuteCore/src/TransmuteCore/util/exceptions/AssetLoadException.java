@@ -1,4 +1,4 @@
-package TransmuteCore.System.Exceptions;
+package TransmuteCore.util.exceptions;
 
 /**
  * Exception thrown when an asset fails to load.

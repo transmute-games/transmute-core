@@ -1,6 +1,7 @@
 package TransmuteCore.util.exceptions;
 
 import TransmuteCore.core.TransmuteCore;
+import TransmuteCore.util.Util;
 
 @SuppressWarnings("serial")
 public class Error

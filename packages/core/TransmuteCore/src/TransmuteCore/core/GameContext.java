@@ -1,6 +1,6 @@
 package TransmuteCore.core;
 
-import TransmuteCore.core.interfaces.Services.*;
+import TransmuteCore.core.interfaces.services.*;
 
 /**
  * Immutable container for all game services and configuration.

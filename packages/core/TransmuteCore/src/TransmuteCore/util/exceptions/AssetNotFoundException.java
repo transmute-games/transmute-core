@@ -1,4 +1,4 @@
-package TransmuteCore.System.Exceptions;
+package TransmuteCore.util.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;

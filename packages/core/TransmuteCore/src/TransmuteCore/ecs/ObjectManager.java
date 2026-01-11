@@ -2,7 +2,7 @@ package TransmuteCore.ecs;
 
 import TransmuteCore.core.interfaces.Renderable;
 import TransmuteCore.core.interfaces.Updatable;
-import TransmuteCore.core.interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.services.IRenderer;
 import TransmuteCore.core.Manager;
 
 import java.util.ArrayList;

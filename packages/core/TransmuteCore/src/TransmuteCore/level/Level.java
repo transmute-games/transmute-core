@@ -6,7 +6,7 @@ import java.util.List;
 import TransmuteCore.core.Manager;
 import TransmuteCore.core.interfaces.Renderable;
 import TransmuteCore.core.interfaces.Updatable;
-import TransmuteCore.core.interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.services.IRenderer;
 import TransmuteCore.ecs.Object;
 import TransmuteCore.ecs.ObjectManager;
 import TransmuteCore.ecs.types.Mob;

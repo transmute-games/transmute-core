@@ -5,7 +5,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 import TransmuteCore.assets.Asset;
-import TransmuteCore.util.Error;
+import TransmuteCore.util.exceptions.Error;
 
 /**
  * <p>Representation of audio resources used in the

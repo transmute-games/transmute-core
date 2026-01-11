@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import TransmuteCore.core.interfaces.Services.ISpriteManager;
-import TransmuteCore.util.Error;
+import TransmuteCore.core.interfaces.services.ISpriteManager;
+import TransmuteCore.util.exceptions.Error;
 import TransmuteCore.util.Logger;
 import TransmuteCore.math.Tuple2i;
 import TransmuteCore.math.Tuple4i;

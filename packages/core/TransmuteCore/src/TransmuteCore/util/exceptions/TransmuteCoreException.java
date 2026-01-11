@@ -1,4 +1,4 @@
-package TransmuteCore.System.Exceptions;
+package TransmuteCore.util.exceptions;
 
 /**
  * Base exception class for all TransmuteCore-related exceptions.

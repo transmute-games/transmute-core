@@ -5,7 +5,7 @@ import java.util.Map;
 
 import TransmuteCore.core.TransmuteCore;
 import TransmuteCore.core.Manager;
-import TransmuteCore.core.interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.services.IRenderer;
 import TransmuteCore.graphics.Bitmap;
 import TransmuteCore.assets.Asset;
 import TransmuteCore.assets.types.Image;

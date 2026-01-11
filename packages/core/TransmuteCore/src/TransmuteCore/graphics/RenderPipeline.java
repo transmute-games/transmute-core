@@ -1,8 +1,9 @@
 package TransmuteCore.graphics;
 
 import TransmuteCore.core.interfaces.Cortex;
-import TransmuteCore.core.interfaces.Services.IGameWindow;
-import TransmuteCore.core.interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.services.IGameWindow;
+import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.core.Manager;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;

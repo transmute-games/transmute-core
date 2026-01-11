@@ -6,7 +6,7 @@ import java.util.List;
 
 import TransmuteCore.core.Manager;
 import TransmuteCore.core.interfaces.Updatable;
-import TransmuteCore.core.interfaces.Services.IRenderer;
+import TransmuteCore.core.interfaces.services.IRenderer;
 import TransmuteCore.graphics.sprites.Animation;
 import TransmuteCore.graphics.sprites.Sprite;
 import TransmuteCore.assets.types.Image;

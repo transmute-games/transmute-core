@@ -4,7 +4,7 @@ import java.awt.Canvas;
 import java.awt.event.*;
 import java.util.HashMap;
 
-import TransmuteCore.core.interfaces.Services.IInputHandler;
+import TransmuteCore.core.interfaces.services.IInputHandler;
 import TransmuteCore.core.TransmuteCore;
 import TransmuteCore.math.Tuple2i;
 

@@ -1,4 +1,4 @@
-package TransmuteCore.System.Exceptions;
+package TransmuteCore.util.exceptions;
 
 /**
  * Exception thrown when there's an error with game state management.
