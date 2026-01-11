@@ -35,9 +35,14 @@ TransmuteCore is a lightweight, high-performance 2D pixel game engine written in
 #### Option 1: Using the CLI Generator (Recommended)
 
 ```bash
-# Install the CLI
+# Clone and set up TransmuteCore
 git clone https://github.com/transmute-games/transmute-core
 cd transmute-core
+
+# Publish the engine to local Maven
+./gradlew :transmute-core:publishToMavenLocal
+
+# Install the CLI
 ./gradlew :transmute-cli:install
 
 # Create a new project
@@ -53,7 +58,7 @@ First, build and publish TransmuteCore locally:
 ```bash
 git clone https://github.com/transmute-games/transmute-core
 cd transmute-core
-./gradlew publishToMavenLocal
+./gradlew :transmute-core:publishToMavenLocal
 ```
 
 Then add to your `build.gradle`:
@@ -67,14 +72,16 @@ dependencies {
 ### Hello World Example
 
 ```java
-import TransmuteCore.GameEngine.TransmuteCore;
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
+import TransmuteCore.core.TransmuteCore;
+import TransmuteCore.core.GameConfig;
+import TransmuteCore.core.Manager;
+import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
 
 public class MyGame extends TransmuteCore {
-    public MyGame() {
-        super("My Game", "1.0", 320, TransmuteCore.Square, 3);
+    public MyGame(GameConfig config) {
+        super(config);
     }
 
     @Override
@@ -88,13 +95,22 @@ public class MyGame extends TransmuteCore {
     }
 
     @Override
-    public void render(Manager manager, Context ctx) {
+    public void render(Manager manager, IRenderer renderer) {
+        Context ctx = (Context) renderer;
         ctx.renderText("Hello, TransmuteCore!", 50, 100,
                       Color.toPixelInt(255, 255, 255, 255));
     }
 
     public static void main(String[] args) {
-        new MyGame();
+        GameConfig config = new GameConfig.Builder()
+            .title("My Game")
+            .version("1.0")
+            .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
+            .scale(3)
+            .build();
+
+        MyGame game = new MyGame(config);
+        game.start();
     }
 }
 ```
@@ -117,12 +133,6 @@ Progressive, hands-on tutorials covering all engine features:
 
 ### Reference Documentation
 - **[WARP.md](WARP.md)** - Architecture overview and core concepts
-- **[Cookbook](docs/COOKBOOK.md)** - Code recipes and solutions
-- **[Serialization](docs/SERIALIZATION.md)** - Save/load system guide
-- **[Deployment](docs/DEPLOYMENT.md)** - Building and distribution
-- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
-- **[DX Features](docs/DX_FEATURES.md)** - Developer experience features
-- **[Javadocs](https://transmute-games.github.io/transmute-core/)** - Complete API reference
 
 ## Building from Source
 
@@ -131,35 +141,48 @@ Progressive, hands-on tutorials covering all engine features:
 git clone https://github.com/transmute-games/transmute-core
 cd transmute-core
 
-# Build the project
+# Build the entire project (core + CLI)
 ./gradlew build
+
+# Build just the core engine
+./gradlew :transmute-core:build
 
 # Run tests
 ./gradlew test
 
 # Publish to local Maven repository
-./gradlew publishToMavenLocal
+./gradlew :transmute-core:publishToMavenLocal
 
 # Generate Javadocs
-./gradlew javadoc
+./gradlew :transmute-core:javadoc
 ```
 
 ## Project Structure
 
 ```
 transmute-core/
-├── build.gradle                # Build configuration
-├── TransmuteCore/
-│   └── src/
-│       └── TransmuteCore/
-│           ├── GameEngine/     # Core game loop and engine
-│           ├── Graphics/       # Rendering and visual systems
-│           ├── Input/          # Keyboard and mouse handling
-│           ├── Objects/        # Game entities and objects
-│           ├── States/         # State management system
-│           ├── Level/          # Level and tile systems
-│           ├── Serialization/  # Save/load functionality
-│           └── System/         # Utilities, logging, exceptions
+├── build.gradle                # Root build configuration
+├── settings.gradle             # Multi-project configuration
+├── packages/
+│   ├── core/                   # TransmuteCore engine
+│   │   ├── TransmuteCore/
+│   │   │   └── src/
+│   │   │       └── TransmuteCore/
+│   │   │           ├── assets/         # Asset loading and management
+│   │   │           ├── core/           # Core game loop, engine, and interfaces
+│   │   │           ├── data/           # Serialization and data structures
+│   │   │           ├── ecs/            # Entity-Component-System and game objects
+│   │   │           ├── graphics/       # Rendering and visual systems
+│   │   │           ├── input/          # Keyboard and mouse handling
+│   │   │           ├── level/          # Level and tile systems
+│   │   │           ├── math/           # Math utilities and vector types
+│   │   │           ├── state/          # State management system
+│   │   │           └── util/           # Utilities, logging, debugging, exceptions
+│   │   └── build.gradle
+│   └── cli/                    # Project generator CLI
+│       ├── src/
+│       ├── bin/                # Shell wrappers
+│       └── build.gradle
 └── docs/                       # Documentation
 ```
 
@@ -171,7 +194,7 @@ TransmuteCore uses a fixed timestep game loop:
 
 1. **init()** - One-time initialization
 2. **update(Manager, delta)** - Game logic updates (60 times per second)
-3. **render(Manager, Context)** - Rendering to pixel buffer
+3. **render(Manager, IRenderer)** - Rendering to pixel buffer
 
 ### Manager System
 
@@ -195,26 +218,6 @@ Input input = manager.getInput();
 - **[transmute-cli](packages/cli/README.md)** - CLI tool for scaffolding new projects
 - Multiple templates: basic, platformer, rpg
 - Interactive project setup
-
-## Roadmap
-
-### Version 0.2.0 (In Progress)
-
-- ✅ Gradle build system
-- ✅ Proper exception hierarchy
-- ✅ Structured logging system
-- ✅ Comprehensive documentation
-- 🚧 Builder patterns for configuration
-- 🚧 Hot reload for development
-- 🚧 Debug visualization tools
-
-### Version 0.3.0 (Planned)
-
-- Configuration file support (JSON/YAML)
-- Enhanced particle system
-- Camera system with effects
-- Shader support for pixel effects
-- Level editor tools
 
 ## Contributing
 

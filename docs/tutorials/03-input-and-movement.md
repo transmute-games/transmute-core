@@ -26,17 +26,35 @@ TransmuteCore provides three input states:
 
 The same applies to mouse buttons with `isButtonPressed()`, `isButtonHeld()`, and `isButtonReleased()`.
 
-## Step 1: Create the Player Class
+## Step 1: Create a New Project
 
-Create `src/main/java/Player.java`:
+Use the transmute CLI to create a new project:
+
+```bash
+transmute new movement-demo -t basic
+cd movement-demo
+```
+
+Add your sprite sheet:
+
+```bash
+mkdir -p src/main/resources/images
+# Copy your sprite sheet to src/main/resources/images/player.png
+```
+
+## Step 2: Create the Player Class
+
+Create `src/main/java/com/example/movementdemo/Player.java`:
 
 ```java
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Sprites.Animation;
-import TransmuteCore.Input.Input;
-import TransmuteCore.Objects.Object;
-import TransmuteCore.Units.Tuple2i;
+package com.example.movementdemo;
+
+import TransmuteCore.core.Manager;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.sprites.Animation;
+import TransmuteCore.input.Input;
+import TransmuteCore.ecs.Object;
+import TransmuteCore.math.Tuple2i;
 import java.awt.event.KeyEvent;
 
 public class Player extends Object {
@@ -82,20 +100,20 @@ public class Player extends Object {
     
     private void handleInput() {
         // Horizontal movement
-        if (Input.isKeyHeld(KeyEvent.VK_LEFT) || Input.isKeyHeld(KeyEvent.VK_A)) {
+        if (manager.getInput().isKeyHeld(KeyEvent.VK_LEFT) || manager.getInput().isKeyHeld(KeyEvent.VK_A)) {
             velocityX -= acceleration;
             facingRight = false;
         }
-        if (Input.isKeyHeld(KeyEvent.VK_RIGHT) || Input.isKeyHeld(KeyEvent.VK_D)) {
+        if (manager.getInput().isKeyHeld(KeyEvent.VK_RIGHT) || manager.getInput().isKeyHeld(KeyEvent.VK_D)) {
             velocityX += acceleration;
             facingRight = true;
         }
         
         // Vertical movement
-        if (Input.isKeyHeld(KeyEvent.VK_UP) || Input.isKeyHeld(KeyEvent.VK_W)) {
+        if (manager.getInput().isKeyHeld(KeyEvent.VK_UP) || manager.getInput().isKeyHeld(KeyEvent.VK_W)) {
             velocityY -= acceleration;
         }
-        if (Input.isKeyHeld(KeyEvent.VK_DOWN) || Input.isKeyHeld(KeyEvent.VK_S)) {
+        if (manager.getInput().isKeyHeld(KeyEvent.VK_DOWN) || manager.getInput().isKeyHeld(KeyEvent.VK_S)) {
             velocityY += acceleration;
         }
     }
@@ -172,35 +190,39 @@ public class Player extends Object {
 }
 ```
 
-## Step 2: Create the Main Game
+## Step 3: Update the Main Game
 
-Create `src/main/java/MovementDemo.java`:
+Open `src/main/java/com/example/movementdemo/Game.java` and replace its contents:
 
 ```java
-import TransmuteCore.GameEngine.TransmuteCore;
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.Graphics.Bitmap;
-import TransmuteCore.Graphics.Sprites.Sprite;
-import TransmuteCore.Graphics.Sprites.Spritesheet;
-import TransmuteCore.Graphics.Sprites.Animation;
-import TransmuteCore.System.Asset.AssetManager;
-import TransmuteCore.System.Asset.Type.Fonts.Font;
-import TransmuteCore.System.Asset.Type.Images.Image;
-import TransmuteCore.System.Logger;
-import TransmuteCore.Units.Tuple2i;
-import TransmuteCore.Input.Input;
+package com.example.movementdemo;
+
+import TransmuteCore.core.GameConfig;
+import TransmuteCore.core.Manager;
+import TransmuteCore.core.TransmuteCore;
+import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.graphics.Bitmap;
+import TransmuteCore.graphics.sprites.Sprite;
+import TransmuteCore.graphics.sprites.Spritesheet;
+import TransmuteCore.graphics.sprites.Animation;
+import TransmuteCore.assets.AssetManager;
+import TransmuteCore.assets.types.Font;
+import TransmuteCore.assets.types.Image;
+import TransmuteCore.util.Logger;
+import TransmuteCore.math.Tuple2i;
+import TransmuteCore.input.Input;
 import java.awt.event.KeyEvent;
 
-public class MovementDemo extends TransmuteCore {
+public class Game extends TransmuteCore {
     
     private Player player;
     private int screenWidth = 320;
     private int screenHeight = 240;
     
-    public MovementDemo() {
-        super("Movement Demo", "1.0", 320, TransmuteCore.Square, 3);
+    public Game(GameConfig config) {
+        super(config);
     }
     
     @Override
@@ -215,10 +237,10 @@ public class MovementDemo extends TransmuteCore {
         new Image("player", "images/player.png");
         
         // Load assets
-        AssetManager.load();
+        AssetManager.getGlobalInstance().load();
         
         // Create sprite sheet
-        Bitmap playerBitmap = AssetManager.getImage("player");
+        Bitmap playerBitmap = AssetManager.getGlobalInstance().getImage("player");
         Spritesheet playerSheet = new Spritesheet(
             playerBitmap,
             new Tuple2i(16, 16),
@@ -256,7 +278,7 @@ public class MovementDemo extends TransmuteCore {
     @Override
     public void update(Manager manager, double delta) {
         // Exit on ESC
-        if (Input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_ESCAPE)) {
             Logger.info("Exiting game");
             System.exit(0);
         }
@@ -266,7 +288,9 @@ public class MovementDemo extends TransmuteCore {
     }
     
     @Override
-    public void render(Manager manager, Context ctx) {
+    public void render(Manager manager, IRenderer renderer) {
+        Context ctx = (Context) renderer;
+        
         // Background
         ctx.setClearColor(Color.toPixelInt(32, 48, 64, 255));
         
@@ -294,12 +318,20 @@ public class MovementDemo extends TransmuteCore {
     }
     
     public static void main(String[] args) {
-        new MovementDemo();
+        GameConfig config = new GameConfig.Builder()
+            .title("Movement Demo")
+            .version("1.0")
+            .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
+            .scale(3)
+            .build();
+        
+        Game game = new Game(config);
+        game.start();
     }
 }
 ```
 
-## Step 3: Run the Game
+## Step 4: Run the Game
 
 ```bash
 ./gradlew run
@@ -337,7 +369,7 @@ private float jumpStrength = -8.0f;
 
 private void handleInput() {
     // Jumping
-    if (Input.isKeyPressed(KeyEvent.VK_SPACE) && isGrounded) {
+    if (manager.getInput().isKeyPressed(KeyEvent.VK_SPACE) && isGrounded) {
         velocityY = jumpStrength;
         isGrounded = false;
     }
@@ -370,7 +402,7 @@ private long lastDashTime = 0;
 
 private void handleInput() {
     // Dash
-    if (Input.isKeyPressed(KeyEvent.VK_SHIFT) && canDash) {
+    if (manager.getInput().isKeyPressed(KeyEvent.VK_SHIFT) && canDash) {
         float dashSpeed = 10.0f;
         velocityX = facingRight ? dashSpeed : -dashSpeed;
         lastDashTime = System.currentTimeMillis();
@@ -411,10 +443,10 @@ private void handleInput() {
     float inputX = 0;
     float inputY = 0;
     
-    if (Input.isKeyHeld(KeyEvent.VK_LEFT)) inputX -= 1;
-    if (Input.isKeyHeld(KeyEvent.VK_RIGHT)) inputX += 1;
-    if (Input.isKeyHeld(KeyEvent.VK_UP)) inputY -= 1;
-    if (Input.isKeyHeld(KeyEvent.VK_DOWN)) inputY += 1;
+    if (manager.getInput().isKeyHeld(KeyEvent.VK_LEFT)) inputX -= 1;
+    if (manager.getInput().isKeyHeld(KeyEvent.VK_RIGHT)) inputX += 1;
+    if (manager.getInput().isKeyHeld(KeyEvent.VK_UP)) inputY -= 1;
+    if (manager.getInput().isKeyHeld(KeyEvent.VK_DOWN)) inputY += 1;
     
     // Normalize diagonal movement
     if (inputX != 0 && inputY != 0) {
@@ -434,7 +466,7 @@ Add to your Player class:
 
 ```java
 public void handleMouseClick(Input input) {
-    if (Input.isButtonPressed(MouseEvent.BUTTON1)) {
+    if (manager.getInput().isButtonPressed(MouseEvent.BUTTON1)) {
         int mouseX = input.getMouseX();
         int mouseY = input.getMouseY();
         
@@ -462,7 +494,7 @@ public void update(Manager manager, double delta) {
 Hold SHIFT to move faster:
 
 ```java
-float currentMaxSpeed = Input.isKeyHeld(KeyEvent.VK_SHIFT) 
+float currentMaxSpeed = manager.getInput().isKeyHeld(KeyEvent.VK_SHIFT) 
                         ? maxSpeed * 2.0f 
                         : maxSpeed;
 ```
@@ -520,7 +552,7 @@ You now have a solid foundation for game development with TransmuteCore! Next st
 
 ## Additional Resources
 
-- **Input Handling**: Check `TransmuteCore.Input.Input` class documentation
+- **Input Handling**: Check `TransmuteCore.input.Input` class documentation
 - **Physics**: Research basic game physics (velocity, acceleration, friction)
 - **Game Feel**: "The Art of Screenshake" and similar resources
 

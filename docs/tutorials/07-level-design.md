@@ -29,11 +29,25 @@ Learn how to create tile-based levels using TransmuteCore's TiledLevel system. L
 - **Performance** - Viewport culling renders only visible tiles
 - **Reusable** - One tileset, many combinations
 
-## Step 1: Create a Tileset
+## Step 1: Create a New Project
+
+For this tutorial, we'll use the RPG template which is designed for tile-based games:
+
+```bash
+transmute new level-demo -t rpg
+cd level-demo
+```
+
+The RPG template provides:
+- TileMap class for level management
+- Entity base class for game objects
+- Grid-based movement system stubs
+
+## Step 2: Create a Tileset
 
 A **tileset** is a sprite sheet containing all your tile graphics.
 
-Create `res/images/tileset.png` (16x16 pixel tiles):
+Create `src/main/resources/images/tileset.png` (16x16 pixel tiles):
 
 ```
 [Grass][Dirt ][Stone][Water]
@@ -42,11 +56,15 @@ Create `res/images/tileset.png` (16x16 pixel tiles):
 
 Each tile should be 16x16 pixels (or your chosen size).
 
-## Step 2: Create a Level Image
+## Step 3: Create a Level Image
 
 Create a level image where each pixel represents one tile:
 
-Create `res/levels/level1.png`:
+```bash
+mkdir -p src/main/resources/levels
+```
+
+Create `src/main/resources/levels/level1.png`:
 - **1 pixel = 1 tile** in the game world
 - **Pixel color** determines tile type
 - For a 20x15 tile level, create a 20x15 pixel image
@@ -59,16 +77,18 @@ Example color mapping:
 
 **Important**: Disable anti-aliasing and save as PNG with no compression.
 
-## Step 3: Create the Tile Class
+## Step 4: Create the Tile Class
 
-Create `src/main/java/Tile.java`:
+Create `src/main/java/com/example/leveldemo/Tile.java`:
 
 ```java
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Sprites.Sprite;
-import TransmuteCore.Interfaces.Renderable;
-import TransmuteCore.Interfaces.Updatable;
+package com.example.leveldemo;
+
+import TransmuteCore.core.Manager;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.sprites.Sprite;
+import TransmuteCore.core.interfaces.Renderable;
+import TransmuteCore.core.interfaces.Updatable;
 
 public class Tile implements Updatable, Renderable {
     
@@ -117,35 +137,40 @@ public class Tile implements Updatable, Renderable {
 }
 ```
 
-## Step 4: Load and Display a Level
+## Step 5: Update the Main Game Class
 
-Create `src/main/java/LevelDemo.java`:
+Open `src/main/java/com/example/leveldemo/Game.java` and replace its contents:
 
 ```java
-import TransmuteCore.GameEngine.TransmuteCore;
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.Graphics.Bitmap;
-import TransmuteCore.Graphics.Sprites.Sprite;
-import TransmuteCore.Graphics.Sprites.Spritesheet;
-import TransmuteCore.Level.TiledLevel;
-import TransmuteCore.System.Asset.AssetManager;
-import TransmuteCore.System.Asset.Type.Fonts.Font;
-import TransmuteCore.System.Asset.Type.Images.Image;
-import TransmuteCore.Units.Tuple2i;
-import TransmuteCore.Input.Input;
+package com.example.leveldemo;
+
+import TransmuteCore.core.GameConfig;
+import TransmuteCore.core.Manager;
+import TransmuteCore.core.TransmuteCore;
+import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.graphics.Bitmap;
+import TransmuteCore.graphics.sprites.Sprite;
+import TransmuteCore.graphics.sprites.Spritesheet;
+import TransmuteCore.graphics.sprites.Animation;
+import TransmuteCore.level.TiledLevel;
+import TransmuteCore.assets.AssetManager;
+import TransmuteCore.assets.types.Font;
+import TransmuteCore.assets.types.Image;
+import TransmuteCore.math.Tuple2i;
+import TransmuteCore.input.Input;
 import java.awt.event.KeyEvent;
 
-public class LevelDemo extends TransmuteCore {
+public class Game extends TransmuteCore {
     
     private TiledLevel level;
     private Player player;
     private int cameraX = 0;
     private int cameraY = 0;
     
-    public LevelDemo() {
-        super("Level Demo", "1.0", 320, TransmuteCore.Square, 3);
+    public Game(GameConfig config) {
+        super(config);
     }
     
     @Override
@@ -156,10 +181,10 @@ public class LevelDemo extends TransmuteCore {
         new Image("tileset", "images/tileset.png");
         new Image("player", "images/player.png");
         
-        AssetManager.load();
+        AssetManager.getGlobalInstance().load();
         
         // Create tileset
-        Bitmap tilesetBitmap = AssetManager.getImage("tileset");
+        Bitmap tilesetBitmap = AssetManager.getGlobalInstance().getImage("tileset");
         Spritesheet tileset = new Spritesheet(
             tilesetBitmap,
             new Tuple2i(16, 16),
@@ -184,7 +209,7 @@ public class LevelDemo extends TransmuteCore {
         level.addTile(Color.toPixelInt(0, 0, 255, 255), waterTile);    // Blue
         
         // Create player
-        Bitmap playerBitmap = AssetManager.getImage("player");
+        Bitmap playerBitmap = AssetManager.getGlobalInstance().getImage("player");
         Spritesheet playerSheet = new Spritesheet(
             playerBitmap,
             new Tuple2i(16, 16),
@@ -212,7 +237,7 @@ public class LevelDemo extends TransmuteCore {
     
     @Override
     public void update(Manager manager, double delta) {
-        if (Input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_ESCAPE)) {
             System.exit(0);
         }
         
@@ -590,6 +615,6 @@ You've completed all the TransmuteCore tutorials! You now know how to:
 
 ## Resources
 
-- [TiledLevel.java](../../TransmuteCore/src/TransmuteCore/Level/TiledLevel.java)
-- [Level.java](../../TransmuteCore/src/TransmuteCore/Level/Level.java)
+- [TiledLevel.java](../../packages/core/TransmuteCore/src/TransmuteCore/Level/TiledLevel.java)
+- [Level.java](../../packages/core/TransmuteCore/src/TransmuteCore/Level/Level.java)
 - [LEVELS.md](../LEVELS.md) - Complete level system guide

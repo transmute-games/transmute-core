@@ -14,47 +14,52 @@ TransmuteCore is a Java-based 2D pixel game engine designed for high-performance
 - IDE with Java support (IntelliJ IDEA, Eclipse, or VS Code recommended)
 
 ### Project Structure
-The project uses Gradle for builds. Source files are in `TransmuteCore/src/` with compiled output managed by Gradle.
+The project uses Gradle for builds with a multi-project structure. Source files are in `packages/core/TransmuteCore/src/` with compiled output managed by Gradle.
 
 ```
-transmute/
+transmute-core/
+├── build.gradle                # Root build configuration
+├── settings.gradle             # Multi-project configuration
 ├── packages/
 │   ├── core/                   # TransmuteCore engine
 │   │   ├── TransmuteCore/
 │   │   │   └── src/
 │   │   │       └── TransmuteCore/
-│   │   │           ├── GameEngine/     # Core game loop and engine
-│   │   │           ├── Graphics/       # Rendering and visual systems
-│   │   │           ├── Input/          # Keyboard and mouse handling
-│   │   │           ├── Objects/        # Game entities and objects
-│   │   │           ├── States/         # State management system
-│   │   │           ├── Level/          # Level and tile systems
-│   │   │           ├── Serialization/  # Save/load functionality
-│   │   │           └── System/         # Utilities, logging, exceptions
-│   │   ├── docs/               # Documentation
+│   │   │           ├── assets/         # Asset loading and management
+│   │   │           ├── core/           # Core game loop, engine, and interfaces
+│   │   │           ├── data/           # Serialization and data structures
+│   │   │           ├── ecs/            # Entity-Component-System and game objects
+│   │   │           ├── graphics/       # Rendering and visual systems
+│   │   │           ├── input/          # Keyboard and mouse handling
+│   │   │           ├── level/          # Level and tile systems
+│   │   │           ├── math/           # Math utilities and vector types
+│   │   │           ├── state/          # State management system
+│   │   │           └── util/           # Utilities, logging, debugging, exceptions
 │   │   └── build.gradle
 │   └── cli/                    # Project generator CLI
 │       ├── src/
 │       ├── bin/                # Shell wrappers
 │       └── build.gradle
-├── build.gradle                # Root build configuration
-└── settings.gradle             # Multi-project configuration
+└── docs/                       # Documentation
 ```
 
 ### Building
 Build the project using Gradle:
 ```bash
-# Build the project
+# Build entire project (core + CLI)
 ./gradlew build
+
+# Build just the core engine
+./gradlew :transmute-core:build
 
 # Run tests
 ./gradlew test
 
 # Publish to local Maven repository
-./gradlew publishToMavenLocal
+./gradlew :transmute-core:publishToMavenLocal
 
 # Generate Javadocs
-./gradlew javadoc
+./gradlew :transmute-core:javadoc
 ```
 
 ### Creating a Game
@@ -62,7 +67,7 @@ This is a library/engine project. To create a game:
 1. Use the CLI generator: `./gradlew :transmute-cli:install && transmute new my-game`
 2. Or extend the `TransmuteCore` class manually
 3. Implement the required methods from the `Cortex` interface
-4. Follow the [tutorials](packages/core/docs/tutorials/) for step-by-step guidance
+4. Follow the [tutorials](docs/tutorials/) for step-by-step guidance
 
 ## Core Architecture
 
@@ -70,7 +75,7 @@ This is a library/engine project. To create a game:
 The engine uses a fixed timestep game loop (default 60 FPS) with delta time calculations:
 - `init()` - One-time initialization of game state
 - `update(Manager manager, double delta)` - Game logic updates with delta time
-- `render(Manager manager, Context ctx)` - Rendering to the custom pixel buffer
+- `render(Manager manager, IRenderer renderer)` - Rendering to the custom pixel buffer (cast to Context for pixel operations)
 
 ### Manager System
 The `Manager` class is the central coordinator that provides access to all subsystems:
@@ -84,7 +89,7 @@ The `Manager` class is the central coordinator that provides access to all subsy
 Access the manager globally via `TransmuteCore.getManager()`.
 
 ### Rendering Pipeline
-1. **Context** (`TransmuteCore.Graphics.Context`) - Custom pixel buffer rendering system
+1. **Context** (`TransmuteCore.graphics.Context`) - Custom pixel buffer rendering system
    - Uses 32-bit ARGB integer pixel format
    - Renders to a master BufferedImage via DataBufferInt
    - All rendering operations (bitmaps, rectangles, text) write directly to pixel array
@@ -141,9 +146,17 @@ The engine includes a custom binary serialization system ("TinyDatabase"):
 
 ### Extending TransmuteCore
 ```java
+import TransmuteCore.core.TransmuteCore;
+import TransmuteCore.core.GameConfig;
+import TransmuteCore.core.Manager;
+import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.state.StateManager;
+import TransmuteCore.assets.AssetManager;
+
 public class MyGame extends TransmuteCore {
-    public MyGame() {
-        super("Game Title", "1.0", 320, TransmuteCore.Square, 3);
+    public MyGame(GameConfig config) {
+        super(config);
     }
     
     @Override
@@ -151,7 +164,7 @@ public class MyGame extends TransmuteCore {
         // Initialize managers, load assets
         StateManager sm = new StateManager(this);
         getManager().setStateManager(sm);
-        AssetManager.load();
+        AssetManager.getGlobalInstance().load();
     }
     
     @Override
@@ -162,16 +175,29 @@ public class MyGame extends TransmuteCore {
     }
     
     @Override
-    public void render(Manager manager, Context ctx) {
+    public void render(Manager manager, IRenderer renderer) {
+        Context ctx = (Context) renderer;
         if (manager.getStateManager() != null) {
             manager.getStateManager().render(manager, ctx);
         }
+    }
+    
+    public static void main(String[] args) {
+        GameConfig config = new GameConfig.Builder()
+            .title("Game Title")
+            .version("1.0")
+            .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
+            .scale(3)
+            .build();
+        
+        MyGame game = new MyGame(config);
+        game.start();
     }
 }
 ```
 
 ### Creating Game Objects
-All game objects should extend `TransmuteCore.Objects.Object` which implements:
+All game objects should extend `TransmuteCore.ecs.Object` which implements:
 - `Updatable` interface (update method)
 - `Renderable` interface (render method)
 - `Initializable` interface (init method)
@@ -186,23 +212,23 @@ The `Context` is the rendering canvas. Always render through it:
 - Colors use `Color.toPixelInt(r, g, b, a)` format
 
 ### Aspect Ratios
-Use predefined constants when creating game window:
-- `TransmuteCore.WideScreen` - 16:9 aspect ratio (0x0)
-- `TransmuteCore.Square` - 4:3 aspect ratio (0x1)
+Use predefined constants in GameConfig.Builder when creating game window:
+- `GameConfig.ASPECT_RATIO_WIDESCREEN` - 16:9 aspect ratio
+- `GameConfig.ASPECT_RATIO_SQUARE` - 4:3 aspect ratio
 
-Height is automatically calculated from width and ratio.
+Height is automatically calculated from width and ratio when using `dimensions(width, aspectRatio)`.
 
 ## Performance Notes
 
 - The Context renders every pixel per frame - minimize overdraw
 - Use `TiledLevel` viewport culling for large levels (only visible tiles render)
 - Assets are cached after loading - avoid repeated `AssetManager.load()` calls
-- Target FPS is configurable with `setTargetFPS(fps)`
-- Enable FPS logging with `setFPSVerbose(true)` for performance debugging
+- Target FPS is configurable via GameConfig: `.targetFPS(60)`
+- Enable FPS logging via GameConfig: `.fpsVerbose(true)` for performance debugging
 
 ## Pathfinding
 
-The engine includes A* pathfinding in `TransmuteCore.Objects.Pathfinding.AStar` for grid-based navigation.
+The engine includes A* pathfinding in `TransmuteCore.ecs.pathfinding.AStar` for grid-based navigation.
 
 ## Documentation Resources
 

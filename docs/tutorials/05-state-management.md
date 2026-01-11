@@ -42,19 +42,34 @@ public abstract class State {
 }
 ```
 
-## Step 1: Create the Main Menu State
+## Step 1: Create a New Project
 
-Create `src/main/java/states/MainMenuState.java`:
+Use the transmute CLI to create a new project:
+
+```bash
+transmute new state-demo -t basic
+cd state-demo
+```
+
+Create a states package:
+
+```bash
+mkdir -p src/main/java/com/example/statedemo/states
+```
+
+## Step 2: Create the Main Menu State
+
+Create `src/main/java/com/example/statedemo/states/MainMenuState.java`:
 
 ```java
-package states;
+package com.example.statedemo.states;
 
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.States.State;
-import TransmuteCore.States.StateManager;
-import TransmuteCore.Input.Input;
+import TransmuteCore.core.Manager;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.state.State;
+import TransmuteCore.state.StateManager;
+import TransmuteCore.input.Input;
 import java.awt.event.KeyEvent;
 
 public class MainMenuState extends State {
@@ -85,14 +100,14 @@ public class MainMenuState extends State {
         titleBob += 0.05f;
         
         // Navigate menu
-        if (Input.isKeyPressed(KeyEvent.VK_UP) || Input.isKeyPressed(KeyEvent.VK_W)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_UP) || manager.getInput().isKeyPressed(KeyEvent.VK_W)) {
             selectedIndex--;
             if (selectedIndex < 0) {
                 selectedIndex = menuOptions.length - 1;
             }
         }
         
-        if (Input.isKeyPressed(KeyEvent.VK_DOWN) || Input.isKeyPressed(KeyEvent.VK_S)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_DOWN) || manager.getInput().isKeyPressed(KeyEvent.VK_S)) {
             selectedIndex++;
             if (selectedIndex >= menuOptions.length) {
                 selectedIndex = 0;
@@ -100,8 +115,8 @@ public class MainMenuState extends State {
         }
         
         // Select option
-        if (Input.isKeyPressed(KeyEvent.VK_ENTER) || 
-            Input.isKeyPressed(KeyEvent.VK_SPACE)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_ENTER) || 
+            manager.getInput().isKeyPressed(KeyEvent.VK_SPACE)) {
             handleSelection(manager);
         }
     }
@@ -156,25 +171,25 @@ public class MainMenuState extends State {
 }
 ```
 
-## Step 2: Create the Gameplay State
+## Step 3: Create the Gameplay State
 
-Create `src/main/java/states/GamePlayState.java`:
+Create `src/main/java/com/example/statedemo/states/GamePlayState.java`:
 
 ```java
-package states;
+package com.example.statedemo.states;
 
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.Graphics.Bitmap;
-import TransmuteCore.Graphics.Sprites.Sprite;
-import TransmuteCore.Graphics.Sprites.Spritesheet;
-import TransmuteCore.Graphics.Sprites.Animation;
-import TransmuteCore.States.State;
-import TransmuteCore.States.StateManager;
-import TransmuteCore.System.Asset.AssetManager;
-import TransmuteCore.Units.Tuple2i;
-import TransmuteCore.Input.Input;
+import TransmuteCore.core.Manager;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.graphics.Bitmap;
+import TransmuteCore.graphics.sprites.Sprite;
+import TransmuteCore.graphics.sprites.Spritesheet;
+import TransmuteCore.graphics.sprites.Animation;
+import TransmuteCore.state.State;
+import TransmuteCore.state.StateManager;
+import TransmuteCore.assets.AssetManager;
+import TransmuteCore.math.Tuple2i;
+import TransmuteCore.input.Input;
 import java.awt.event.KeyEvent;
 
 public class GamePlayState extends State {
@@ -192,7 +207,7 @@ public class GamePlayState extends State {
     @Override
     public void init() {
         // Create player
-        Bitmap playerBitmap = AssetManager.getImage("player");
+        Bitmap playerBitmap = AssetManager.getGlobalInstance().getImage("player");
         Spritesheet playerSheet = new Spritesheet(
             playerBitmap,
             new Tuple2i(16, 16),
@@ -227,13 +242,13 @@ public class GamePlayState extends State {
     @Override
     public void update(Manager manager, double delta) {
         // Check for pause
-        if (Input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_ESCAPE)) {
             stateManager.push(new PauseState(stateManager));
             return;
         }
         
         // Check for game over
-        if (Input.isKeyPressed(KeyEvent.VK_G)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_G)) {
             stateManager.push(new GameOverState(stateManager, score));
             return;
         }
@@ -277,12 +292,12 @@ Create `src/main/java/states/PauseState.java`:
 ```java
 package states;
 
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.States.State;
-import TransmuteCore.States.StateManager;
-import TransmuteCore.Input.Input;
+import TransmuteCore.core.Manager;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.state.State;
+import TransmuteCore.state.StateManager;
+import TransmuteCore.input.Input;
 import java.awt.event.KeyEvent;
 
 public class PauseState extends State {
@@ -303,14 +318,14 @@ public class PauseState extends State {
     @Override
     public void update(Manager manager, double delta) {
         // Navigate menu
-        if (Input.isKeyPressed(KeyEvent.VK_UP)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_UP)) {
             selectedIndex--;
             if (selectedIndex < 0) {
                 selectedIndex = menuOptions.length - 1;
             }
         }
         
-        if (Input.isKeyPressed(KeyEvent.VK_DOWN)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_DOWN)) {
             selectedIndex++;
             if (selectedIndex >= menuOptions.length) {
                 selectedIndex = 0;
@@ -318,13 +333,13 @@ public class PauseState extends State {
         }
         
         // Quick resume with ESC
-        if (Input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_ESCAPE)) {
             stateManager.pop(); // Remove pause state
             return;
         }
         
         // Select option
-        if (Input.isKeyPressed(KeyEvent.VK_ENTER)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_ENTER)) {
             handleSelection();
         }
     }
@@ -389,12 +404,12 @@ Create `src/main/java/states/OptionsState.java`:
 ```java
 package states;
 
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.States.State;
-import TransmuteCore.States.StateManager;
-import TransmuteCore.Input.Input;
+import TransmuteCore.core.Manager;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.state.State;
+import TransmuteCore.state.StateManager;
+import TransmuteCore.input.Input;
 import java.awt.event.KeyEvent;
 
 public class OptionsState extends State {
@@ -416,33 +431,33 @@ public class OptionsState extends State {
     @Override
     public void update(Manager manager, double delta) {
         // Navigate
-        if (Input.isKeyPressed(KeyEvent.VK_UP)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_UP)) {
             selectedOption = Math.max(0, selectedOption - 1);
         }
-        if (Input.isKeyPressed(KeyEvent.VK_DOWN)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_DOWN)) {
             selectedOption = Math.min(2, selectedOption + 1);
         }
         
         // Adjust values
         if (selectedOption == 0) { // Sound volume
-            if (Input.isKeyHeld(KeyEvent.VK_LEFT)) {
+            if (manager.getInput().isKeyHeld(KeyEvent.VK_LEFT)) {
                 soundVolume = Math.max(0, soundVolume - 1);
             }
-            if (Input.isKeyHeld(KeyEvent.VK_RIGHT)) {
+            if (manager.getInput().isKeyHeld(KeyEvent.VK_RIGHT)) {
                 soundVolume = Math.min(100, soundVolume + 1);
             }
         } else if (selectedOption == 1) { // Music volume
-            if (Input.isKeyHeld(KeyEvent.VK_LEFT)) {
+            if (manager.getInput().isKeyHeld(KeyEvent.VK_LEFT)) {
                 musicVolume = Math.max(0, musicVolume - 1);
             }
-            if (Input.isKeyHeld(KeyEvent.VK_RIGHT)) {
+            if (manager.getInput().isKeyHeld(KeyEvent.VK_RIGHT)) {
                 musicVolume = Math.min(100, musicVolume + 1);
             }
         }
         
         // Back
-        if (Input.isKeyPressed(KeyEvent.VK_ESCAPE) || 
-            (selectedOption == 2 && Input.isKeyPressed(KeyEvent.VK_ENTER))) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_ESCAPE) || 
+            (selectedOption == 2 && manager.getInput().isKeyPressed(KeyEvent.VK_ENTER))) {
             stateManager.pop();
         }
     }
@@ -499,12 +514,12 @@ Create `src/main/java/states/GameOverState.java`:
 ```java
 package states;
 
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.States.State;
-import TransmuteCore.States.StateManager;
-import TransmuteCore.Input.Input;
+import TransmuteCore.core.Manager;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.state.State;
+import TransmuteCore.state.StateManager;
+import TransmuteCore.input.Input;
 import java.awt.event.KeyEvent;
 
 public class GameOverState extends State {
@@ -526,14 +541,14 @@ public class GameOverState extends State {
     
     @Override
     public void update(Manager manager, double delta) {
-        if (Input.isKeyPressed(KeyEvent.VK_UP)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_UP)) {
             selectedIndex = 0;
         }
-        if (Input.isKeyPressed(KeyEvent.VK_DOWN)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_DOWN)) {
             selectedIndex = 1;
         }
         
-        if (Input.isKeyPressed(KeyEvent.VK_ENTER)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_ENTER)) {
             handleSelection();
         }
     }
@@ -580,24 +595,28 @@ public class GameOverState extends State {
 
 ## Step 5: Update the Main Game Class
 
-Create `src/main/java/StateDemo.java`:
+Create `src/main/java/com/example/statedemo/Game.java`:
 
 ```java
-import TransmuteCore.GameEngine.TransmuteCore;
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.States.StateManager;
-import TransmuteCore.System.Asset.AssetManager;
-import TransmuteCore.System.Asset.Type.Fonts.Font;
-import TransmuteCore.System.Asset.Type.Images.Image;
-import states.*;
+package com.example.statedemo;
 
-public class StateDemo extends TransmuteCore {
+import TransmuteCore.core.GameConfig;
+import TransmuteCore.core.Manager;
+import TransmuteCore.core.TransmuteCore;
+import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.state.StateManager;
+import TransmuteCore.assets.AssetManager;
+import TransmuteCore.assets.types.Font;
+import TransmuteCore.assets.types.Image;
+import com.example.statedemo.states.*;
+
+public class Game extends TransmuteCore {
     
     private StateManager stateManager;
     
-    public StateDemo() {
-        super("State Management Demo", "1.0", 320, TransmuteCore.Square, 3);
+    public Game(GameConfig config) {
+        super(config);
     }
     
     @Override
@@ -609,7 +628,7 @@ public class StateDemo extends TransmuteCore {
         new Image("player", "images/player.png");
         
         // Load assets
-        AssetManager.load();
+        AssetManager.getGlobalInstance().load();
         
         // Create state manager
         stateManager = new StateManager(this);
@@ -627,14 +646,24 @@ public class StateDemo extends TransmuteCore {
     }
     
     @Override
-    public void render(Manager manager, Context ctx) {
+    public void render(Manager manager, IRenderer renderer) {
+        Context ctx = (Context) renderer;
+        
         if (stateManager != null) {
             stateManager.render(manager, ctx);
         }
     }
     
     public static void main(String[] args) {
-        new StateDemo();
+        GameConfig config = new GameConfig.Builder()
+            .title("State Management Demo")
+            .version("1.0")
+            .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
+            .scale(3)
+            .build();
+        
+        Game game = new Game(config);
+        game.start();
     }
 }
 ```
@@ -759,11 +788,11 @@ public class ConfirmDialog extends State {
     
     @Override
     public void update(Manager manager, double delta) {
-        if (Input.isKeyPressed(KeyEvent.VK_Y)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_Y)) {
             stateManager.pop();
             if (onConfirm != null) onConfirm.run();
         }
-        if (Input.isKeyPressed(KeyEvent.VK_N)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_N)) {
             stateManager.pop();
             if (onCancel != null) onCancel.run();
         }
@@ -858,7 +887,7 @@ Create smooth transitions between states.
 ### Input bleeding through states
 
 - Clear input state when pushing/popping states
-- Use `Input.isKeyPressed()` instead of `isKeyHeld()` for menu navigation
+- Use `manager.getInput().isKeyPressed()` instead of `isKeyHeld()` for menu navigation
 
 ## What's Next?
 
@@ -872,5 +901,5 @@ Continue to [Tutorial 6: Audio System](06-audio-system.md)
 
 ## Resources
 
-- [StateManager.java](../../TransmuteCore/src/TransmuteCore/States/StateManager.java)
+- [StateManager.java](../../packages/core/TransmuteCore/src/TransmuteCore/States/StateManager.java)
 - [COOKBOOK.md](../COOKBOOK.md) - Menu system patterns

@@ -26,20 +26,43 @@ Collision detection determines when two game objects overlap or touch. The engin
 3. **Point Collision** - For checking if a point is inside an object
 4. **Tile Collision** - For level geometry and obstacles
 
-## Step 1: Create Collidable Objects
+## Step 1: Create a New Project
 
-First, let's create a base class for objects that can collide.
+For this tutorial, we'll use the platformer template which includes collision detection scaffolding:
 
-Create `src/main/java/GameObject.java`:
+```bash
+transmute new collision-demo -t platformer
+cd collision-demo
+```
+
+The platformer template provides:
+- Player class with movement
+- Platform class for collision objects
+- Basic gravity and physics
+
+Add your sprite assets:
+
+```bash
+mkdir -p src/main/resources/images
+# Copy your sprite sheet to src/main/resources/images/player.png
+```
+
+## Step 2: Update the GameObject Base Class
+
+The template includes basic collision support. Let's enhance it.
+
+Open `src/main/java/com/example/collisiondemo/GameObject.java`:
 
 ```java
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.Graphics.Sprites.Sprite;
-import TransmuteCore.Objects.Object;
-import TransmuteCore.Units.Tuple2i;
-import TransmuteCore.System.MathUtils;
+package com.example.collisiondemo;
+
+import TransmuteCore.core.Manager;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.graphics.sprites.Sprite;
+import TransmuteCore.ecs.Object;
+import TransmuteCore.math.Tuple2i;
+import TransmuteCore.util.MathUtils;
 
 public class GameObject extends Object {
     
@@ -113,15 +136,17 @@ public class GameObject extends Object {
 }
 ```
 
-## Step 2: Create the Player with Collision
+## Step 3: Update the Player with Collision
 
-Update your Player class to handle collisions:
+Open the template's `src/main/java/com/example/collisiondemo/Player.java` and enhance it:
 
 ```java
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Sprites.Animation;
-import TransmuteCore.Input.Input;
-import TransmuteCore.Units.Tuple2i;
+package com.example.collisiondemo;
+
+import TransmuteCore.core.Manager;
+import TransmuteCore.graphics.sprites.Animation;
+import TransmuteCore.input.Input;
+import TransmuteCore.math.Tuple2i;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
@@ -163,16 +188,16 @@ public class Player extends GameObject {
     }
     
     private void handleInput() {
-        if (Input.isKeyHeld(KeyEvent.VK_LEFT) || Input.isKeyHeld(KeyEvent.VK_A)) {
+        if (manager.getInput().isKeyHeld(KeyEvent.VK_LEFT) || manager.getInput().isKeyHeld(KeyEvent.VK_A)) {
             velocityX -= acceleration;
         }
-        if (Input.isKeyHeld(KeyEvent.VK_RIGHT) || Input.isKeyHeld(KeyEvent.VK_D)) {
+        if (manager.getInput().isKeyHeld(KeyEvent.VK_RIGHT) || manager.getInput().isKeyHeld(KeyEvent.VK_D)) {
             velocityX += acceleration;
         }
-        if (Input.isKeyHeld(KeyEvent.VK_UP) || Input.isKeyHeld(KeyEvent.VK_W)) {
+        if (manager.getInput().isKeyHeld(KeyEvent.VK_UP) || manager.getInput().isKeyHeld(KeyEvent.VK_W)) {
             velocityY -= acceleration;
         }
-        if (Input.isKeyHeld(KeyEvent.VK_DOWN) || Input.isKeyHeld(KeyEvent.VK_S)) {
+        if (manager.getInput().isKeyHeld(KeyEvent.VK_DOWN) || manager.getInput().isKeyHeld(KeyEvent.VK_S)) {
             velocityY += acceleration;
         }
     }
@@ -256,11 +281,11 @@ public class Player extends GameObject {
 Create `src/main/java/Obstacle.java`:
 
 ```java
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.Graphics.Sprites.Sprite;
-import TransmuteCore.Units.Tuple2i;
+import TransmuteCore.core.Manager;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.graphics.sprites.Sprite;
+import TransmuteCore.math.Tuple2i;
 
 public class Obstacle extends GameObject {
     
@@ -288,32 +313,36 @@ public class Obstacle extends GameObject {
 Create `src/main/java/CollisionDemo.java`:
 
 ```java
-import TransmuteCore.GameEngine.TransmuteCore;
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.Graphics.Bitmap;
-import TransmuteCore.Graphics.Sprites.Sprite;
-import TransmuteCore.Graphics.Sprites.Spritesheet;
-import TransmuteCore.Graphics.Sprites.Animation;
-import TransmuteCore.System.Asset.AssetManager;
-import TransmuteCore.System.Asset.Type.Fonts.Font;
-import TransmuteCore.System.Asset.Type.Images.Image;
-import TransmuteCore.Units.Tuple2i;
-import TransmuteCore.Input.Input;
+package com.example.collisiondemo;
+
+import TransmuteCore.core.GameConfig;
+import TransmuteCore.core.Manager;
+import TransmuteCore.core.TransmuteCore;
+import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.graphics.Bitmap;
+import TransmuteCore.graphics.sprites.Sprite;
+import TransmuteCore.graphics.sprites.Spritesheet;
+import TransmuteCore.graphics.sprites.Animation;
+import TransmuteCore.assets.AssetManager;
+import TransmuteCore.assets.types.Font;
+import TransmuteCore.assets.types.Image;
+import TransmuteCore.math.Tuple2i;
+import TransmuteCore.input.Input;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CollisionDemo extends TransmuteCore {
+public class Game extends TransmuteCore {
     
     private Player player;
     private List<GameObject> obstacles;
     private List<Pickup> pickups;
     private int score = 0;
     
-    public CollisionDemo() {
-        super("Collision Demo", "1.0", 320, TransmuteCore.Square, 3);
+    public Game(GameConfig config) {
+        super(config);
     }
     
     @Override
@@ -323,10 +352,10 @@ public class CollisionDemo extends TransmuteCore {
         
         // Register assets
         new Image("player", "images/player.png");
-        AssetManager.load();
+        AssetManager.getGlobalInstance().load();
         
         // Create player
-        Bitmap playerBitmap = AssetManager.getImage("player");
+        Bitmap playerBitmap = AssetManager.getGlobalInstance().getImage("player");
         Spritesheet playerSheet = new Spritesheet(
             playerBitmap,
             new Tuple2i(16, 16),
@@ -382,7 +411,7 @@ public class CollisionDemo extends TransmuteCore {
     
     @Override
     public void update(Manager manager, double delta) {
-        if (Input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_ESCAPE)) {
             System.exit(0);
         }
         
@@ -405,7 +434,9 @@ public class CollisionDemo extends TransmuteCore {
     }
     
     @Override
-    public void render(Manager manager, Context ctx) {
+    public void render(Manager manager, IRenderer renderer) {
+        Context ctx = (Context) renderer;
+        
         // Background
         ctx.setClearColor(Color.toPixelInt(20, 20, 40, 255));
         
@@ -430,7 +461,15 @@ public class CollisionDemo extends TransmuteCore {
     }
     
     public static void main(String[] args) {
-        new CollisionDemo();
+        GameConfig config = new GameConfig.Builder()
+            .title("Collision Demo")
+            .version("1.0")
+            .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
+            .scale(3)
+            .build();
+        
+        Game game = new Game(config);
+        game.start();
     }
 }
 
@@ -771,5 +810,5 @@ Continue to [Tutorial 5: State Management](05-state-management.md)
 
 ## Resources
 
-- [MathUtils.java](../../TransmuteCore/src/TransmuteCore/System/MathUtils.java) - Built-in collision helpers
+- [MathUtils.java](../../packages/core/TransmuteCore/src/TransmuteCore/System/MathUtils.java) - Built-in collision helpers
 - [COOKBOOK.md](../COOKBOOK.md) - Collision response patterns

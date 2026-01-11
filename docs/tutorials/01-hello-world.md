@@ -15,89 +15,60 @@ In this tutorial, you'll create your first TransmuteCore game that displays "Hel
 - TransmuteCore published to your local Maven repository
 - Basic Java knowledge
 
-## Step 1: Create the Project Structure
+## Step 1: Create the Project with CLI
 
-Create a new directory for your project:
+Use the transmute CLI to create a new project:
 
 ```bash
-mkdir hello-world-game
+transmute new hello-world-game -t basic
 cd hello-world-game
 ```
 
-Create the following structure:
+This creates a project with the following structure:
 
 ```
 hello-world-game/
-├── build.gradle
+├── build.gradle           # Pre-configured for TransmuteCore
 ├── settings.gradle
+├── gradlew               # Gradle wrapper included
+├── gradlew.bat
 └── src/
     └── main/
         ├── java/
-        │   └── HelloWorld.java
+        │   └── com/example/helloworldgame/
+        │       └── Game.java
         └── resources/
             └── fonts/
-                └── font.png
+                └── font.png  # Default font included
 ```
 
-## Step 2: Set Up Gradle
+## Step 2: Update the Game Class
 
-Create `build.gradle`:
-
-```gradle
-plugins {
-    id 'application'
-    id 'java'
-}
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'games.transmute:transmute-core:0.1.0-ALPHA'
-}
-
-application {
-    mainClass = 'HelloWorld'
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-```
-
-Create `settings.gradle`:
-
-```gradle
-rootProject.name = 'hello-world-game'
-```
-
-## Step 3: Create Your Game Class
-
-Create `src/main/java/HelloWorld.java`:
+Open the generated `src/main/java/com/example/helloworldgame/Game.java` and replace its contents with:
 
 ```java
-import TransmuteCore.GameEngine.TransmuteCore;
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.System.Asset.AssetManager;
-import TransmuteCore.System.Asset.Type.Fonts.Font;
+package com.example.helloworldgame;
 
-public class HelloWorld extends TransmuteCore {
+import TransmuteCore.core.GameConfig;
+import TransmuteCore.core.Manager;
+import TransmuteCore.core.TransmuteCore;
+import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.assets.AssetManager;
+import TransmuteCore.assets.types.Font;
+
+public class Game extends TransmuteCore {
     
-    public HelloWorld() {
-        // Parameters: title, version, width, aspectRatio, scale
-        super("Hello World", "1.0", 320, TransmuteCore.Square, 3);
+    public Game(GameConfig config) {
+        super(config);
     }
     
     @Override
     public void init() {
         // Initialize the default font
         Font.initializeDefaultFont("fonts/font.png");
-        AssetManager.load();
+        AssetManager.getGlobalInstance().load();
     }
     
     @Override
@@ -106,7 +77,9 @@ public class HelloWorld extends TransmuteCore {
     }
     
     @Override
-    public void render(Manager manager, Context ctx) {
+    public void render(Manager manager, IRenderer renderer) {
+        Context ctx = (Context) renderer;
+        
         // Clear the screen to black
         ctx.setClearColor(Color.toPixelInt(0, 0, 0, 255));
         
@@ -116,16 +89,22 @@ public class HelloWorld extends TransmuteCore {
     }
     
     public static void main(String[] args) {
-        new HelloWorld();
+        GameConfig config = new GameConfig.Builder()
+            .title("Hello World")
+            .version("1.0")
+            .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
+            .scale(3)
+            .build();
+        
+        Game game = new Game(config);
+        game.start();
     }
 }
 ```
 
-## Step 4: Add a Font
+## Step 3: Run Your Game
 
-Copy the `font.png` file from the transmute-starter project to `src/main/resources/fonts/font.png`, or use your own bitmap font.
-
-## Step 5: Run Your Game
+The CLI has already included a default font, so you can run immediately:
 
 ```bash
 ./gradlew run
@@ -138,16 +117,21 @@ You should see a window with "Hello, World!" displayed in white text on a black 
 ### Constructor
 
 ```java
-public HelloWorld() {
-    super("Hello World", "1.0", 320, TransmuteCore.Square, 3);
+public Game(GameConfig config) {
+    super(config);
 }
 ```
 
-- **"Hello World"** - Window title
-- **"1.0"** - Game version
-- **320** - Base width in pixels
-- **TransmuteCore.Square** - 4:3 aspect ratio (height will be 240)
-- **3** - Scale factor (window will be 960x720)
+The game now uses a `GameConfig` builder pattern for configuration. In `main()`, the config is created:
+
+```java
+GameConfig config = new GameConfig.Builder()
+    .title("Hello World")        // Window title
+    .version("1.0")              // Game version
+    .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)  // 320x240 (4:3)
+    .scale(3)                    // 3x scale = 960x720 window
+    .build();
+```
 
 ### init() Method
 
@@ -155,7 +139,7 @@ public HelloWorld() {
 @Override
 public void init() {
     Font.initializeDefaultFont("fonts/font.png");
-    AssetManager.load();
+    AssetManager.getGlobalInstance().load();
 }
 ```
 
@@ -185,7 +169,8 @@ The `delta` parameter tells you how much time has passed, useful for frame-indep
 
 ```java
 @Override
-public void render(Manager manager, Context ctx) {
+public void render(Manager manager, IRenderer renderer) {
+    Context ctx = (Context) renderer;
     ctx.setClearColor(Color.toPixelInt(0, 0, 0, 255));
     ctx.renderText("Hello, World!", 50, 100, white);
 }
@@ -264,11 +249,11 @@ ctx.renderText("Hello, World!", 50, textY, white);
 
 ```java
 import java.awt.event.KeyEvent;
-import TransmuteCore.Input.Input;
+import TransmuteCore.input.Input;
 
 @Override
 public void update(Manager manager, double delta) {
-    if (Input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
+    if (manager.getInput().isKeyPressed(KeyEvent.VK_ESCAPE)) {
         System.exit(0);
     }
 }
@@ -291,7 +276,7 @@ Adjust the scale parameter:
 ### Text doesn't appear
 
 - Make sure you called `Font.initializeDefaultFont()` in `init()`
-- Ensure `AssetManager.load()` was called
+- Ensure `AssetManager.getGlobalInstance().load()` was called
 - Check that the text position is within the window bounds
 
 ## What's Next?
@@ -305,36 +290,40 @@ Continue to [Tutorial 2: Sprites and Animation](02-sprites-and-animation.md)
 
 ## Complete Code
 
-Here's the complete `HelloWorld.java` with all features:
+Here's the complete `Game.java` with all features:
 
 ```java
-import TransmuteCore.GameEngine.TransmuteCore;
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.System.Asset.AssetManager;
-import TransmuteCore.System.Asset.Type.Fonts.Font;
-import TransmuteCore.Input.Input;
+package com.example.helloworldgame;
+
+import TransmuteCore.core.GameConfig;
+import TransmuteCore.core.Manager;
+import TransmuteCore.core.TransmuteCore;
+import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.assets.AssetManager;
+import TransmuteCore.assets.types.Font;
+import TransmuteCore.input.Input;
 import java.awt.event.KeyEvent;
 
-public class HelloWorld extends TransmuteCore {
+public class Game extends TransmuteCore {
     
     private int textY = 100;
     
-    public HelloWorld() {
-        super("Hello World", "1.0", 320, TransmuteCore.Square, 3);
+    public Game(GameConfig config) {
+        super(config);
     }
     
     @Override
     public void init() {
         Font.initializeDefaultFont("fonts/font.png");
-        AssetManager.load();
+        AssetManager.getGlobalInstance().load();
     }
     
     @Override
     public void update(Manager manager, double delta) {
         // Exit on ESC
-        if (Input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_ESCAPE)) {
             System.exit(0);
         }
         
@@ -344,7 +333,9 @@ public class HelloWorld extends TransmuteCore {
     }
     
     @Override
-    public void render(Manager manager, Context ctx) {
+    public void render(Manager manager, IRenderer renderer) {
+        Context ctx = (Context) renderer;
+        
         // Dark blue background
         ctx.setClearColor(Color.toPixelInt(0, 0, 64, 255));
         
@@ -356,7 +347,15 @@ public class HelloWorld extends TransmuteCore {
     }
     
     public static void main(String[] args) {
-        new HelloWorld();
+        GameConfig config = new GameConfig.Builder()
+            .title("Hello World")
+            .version("1.0")
+            .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
+            .scale(3)
+            .build();
+        
+        Game game = new Game(config);
+        game.start();
     }
 }
 ```

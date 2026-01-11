@@ -26,63 +26,64 @@ Example sprite sheet layout (4 columns x 2 rows):
 [Frame 4] [Frame 5] [Frame 6] [Frame 7]
 ```
 
-## Step 1: Project Setup
+## Step 1: Create a New Project
 
-Create a new project or continue from Tutorial 1. Add these directories:
+Use the transmute CLI to create a new project:
 
-```
-sprite-demo/
-├── build.gradle
-├── settings.gradle
-└── src/
-    └── main/
-        ├── java/
-        │   └── SpriteDemo.java
-        └── resources/
-            ├── fonts/
-            │   └── font.png
-            └── images/
-                └── player.png     # Your sprite sheet
+```bash
+transmute new sprite-demo -t basic
+cd sprite-demo
 ```
 
-## Step 2: Prepare Your Sprite Sheet
+The CLI creates all necessary directories and files, including a resources folder for your assets.
 
-For this tutorial, you'll need a sprite sheet. You can:
+## Step 2: Add Your Sprite Sheet
+
+Place your sprite sheet in the resources folder:
+
+```bash
+mkdir -p src/main/resources/images
+# Copy your sprite sheet to src/main/resources/images/player.png
+```
+
+For this tutorial, you'll need a sprite sheet with uniform grid dimensions (e.g., 16x16 pixels per frame). You can:
 - Use your own (PNG format recommended)
 - Create a simple one (8x8 or 16x16 pixel sprites work well)
-- Download from open game art resources
+- Download from open game art resources like OpenGameArt.org
 
-Your sprite sheet should have uniform grid dimensions (e.g., 16x16 pixels per frame).
+## Step 3: Update the Game Class
 
-## Step 3: Create the Sprite Demo
-
-Create `src/main/java/SpriteDemo.java`:
+Open `src/main/java/com/example/spritedemo/Game.java` and replace its contents with:
 
 ```java
-import TransmuteCore.GameEngine.TransmuteCore;
-import TransmuteCore.GameEngine.Manager;
-import TransmuteCore.Graphics.Context;
-import TransmuteCore.Graphics.Color;
-import TransmuteCore.Graphics.Bitmap;
-import TransmuteCore.Graphics.Sprites.Sprite;
-import TransmuteCore.Graphics.Sprites.Spritesheet;
-import TransmuteCore.Graphics.Sprites.Animation;
-import TransmuteCore.System.Asset.AssetManager;
-import TransmuteCore.System.Asset.Type.Fonts.Font;
-import TransmuteCore.System.Asset.Type.Images.Image;
-import TransmuteCore.Units.Tuple2i;
-import TransmuteCore.Input.Input;
+package com.example.spritedemo;
+
+import TransmuteCore.core.GameConfig;
+import TransmuteCore.core.Manager;
+import TransmuteCore.core.TransmuteCore;
+import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.graphics.Bitmap;
+import TransmuteCore.graphics.sprites.Sprite;
+import TransmuteCore.graphics.sprites.Spritesheet;
+import TransmuteCore.graphics.sprites.Animation;
+import TransmuteCore.assets.AssetManager;
+import TransmuteCore.assets.types.Font;
+import TransmuteCore.assets.types.Image;
+import TransmuteCore.math.Tuple2i;
+import TransmuteCore.input.Input;
 import java.awt.event.KeyEvent;
 
-public class SpriteDemo extends TransmuteCore {
+public class Game extends TransmuteCore {
     
     private Sprite staticSprite;
     private Animation walkAnimation;
     private int spriteX = 100;
     private int spriteY = 100;
     
-    public SpriteDemo() {
-        super("Sprite Demo", "1.0", 320, TransmuteCore.Square, 3);
+    public Game(GameConfig config) {
+        super(config);
     }
     
     @Override
@@ -94,10 +95,10 @@ public class SpriteDemo extends TransmuteCore {
         new Image("player", "images/player.png");
         
         // Load all assets
-        AssetManager.load();
+        AssetManager.getGlobalInstance().load();
         
         // Create sprite sheet (assuming 16x16 pixel sprites)
-        Bitmap playerBitmap = AssetManager.getImage("player");
+        Bitmap playerBitmap = AssetManager.getGlobalInstance().getImage("player");
         Spritesheet playerSheet = new Spritesheet(
             playerBitmap,
             new Tuple2i(16, 16),  // Size of each sprite
@@ -124,7 +125,7 @@ public class SpriteDemo extends TransmuteCore {
     @Override
     public void update(Manager manager, double delta) {
         // Exit on ESC
-        if (Input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_ESCAPE)) {
             System.exit(0);
         }
         
@@ -133,16 +134,16 @@ public class SpriteDemo extends TransmuteCore {
         
         // Move sprite with arrow keys
         int speed = 2;
-        if (Input.isKeyHeld(KeyEvent.VK_LEFT)) {
+        if (manager.getInput().isKeyHeld(KeyEvent.VK_LEFT)) {
             spriteX -= speed;
         }
-        if (Input.isKeyHeld(KeyEvent.VK_RIGHT)) {
+        if (manager.getInput().isKeyHeld(KeyEvent.VK_RIGHT)) {
             spriteX += speed;
         }
-        if (Input.isKeyHeld(KeyEvent.VK_UP)) {
+        if (manager.getInput().isKeyHeld(KeyEvent.VK_UP)) {
             spriteY -= speed;
         }
-        if (Input.isKeyHeld(KeyEvent.VK_DOWN)) {
+        if (manager.getInput().isKeyHeld(KeyEvent.VK_DOWN)) {
             spriteY += speed;
         }
         
@@ -154,7 +155,9 @@ public class SpriteDemo extends TransmuteCore {
     }
     
     @Override
-    public void render(Manager manager, Context ctx) {
+    public void render(Manager manager, IRenderer renderer) {
+        Context ctx = (Context) renderer;
+        
         // Dark background
         ctx.setClearColor(Color.toPixelInt(32, 32, 64, 255));
         
@@ -171,7 +174,15 @@ public class SpriteDemo extends TransmuteCore {
     }
     
     public static void main(String[] args) {
-        new SpriteDemo();
+        GameConfig config = new GameConfig.Builder()
+            .title("Sprite Demo")
+            .version("1.0")
+            .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
+            .scale(3)
+            .build();
+        
+        Game game = new Game(config);
+        game.start();
     }
 }
 ```
@@ -193,10 +204,10 @@ You should see:
 ```java
 // Register the image
 new Image("player", "images/player.png");
-AssetManager.load();
+AssetManager.getGlobalInstance().load();
 
 // Get the loaded bitmap
-Bitmap playerBitmap = AssetManager.getImage("player");
+Bitmap playerBitmap = AssetManager.getGlobalInstance().getImage("player");
 ```
 
 ### Creating a Spritesheet
@@ -278,9 +289,9 @@ public void init() {
 @Override
 public void update(Manager manager, double delta) {
     // Switch animations based on input
-    if (Input.isKeyPressed(KeyEvent.VK_SPACE)) {
+    if (manager.getInput().isKeyPressed(KeyEvent.VK_SPACE)) {
         currentAnimation = jumpAnimation;
-    } else if (Input.isKeyHeld(KeyEvent.VK_RIGHT)) {
+    } else if (manager.getInput().isKeyHeld(KeyEvent.VK_RIGHT)) {
         currentAnimation = walkAnimation;
     }
     
@@ -329,7 +340,7 @@ ctx.renderBitmap(sprite, x, y, 1.0f, redTint);
 For managing many sprites, use the `SpriteManager`:
 
 ```java
-import TransmuteCore.Graphics.Sprites.SpriteManager;
+import TransmuteCore.graphics.sprites.SpriteManager;
 
 private SpriteManager spriteManager;
 

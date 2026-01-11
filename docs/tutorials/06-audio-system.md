@@ -27,12 +27,28 @@ TransmuteCore uses Java's `javax.sound.sampled` API with the `Clip` class for au
 - **AU** - Supported
 - MP3 - NOT supported (requires external libraries)
 
-## Step 1: Prepare Audio Files
+## Step 1: Create a New Project
+
+Use the transmute CLI to create a new project:
+
+```bash
+transmute new audio-demo -t basic
+cd audio-demo
+```
+
+## Step 2: Prepare Audio Files
+
+Create audio directories and add your audio files:
+
+```bash
+mkdir -p src/main/resources/audio/sfx
+mkdir -p src/main/resources/audio/music
+```
 
 Organize your audio files:
 
 ```
-res/
+src/main/resources/
 ├── audio/
 │   ├── sfx/
 │   │   ├── jump.wav
@@ -45,13 +61,13 @@ res/
 │       └── gameover.wav
 ```
 
-## Step 2: Load Audio Assets
+## Step 3: Load Audio Assets
 
-In your game's `init()` method:
+In your `src/main/java/com/example/audiodemo/Game.java` file's `init()` method:
 
 ```java
-import TransmuteCore.System.Asset.Type.Audio.Audio;
-import TransmuteCore.System.Asset.AssetManager;
+import TransmuteCore.assets.types.Audio;
+import TransmuteCore.assets.AssetManager;
 
 @Override
 public void init() {
@@ -65,16 +81,16 @@ public void init() {
     new Audio("gameMusic", "audio/music/gameplay.wav");
     
     // Load all assets
-    AssetManager.load();
+    AssetManager.getGlobalInstance().load();
 }
 ```
 
-## Step 3: Play Sound Effects
+## Step 4: Play Sound Effects
 
 Use `AudioPlayer` to play sounds:
 
 ```java
-import TransmuteCore.System.Asset.Type.Audio.AudioPlayer;
+import TransmuteCore.assets.types.AudioPlayer;
 
 // Play a sound effect
 AudioPlayer.play("jump");
@@ -96,7 +112,7 @@ public class Player {
 }
 ```
 
-## Step 4: Play Background Music
+## Step 5: Play Background Music
 
 Music should loop continuously:
 
@@ -111,11 +127,17 @@ AudioPlayer.stop("menuMusic");
 AudioPlayer.resume("gameMusic");
 ```
 
-## Step 5: Create an Audio Manager
+## Step 6: Create an Audio Manager
 
-Create a centralized audio manager:
+Create `src/main/java/com/example/audiodemo/GameAudioManager.java`:
 
 ```java
+package com.example.audiodemo;
+
+import TransmuteCore.assets.AssetManager;
+import TransmuteCore.assets.types.AudioPlayer;
+import javax.sound.sampled.Clip;
+
 public class GameAudioManager {
     
     private static String currentMusic = null;
@@ -130,7 +152,7 @@ public class GameAudioManager {
     public static void playSfx(String name) {
         if (muted || sfxVolume <= 0) return;
         
-        Clip clip = AssetManager.getAudio(name);
+        Clip clip = AssetManager.getGlobalInstance().getAudio(name);
         if (clip != null) {
             setVolume(clip, sfxVolume * masterVolume);
             AudioPlayer.play(name);
@@ -150,7 +172,7 @@ public class GameAudioManager {
         
         // Start new music
         if (!muted && musicVolume > 0) {
-            Clip clip = AssetManager.getAudio(name);
+            Clip clip = AssetManager.getGlobalInstance().getAudio(name);
             if (clip != null) {
                 setVolume(clip, musicVolume * masterVolume);
                 AudioPlayer.loop(name);
@@ -230,7 +252,7 @@ public class GameAudioManager {
      */
     private static void updateVolumes() {
         if (currentMusic != null) {
-            Clip musicClip = AssetManager.getAudio(currentMusic);
+            Clip musicClip = AssetManager.getGlobalInstance().getAudio(currentMusic);
             setVolume(musicClip, musicVolume * masterVolume);
         }
     }
@@ -268,7 +290,7 @@ public class GamePlayState extends State {
     @Override
     public void update(Manager manager, double delta) {
         // Play sounds during gameplay
-        if (Input.isKeyPressed(KeyEvent.VK_SPACE)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_SPACE)) {
             player.jump();
             GameAudioManager.playSfx("jump");
         }
@@ -279,7 +301,7 @@ public class PauseState extends State {
     @Override
     public void onEnter() {
         // Pause music when entering pause state
-        Clip music = AssetManager.getAudio("gameMusic");
+        Clip music = AssetManager.getGlobalInstance().getAudio("gameMusic");
         if (music != null && music.isRunning()) {
             music.stop();
         }
@@ -335,7 +357,7 @@ Fade music in/out:
 ```java
 public class AudioFader {
     public static void fadeOut(String name, int durationMs) {
-        Clip clip = AssetManager.getAudio(name);
+        Clip clip = AssetManager.getGlobalInstance().getAudio(name);
         if (clip == null) return;
         
         new Thread(() -> {
@@ -373,7 +395,7 @@ public static void playPositional(String name, int sourceX, int sourceY,
     
     float volume = 1.0f - (distance / maxDistance);
     
-    Clip clip = AssetManager.getAudio(name);
+    Clip clip = AssetManager.getGlobalInstance().getAudio(name);
     GameAudioManager.setVolume(clip, volume);
     AudioPlayer.play(name);
 }
@@ -408,7 +430,7 @@ public static void playPositional(String name, int sourceX, int sourceY,
 
 - Check file format (must be WAV/AIFF/AU)
 - Verify file path is correct
-- Ensure `AssetManager.load()` was called
+- Ensure `AssetManager.getGlobalInstance().load()` was called
 - Check that audio isn't muted
 
 ### Audio stutters or lags
@@ -435,10 +457,24 @@ ffmpeg -i input.mp3 -ar 44100 -ac 2 output.wav
 ## Complete Example
 
 ```java
-public class AudioDemo extends TransmuteCore {
+package com.example.audiodemo;
+
+import TransmuteCore.core.GameConfig;
+import TransmuteCore.core.Manager;
+import TransmuteCore.core.TransmuteCore;
+import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.graphics.Context;
+import TransmuteCore.graphics.Color;
+import TransmuteCore.assets.AssetManager;
+import TransmuteCore.assets.types.Audio;
+import TransmuteCore.assets.types.Font;
+import TransmuteCore.input.Input;
+import java.awt.event.KeyEvent;
+
+public class Game extends TransmuteCore {
     
-    public AudioDemo() {
-        super("Audio Demo", "1.0", 320, TransmuteCore.Square, 3);
+    public Game(GameConfig config) {
+        super(config);
     }
     
     @Override
@@ -450,7 +486,7 @@ public class AudioDemo extends TransmuteCore {
         new Audio("coin", "audio/coin.wav");
         new Audio("music", "audio/music.wav");
         
-        AssetManager.load();
+        AssetManager.getGlobalInstance().load();
         
         // Start music
         GameAudioManager.playMusic("music");
@@ -458,19 +494,21 @@ public class AudioDemo extends TransmuteCore {
     
     @Override
     public void update(Manager manager, double delta) {
-        if (Input.isKeyPressed(KeyEvent.VK_1)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_1)) {
             GameAudioManager.playSfx("jump");
         }
-        if (Input.isKeyPressed(KeyEvent.VK_2)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_2)) {
             GameAudioManager.playSfx("coin");
         }
-        if (Input.isKeyPressed(KeyEvent.VK_M)) {
+        if (manager.getInput().isKeyPressed(KeyEvent.VK_M)) {
             GameAudioManager.toggleMute();
         }
     }
     
     @Override
-    public void render(Manager manager, Context ctx) {
+    public void render(Manager manager, IRenderer renderer) {
+        Context ctx = (Context) renderer;
+        
         ctx.setClearColor(Color.toPixelInt(20, 30, 40, 255));
         
         int white = Color.toPixelInt(255, 255, 255, 255);
@@ -481,7 +519,15 @@ public class AudioDemo extends TransmuteCore {
     }
     
     public static void main(String[] args) {
-        new AudioDemo();
+        GameConfig config = new GameConfig.Builder()
+            .title("Audio Demo")
+            .version("1.0")
+            .dimensions(320, GameConfig.ASPECT_RATIO_SQUARE)
+            .scale(3)
+            .build();
+        
+        Game game = new Game(config);
+        game.start();
     }
 }
 ```
@@ -498,6 +544,6 @@ Continue to [Tutorial 7: Level Design with Tiles](07-level-design.md)
 
 ## Resources
 
-- [Audio.java](../../TransmuteCore/src/TransmuteCore/System/Asset/Type/Audio/Audio.java)
-- [AudioPlayer.java](../../TransmuteCore/src/TransmuteCore/System/Asset/Type/Audio/AudioPlayer.java)
+- [Audio.java](../../packages/core/TransmuteCore/src/TransmuteCore/System/Asset/Type/Audio/Audio.java)
+- [AudioPlayer.java](../../packages/core/TransmuteCore/src/TransmuteCore/System/Asset/Type/Audio/AudioPlayer.java)
 - [AUDIO.md](../AUDIO.md) - Complete audio reference
