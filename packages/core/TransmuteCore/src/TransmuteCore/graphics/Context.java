@@ -1,6 +1,7 @@
 package TransmuteCore.graphics;
 
 import TransmuteCore.assets.types.Font;
+import TransmuteCore.core.interfaces.services.IRenderer;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -16,7 +17,7 @@ import java.util.Arrays;
  * render context is different to the dimension of the wrapper, but a resize of the wrapper should not
  * update the size of the context. The size of the context refers to the dimensions of the master image.
  */
-public class Context
+public class Context implements IRenderer
 {
     /**
      * Dimensions for the render context
@@ -302,6 +303,20 @@ public class Context
      * @param height Height of rectangle
      * @param color  Color of rectangle (Use <code>Color.toPixelInt()</code>)
      */
+    public void renderRectangle(int x, int y, int width, int height, int color)
+    {
+        renderRectangle(x, y, (float)width, (float)height, color);
+    }
+    
+    /**
+     * Draws a rectangle on-screen with a given color.
+     *
+     * @param x      x-coordinate on screen
+     * @param y      y-coordinate on screen
+     * @param width  Width of rectangle
+     * @param height Height of rectangle
+     * @param color  Color of rectangle (Use <code>Color.toPixelInt()</code>)
+     */
     public void renderRectangle(int x, int y, int width, int height, float scale, int color)
     {
         renderRectangle(x, y, width * scale, height * scale, color);
@@ -504,6 +519,16 @@ public class Context
     public void setClearColor(int color)
     {
         this.clearColor = color;
+    }
+    
+    /**
+     * Gets the color used to clear the context.
+     *
+     * @return The clear color as a 32-bit ARGB integer.
+     */
+    public int getClearColor()
+    {
+        return clearColor;
     }
 
     /**
