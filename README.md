@@ -2,7 +2,7 @@
 
 ![](assets/og-image.svg)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: PolyForm Shield 1.0.0](https://img.shields.io/badge/License-PolyForm%20Shield%201.0.0-blue.svg)](https://polyformproject.org/licenses/shield/1.0.0/)
 [![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?logo=openjdk&logoColor=white)](https://adoptium.net/)
 [![JitPack](https://jitpack.io/v/transmute-games/transmute-core.svg)](https://jitpack.io/#transmute-games/transmute-core)
 [![CLI Release](https://img.shields.io/github/v/release/transmute-games/transmute-core?filter=cli-*&label=CLI&color=success)](https://github.com/transmute-games/transmute-core/releases/latest)
@@ -279,7 +279,7 @@ On a typical modern system (2020+ hardware):
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](.github/LICENSE) file for details.
+This project is licensed under the [PolyForm Shield License 1.0.0](https://polyformproject.org/licenses/shield/1.0.0/) — see [LICENSE](.github/LICENSE) for details.
 
 ## Acknowledgments
 
