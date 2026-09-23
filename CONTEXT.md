@@ -18,6 +18,7 @@ Vocabulary for humans and agents working in this repository.
 - **TiledLevel** — PNG-indexed tile map with viewport culling.
 - **World** — deep tile-grid + Actor module for top-down games (`blocks`, `tryMove`, `fillBorder`). Prefer over inventing TileMap.
 - **Body2D** — gravity/jump/AABB platformer body resolved against `Body2D.Solid` list.
+- **Camera** — view offset helper (`lookAt`, `clampToWorld`, world↔screen).
 - **GameConfig** — immutable runtime config (`headless`, size, scale, FPS).
 
 ## Invariants
