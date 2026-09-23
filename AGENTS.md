@@ -5,11 +5,13 @@ How to build and verify a game from a prompt + assets without a human at the win
 ## Golden path
 
 1. Publish or depend on the engine (`games.transmute:transmute-core:1.0.0` via mavenLocal / JitPack).
-2. Copy `examples/hello` or run `transmute new my-game -t basic -y`.
+2. Copy a verified example (`examples/hello`, `platformer`, `rpg`) or run `transmute new my-game -t basic|platformer|rpg -y`.
 3. Put assets under `src/main/resources/` (sprites, audio, `fonts/font.png`).
-4. Declare them in `src/main/resources/gamespec.properties`.
+4. Declare them in `src/main/resources/gamespec.properties` (optional `world.*` keys).
 5. Implement `init` / `update` / `render` on a `TransmuteCore` subclass.
 6. Verify headless: `GameHarness` + `FrameAssert`, or `./gradlew verifyHeadless`.
+
+Use the repo skill `.cursor/skills/build-transmute-game/SKILL.md` when scaffolding from a prompt + assets.
 
 ## Authoring seam (one model)
 
@@ -29,6 +31,15 @@ public void init() {
 
 `GameContext` is an internal DI container. Prefer Manager in game code and tutorials.
 
+## Modules to prefer
+
+| Need | Module |
+|------|--------|
+| Tile top-down | `World` / `GameSpec.createWorld()` |
+| Gravity / jump | `Body2D` + `Collision` |
+| Headless play | `GameHarness`, `FrameAssert`, `SimulatedInput` |
+| Assets | `AssetPack` / `GameSpec` |
+
 ## Verify loop
 
 ```java
@@ -46,9 +57,7 @@ try (GameHarness harness = GameHarness.of(() -> new MyGame(config))) {
 }
 ```
 
-Headless installs {@code SimulatedInput} automatically. Capture with `harness.capture(file)` or `Screenshot.captureAs`.
-
-Prefer `manager.getInputHandler()` over `getInput()` so headless playthroughs work.
+Headless installs `SimulatedInput` automatically. Prefer `manager.getInputHandler()` over `getInput()`.
 
 ## GameSpec manifest
 
@@ -63,19 +72,21 @@ audio.jump=sounds/jump.wav
 clear.r=32
 clear.g=32
 clear.b=64
+world.cols=20
+world.rows=15
+world.tile=16
+world.border=true
+world.solid=5,7;6,7
 ```
 
 ## Commands
 
 ```bash
-# Engine
 ./gradlew :transmute-core:test
 ./gradlew :transmute-core:publishToMavenLocal
-
-# Reference example
 cd examples/hello && ./gradlew test verifyHeadless
-
-# Scaffold
+cd examples/platformer && ./gradlew test verifyHeadless
+cd examples/rpg && ./gradlew test verifyHeadless
 transmute new my-game -t basic -y
 ```
 
@@ -83,8 +94,7 @@ transmute new my-game -t basic -y
 
 - Do cast `IRenderer` to `Context` for pixel ops.
 - Do call `StateManager.pop()` to leave a state (public API).
-- Do copy `examples/hello`, `examples/platformer`, or `examples/rpg` before inventing structure.
-- Do use `TransmuteCore.world.World` for tile-based top-down games.
-- Don't invent parallel Entity/TileMap systems when `Object`, `Mob`, and `TiledLevel` exist.
+- Do copy verified examples before inventing structure.
+- Do use `World` / `Body2D` instead of DIY physics/maps.
+- Don't invent parallel Entity/TileMap systems.
 - Don't assume a display — always provide a headless verify path.
-- Prefer `manager.getInputHandler()` so `SimulatedInput` works in playtests.

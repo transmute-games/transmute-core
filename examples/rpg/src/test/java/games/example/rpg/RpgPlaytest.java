@@ -1,5 +1,6 @@
 package games.example.rpg;
 
+import TransmuteCore.core.GameSpec;
 import TransmuteCore.input.SimulatedInput;
 import TransmuteCore.util.verify.FrameAssert;
 import TransmuteCore.util.verify.GameHarness;
@@ -16,7 +17,10 @@ public class RpgPlaytest
     @Test
     public void movesRightUntilBlockedByWall()
     {
-        try (GameHarness harness = GameHarness.of(() -> new RpgGame(RpgGame.headlessConfig())))
+        try (GameHarness harness = GameHarness.of(() -> {
+            GameSpec spec = RpgGame.loadSpec();
+            return new RpgGame(RpgGame.headlessConfig(spec), spec);
+        }))
         {
             harness.step(1);
             RpgGame game = (RpgGame) harness.game();
@@ -47,7 +51,10 @@ public class RpgPlaytest
     @Test
     public void cannotEnterInteriorSolidTiles()
     {
-        try (GameHarness harness = GameHarness.of(() -> new RpgGame(RpgGame.headlessConfig())))
+        try (GameHarness harness = GameHarness.of(() -> {
+            GameSpec spec = RpgGame.loadSpec();
+            return new RpgGame(RpgGame.headlessConfig(spec), spec);
+        }))
         {
             harness.step(1);
             RpgGame game = (RpgGame) harness.game();

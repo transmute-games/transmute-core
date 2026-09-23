@@ -2,6 +2,7 @@ package games.example.rpg;
 
 import TransmuteCore.assets.AssetPack;
 import TransmuteCore.core.GameConfig;
+import TransmuteCore.core.GameSpec;
 import TransmuteCore.core.Manager;
 import TransmuteCore.core.TransmuteCore;
 import TransmuteCore.core.interfaces.services.IRenderer;
@@ -12,19 +13,21 @@ import TransmuteCore.util.verify.GameHarness;
 import TransmuteCore.world.World;
 
 /**
- * Verified top-down RPG recipe built on {@link World}.
+ * Verified top-down RPG recipe: GameSpec → World + SimulatedInput playtests.
  */
 public class RpgGame extends TransmuteCore
 {
     public static final int CLEAR = Color.toPixelInt(20, 20, 30, 255);
     public static final int TILE = 16;
 
+    private final GameSpec spec;
     private World world;
     private Player player;
 
-    public RpgGame(GameConfig config)
+    public RpgGame(GameConfig config, GameSpec spec)
     {
         super(config);
+        this.spec = spec;
     }
 
     @Override
@@ -35,18 +38,12 @@ public class RpgGame extends TransmuteCore
             .font(AssetPack.DEFAULT_FONT_RESOURCE)
             .ensureDefaultFont();
 
-        world = World.grid(20, 15, TILE)
-            .clearColor(CLEAR)
-            .solidColor(Color.toPixelInt(60, 60, 80, 255));
-        world.fillBorder(World.SOLID);
-        for (int x = 5; x < 10; x++)
+        world = spec.createWorld();
+        if (world == null)
         {
-            world.setTile(x, 7, World.SOLID);
+            throw new IllegalStateException("gamespec.properties must define world.cols/world.rows");
         }
-        for (int y = 3; y < 8; y++)
-        {
-            world.setTile(15, y, World.SOLID);
-        }
+        world.solidColor(Color.toPixelInt(60, 60, 80, 255));
 
         player = new Player(TILE * 2, TILE * 2);
         world.add(player);
@@ -76,10 +73,15 @@ public class RpgGame extends TransmuteCore
         return world;
     }
 
-    public static GameConfig headlessConfig()
+    public static GameSpec loadSpec()
+    {
+        return GameSpec.loadClasspath("gamespec.properties");
+    }
+
+    public static GameConfig headlessConfig(GameSpec spec)
     {
         return new GameConfig.Builder()
-            .title("RPG Example")
+            .title(spec.getTitle())
             .version("1.0.0")
             .size(20 * TILE, 15 * TILE)
             .scale(1)
@@ -90,9 +92,10 @@ public class RpgGame extends TransmuteCore
 
     public static void main(String[] args)
     {
+        GameSpec spec = loadSpec();
         boolean headless = args.length > 0 && "--headless".equals(args[0]);
         GameConfig config = new GameConfig.Builder()
-            .title("RPG Example")
+            .title(spec.getTitle())
             .version("1.0.0")
             .size(20 * TILE, 15 * TILE)
             .scale(2)
@@ -102,7 +105,7 @@ public class RpgGame extends TransmuteCore
 
         if (headless)
         {
-            try (GameHarness harness = GameHarness.of(() -> new RpgGame(config)))
+            try (GameHarness harness = GameHarness.of(() -> new RpgGame(config, spec)))
             {
                 harness.step(1);
                 FrameAssert.assertPixel(harness.renderer(), TILE * 2 + 8, TILE * 2 + 8, Player.COLOR);
@@ -112,6 +115,6 @@ public class RpgGame extends TransmuteCore
             return;
         }
 
-        new RpgGame(config).start();
+        new RpgGame(config, spec).start();
     }
 }
