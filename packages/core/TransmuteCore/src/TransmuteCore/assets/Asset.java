@@ -76,7 +76,7 @@ public abstract class Asset
 
         this.key = AssetManager.createKey(type, name);
 
-        this.filePath = filePath.toLowerCase();
+        this.filePath = filePath; // preserve case for case-sensitive filesystems
         this.fileName = Asset.crop("fileName", this.filePath);
         this.fileType = Asset.crop("fileType", this.filePath);
 

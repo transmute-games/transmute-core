@@ -3,22 +3,11 @@ package TransmuteCore.core;
 import TransmuteCore.core.interfaces.services.*;
 
 /**
- * Immutable container for all game services and configuration.
+ * Immutable container for game services and configuration.
  * <p>
- * This replaces the Manager service locator with proper dependency injection.
- * GameContext holds references to all subsystems via their interfaces, making
- * dependencies explicit and testable.
- * <p>
- * Usage:
- * <pre>{@code
- * GameContext context = new GameContext.Builder()
- *     .config(config)
- *     .assetManager(assetManager)
- *     .inputHandler(input)
- *     .renderer(ctx)
- *     .gameWindow(window)
- *     .build();
- * }</pre>
+ * Used internally by the engine. <b>Game authors should use {@link Manager}</b>
+ * (call {@link Manager#bootstrapDefaults()} in {@code init}) as the authoring seam.
+ * Prefer Manager in tutorials, templates, and agent-generated games.
  */
 public final class GameContext
 {

@@ -78,15 +78,17 @@ The engine uses a fixed timestep game loop (default 60 FPS) with delta time calc
 - `render(Manager manager, IRenderer renderer)` - Rendering to the custom pixel buffer (cast to Context for pixel operations)
 
 ### Manager System
-The `Manager` class is the central coordinator that provides access to all subsystems:
-- `StateManager` - Game state stack (menus, gameplay, pause, etc.)
-- `AssetManager` - Resource loading and caching (images, audio, fonts)
-- `ObjectManager` - Game entity management
-- `SpriteManager` - Sprite sheet parsing and animation
-- `Input` - Keyboard and mouse input handling
-- `GameWindow` - Window and canvas management
+The `Manager` is the **authoring seam** for game code. Call `manager.bootstrapDefaults()`
+in `init()` to wire AssetManager, StateManager, and ObjectManager.
+See [AGENTS.md](AGENTS.md) and [examples/hello](examples/hello).
 
-Access the manager globally via `TransmuteCore.getManager()`.
+`GameContext` is an internal DI snapshot — prefer Manager in game subclasses.
+
+Access via `TransmuteCore.getManager()` (lazy-initialized, thread-safe).
+
+### Verify loop (agents / CI)
+Use `GameHarness` + `FrameAssert` with `GameConfig.headless(true)`. Headless still
+renders into `Context` so frames can be hashed and asserted without a window.
 
 ### Rendering Pipeline
 1. **Context** (`TransmuteCore.graphics.Context`) - Custom pixel buffer rendering system
@@ -248,20 +250,21 @@ When helping users or making code changes, reference these documentation resourc
 7. `docs/tutorials/07-level-design.md` - Tile-based levels
 
 ### Reference Guides
-- `docs/COOKBOOK.md` - Code recipes and common patterns
-- `docs/SERIALIZATION.md` - TinyDatabase save/load system
-- `docs/DEPLOYMENT.md` - Building and distributing games
-- `docs/TROUBLESHOOTING.md` - Solutions to common problems
-- `docs/DX_FEATURES.md` - Developer experience features
+- `AGENTS.md` - Agent/automation golden path (prompt + assets → verify)
+- `CONTEXT.md` - Domain vocabulary
+- `docs/COOKBOOK.md` - Short recipes (verify, GameSpec, SimulatedInput)
+- `examples/hello` - Reference game with headless verify
+- `docs/GETTING_STARTED.md` - Initial setup
 
 ### Project Generator
 - `packages/cli/` - CLI tool for scaffolding new projects with multiple templates
 
 ## Common Issues
 
-- **Missing Assets**: Check asset names are lowercase when retrieving (AssetManager normalizes keys)
-- **Input Not Working**: Ensure canvas has focus and input listeners are attached
+- **Missing Assets**: Prefer `AssetPack` / `gamespec.properties`; keys are lowercase, paths keep case
+- **Input Not Working**: Use `manager.getInputHandler()` (works headless via SimulatedInput)
 - **Rendering Issues**: Verify BufferStrategy is created before rendering (first frame may be skipped)
-- **State Errors**: Don't push states with duplicate names to StateManager
+- **State Errors**: Don't push states with duplicate names; use public `StateManager.pop()`
+- **Can't verify without a window**: Use `GameHarness` + `FrameAssert` with `headless(true)`
 
-For more troubleshooting guidance, see `docs/TROUBLESHOOTING.md`.
+For more recipes, see `docs/COOKBOOK.md` and `AGENTS.md`.

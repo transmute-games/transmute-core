@@ -173,12 +173,12 @@ public class StateInspector
             StringBuilder json = new StringBuilder();
             json.append("{\n");
             json.append("  \"timestamp\": \"").append(new Date().toString()).append("\",\n");
-            json.append("  \"objectCount\": ").append(objectManager.objectList.size()).append(",\n");
+            json.append("  \"objectCount\": ").append(objectManager.getObjects().size()).append(",\n");
             json.append("  \"objects\": [\n");
             
-            for (int i = 0; i < objectManager.objectList.size(); i++)
+            for (int i = 0; i < objectManager.getObjects().size(); i++)
             {
-                Object obj = objectManager.objectList.get(i);
+                Object obj = objectManager.getObjects().get(i);
                 json.append("    {\n");
                 json.append("      \"index\": ").append(i).append(",\n");
                 json.append("      \"type\": \"").append(obj.getClass().getSimpleName()).append("\",\n");
@@ -186,7 +186,7 @@ public class StateInspector
                 json.append("      \"y\": ").append(obj.getY()).append("\n");
                 json.append("    }");
                 
-                if (i < objectManager.objectList.size() - 1)
+                if (i < objectManager.getObjects().size() - 1)
                 {
                     json.append(",");
                 }

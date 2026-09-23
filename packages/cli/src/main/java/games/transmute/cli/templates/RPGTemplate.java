@@ -59,6 +59,8 @@ public class RPGTemplate implements ProjectTemplate {
             
                 @Override
                 public void init() {
+                    getManager().bootstrapDefaults();
+
                     // Create a simple tile map (20x15 tiles)
                     tileMap = new TileMap(20, 15, 16);
                     
@@ -83,8 +85,12 @@ public class RPGTemplate implements ProjectTemplate {
             
                 @Override
                 public void update(Manager manager, double delta) {
+                    var input = manager.getInputHandler();
+                    if (input == null) {
+                        return;
+                    }
                     // Exit on ESC
-                    if (manager.getInput().isKeyPressed(KeyEvent.VK_ESCAPE)) {
+                    if (input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
                         System.exit(0);
                     }
             
@@ -92,16 +98,16 @@ public class RPGTemplate implements ProjectTemplate {
                     int newX = playerX;
                     int newY = playerY;
                     
-                    if (manager.getInput().isKeyPressed(KeyEvent.VK_W, KeyEvent.VK_UP)) {
+                    if (input.isKeyPressed(KeyEvent.VK_W, KeyEvent.VK_UP)) {
                         newY -= moveSpeed;
                     }
-                    if (manager.getInput().isKeyPressed(KeyEvent.VK_S, KeyEvent.VK_DOWN)) {
+                    if (input.isKeyPressed(KeyEvent.VK_S, KeyEvent.VK_DOWN)) {
                         newY += moveSpeed;
                     }
-                    if (manager.getInput().isKeyPressed(KeyEvent.VK_A, KeyEvent.VK_LEFT)) {
+                    if (input.isKeyPressed(KeyEvent.VK_A, KeyEvent.VK_LEFT)) {
                         newX -= moveSpeed;
                     }
-                    if (manager.getInput().isKeyPressed(KeyEvent.VK_D, KeyEvent.VK_RIGHT)) {
+                    if (input.isKeyPressed(KeyEvent.VK_D, KeyEvent.VK_RIGHT)) {
                         newX += moveSpeed;
                     }
                     
@@ -152,14 +158,23 @@ public class RPGTemplate implements ProjectTemplate {
                 }
             
                 public static void main(String[] args) {
+                    boolean headless = args.length > 0 && "--headless".equals(args[0]);
                     GameConfig config = new GameConfig.Builder()
                         .title("%s")
                         .version("%s")
                         .dimensions(%s, GameConfig.ASPECT_RATIO_SQUARE)
                         .scale(%s)
+                        .headless(headless)
+                        .showStartScreen(false)
                         .build();
             
                     Game game = new Game(config);
+                    if (headless) {
+                        game.initForHarness();
+                        game.stepFrame(1.0);
+                        System.out.println("headless ok");
+                        return;
+                    }
                     game.start();
                 }
             }

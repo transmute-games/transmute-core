@@ -211,6 +211,21 @@ public final class GameConfig
             
             return this;
         }
+
+        /**
+         * Sets explicit pixel dimensions (for GameSpec / agent manifests).
+         */
+        public Builder size(int width, int height)
+        {
+            if (width <= 0 || height <= 0)
+            {
+                throw new IllegalArgumentException(
+                    String.format("Width and height must be positive. Got: %dx%d", width, height));
+            }
+            this.width = width;
+            this.height = height;
+            return this;
+        }
         
         public Builder scale(int scale)
         {

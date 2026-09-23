@@ -2,24 +2,24 @@ package TransmuteCore.core;
 
 import TransmuteCore.graphics.sprites.SpriteManager;
 import TransmuteCore.input.Input;
+import TransmuteCore.core.interfaces.services.IInputHandler;
 import TransmuteCore.ecs.ObjectManager;
 import TransmuteCore.state.StateManager;
 import TransmuteCore.assets.AssetManager;
 
 /**
- * {@code Manager} is a convenience class for accessing game services.
+ * {@code Manager} is the primary authoring seam for game code.
  * <br>
- * This class acts as a service locator that aggregates various game subsystems.
- * While functional, it is recommended to use {@link GameContext} directly for better
- * testability and explicit dependency management.
- * <p>
- * This class is kept for backward compatibility and convenience during migration.
+ * Call {@link #bootstrapDefaults()} once from {@code init()} to wire AssetManager,
+ * StateManager, and ObjectManager. Prefer Manager over {@link GameContext} in
+ * game subclasses, tutorials, and agent-generated projects.
  */
 public class Manager
 {
     private TransmuteCore gameEngine; //The game object
     private GameWindow gameWindow; //The game gameWindow handler
-    private Input input; //The game input handler
+    private Input input; //The game input handler (windowed)
+    private IInputHandler inputHandler; // Real Input or SimulatedInput
     private StateManager stateManager; //The state manager
     private AssetManager assetManager; //The asset manager
     private ObjectManager objectManager; //The object manager
@@ -79,14 +79,34 @@ public class Manager
     public void setInput(Input input)
     {
         this.input = input;
+        if (input != null)
+        {
+            this.inputHandler = input;
+        }
     }
 
     /**
-     * @return The input object.
+     * Installs a scriptable or alternate input adapter (e.g. {@link TransmuteCore.input.SimulatedInput}).
+     */
+    public void setInputHandler(IInputHandler inputHandler)
+    {
+        this.inputHandler = inputHandler;
+    }
+
+    /**
+     * @return The concrete window Input, or null in headless mode.
      */
     public Input getInput()
     {
         return input;
+    }
+
+    /**
+     * @return Window Input or SimulatedInput — prefer this in game update code.
+     */
+    public IInputHandler getInputHandler()
+    {
+        return inputHandler != null ? inputHandler : input;
     }
 
     /**
@@ -159,5 +179,26 @@ public class Manager
     public void setSpriteManager(SpriteManager spriteManager)
     {
         this.spriteManager = spriteManager;
+    }
+
+    /**
+     * Wires default AssetManager, StateManager, and ObjectManager if missing.
+     * Call once from {@code init()} so agents have a single authoring seam via Manager.
+     */
+    public void bootstrapDefaults()
+    {
+        if (assetManager == null)
+        {
+            assetManager = new AssetManager();
+            AssetManager.setGlobalInstance(assetManager);
+        }
+        if (stateManager == null)
+        {
+            stateManager = new StateManager(gameEngine);
+        }
+        if (objectManager == null)
+        {
+            objectManager = new ObjectManager();
+        }
     }
 }

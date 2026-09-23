@@ -250,7 +250,7 @@ public class Bitmap
      * @param xEnd   Ending x-coordinate.
      * @param yEnd   Ending y-coordinate.
      * @return A bitmap that is a portion of the original.
-     * @see TransmuteCore.Graphics.Context
+     * @see TransmuteCore.graphics.Context
      */
     public Bitmap getRegionAsBitmap(int xStart, int yStart, int xEnd, int yEnd)
     {

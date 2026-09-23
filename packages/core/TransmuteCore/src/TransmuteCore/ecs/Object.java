@@ -127,7 +127,7 @@ public abstract class Object implements Updatable, Renderable
      */
     protected boolean isCollidingWithObject(int xOffset, int yOffset)
     {
-        for (Object object : manager.getObjectManager().objectList)
+        for (Object object : manager.getObjectManager().getObjects())
         {
             if (object.name.equalsIgnoreCase(this.name)) continue;
 

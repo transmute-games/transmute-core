@@ -148,9 +148,9 @@ public abstract class Level implements Updatable, Renderable
         int mx = m.getX();
         int my = m.getY();
 
-        for (int i = 0; i < objManager.objectList.size(); i++)
+        for (int i = 0; i < objManager.getObjects().size(); i++)
         {
-            Object object = objManager.objectList.get(i);
+            Object object = objManager.getObjects().get(i);
 
             if (object.equals(m)) continue;
 
@@ -190,9 +190,9 @@ public abstract class Level implements Updatable, Renderable
         int ox = obj.getX();
         int oy = obj.getY();
 
-        for (int i = 0; i < objManager.objectList.size(); i++)
+        for (int i = 0; i < objManager.getObjects().size(); i++)
         {
-            Object object = objManager.objectList.get(i);
+            Object object = objManager.getObjects().get(i);
 
             if (object.equals(obj) || object instanceof Mob) continue;
 

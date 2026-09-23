@@ -58,6 +58,8 @@ public class PlatformerTemplate implements ProjectTemplate {
             
                 @Override
                 public void init() {
+                    getManager().bootstrapDefaults();
+
                     // Create player
                     player = new Player(50, 50);
             
@@ -71,8 +73,8 @@ public class PlatformerTemplate implements ProjectTemplate {
             
                 @Override
                 public void update(Manager manager, double delta) {
-                    // Exit on ESC
-                    if (manager.getInput().isKeyPressed(KeyEvent.VK_ESCAPE)) {
+                    var input = manager.getInputHandler();
+                    if (input != null && input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
                         System.exit(0);
                     }
             
@@ -106,14 +108,23 @@ public class PlatformerTemplate implements ProjectTemplate {
                 }
             
                 public static void main(String[] args) {
+                    boolean headless = args.length > 0 && "--headless".equals(args[0]);
                     GameConfig config = new GameConfig.Builder()
                         .title("%s")
                         .version("%s")
                         .dimensions(%s, GameConfig.ASPECT_RATIO_SQUARE)
                         .scale(%s)
+                        .headless(headless)
+                        .showStartScreen(false)
                         .build();
             
                     Game game = new Game(config);
+                    if (headless) {
+                        game.initForHarness();
+                        game.stepFrame(1.0);
+                        System.out.println("headless ok");
+                        return;
+                    }
                     game.start();
                 }
             }
@@ -155,17 +166,18 @@ public class PlatformerTemplate implements ProjectTemplate {
                 public void update(Manager manager, double delta) {
                     // Horizontal movement
                     velocityX = 0;
-                    if (manager.getInput().isKeyHeld(KeyEvent.VK_LEFT, KeyEvent.VK_A)) {
-                        velocityX = -moveSpeed;
-                    }
-                    if (manager.getInput().isKeyHeld(KeyEvent.VK_RIGHT, KeyEvent.VK_D)) {
-                        velocityX = moveSpeed;
-                    }
-            
-                    // Jumping
-                    if (manager.getInput().isKeyPressed(KeyEvent.VK_SPACE) && onGround) {
-                        velocityY = jumpStrength;
-                        onGround = false;
+                    var input = manager.getInputHandler();
+                    if (input != null) {
+                        if (input.isKeyHeld(KeyEvent.VK_LEFT, KeyEvent.VK_A)) {
+                            velocityX = -moveSpeed;
+                        }
+                        if (input.isKeyHeld(KeyEvent.VK_RIGHT, KeyEvent.VK_D)) {
+                            velocityX = moveSpeed;
+                        }
+                        if (input.isKeyPressed(KeyEvent.VK_SPACE) && onGround) {
+                            velocityY = jumpStrength;
+                            onGround = false;
+                        }
                     }
             
                     // Apply gravity
@@ -181,22 +193,23 @@ public class PlatformerTemplate implements ProjectTemplate {
                 public void checkCollision(List<Platform> platforms) {
                     onGround = false;
                     for (Platform platform : platforms) {
-                        if (intersects(platform)) {
-                            // Bottom collision (landing on platform)
-                            if (velocityY > 0 && y < platform.getY()) {
-                                y = platform.getY() - height;
+                        var hit = TransmuteCore.math.Collision.resolveAabb(
+                            x, y, width, height,
+                            platform.getX(), platform.getY(),
+                            platform.getWidth(), platform.getHeight());
+                        if (hit.collided) {
+                            x = hit.x;
+                            y = hit.y;
+                            if (hit.landed()) {
                                 velocityY = 0;
                                 onGround = true;
+                            } else if (hit.hitBottom) {
+                                velocityY = 0;
+                            } else if (hit.hitHorizontal) {
+                                velocityX = 0;
                             }
                         }
                     }
-                }
-            
-                private boolean intersects(Platform platform) {
-                    return x < platform.getX() + platform.getWidth() &&
-                           x + width > platform.getX() &&
-                           y < platform.getY() + platform.getHeight() &&
-                           y + height > platform.getY();
                 }
             
                 public void render(Context ctx) {
