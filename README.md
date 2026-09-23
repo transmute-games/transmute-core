@@ -149,6 +149,8 @@ public class MyGame extends TransmuteCore {
 ### Getting Started
 - **[Getting Started Guide](docs/GETTING_STARTED.md)** - Complete setup and first steps
 - **[Hello World Tutorial](docs/tutorials/01-hello-world.md)** - Your first Transmute Core game
+- **[AGENTS.md](AGENTS.md)** - Agent/automation guide (prompt + assets → verify)
+- **[examples/hello](examples/hello)** - Reference game with headless verify
 
 ### Tutorials
 Progressive, hands-on tutorials covering all engine features:

@@ -33,4 +33,11 @@ public interface IStateManager
      * @param newState The state to push.
      */
     void push(State newState);
+
+    /**
+     * Removes the current (top) state from the stack.
+     *
+     * @return The removed state.
+     */
+    State pop();
 }

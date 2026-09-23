@@ -38,13 +38,14 @@ public class TiledLevel extends Level
         if (filePath == null || filePath.trim().isEmpty()) {
             throw new IllegalArgumentException("File path cannot be null or empty");
         }
-        if (!Asset.cropFileExtension(filePath).equalsIgnoreCase(".png") ||
-                !Asset.cropFileExtension(filePath).equalsIgnoreCase(".jpg") ||
-                !Asset.cropFileExtension(filePath).equalsIgnoreCase(".jpeg"))
+        String extension = Asset.cropFileExtension(filePath);
+        if (!extension.equalsIgnoreCase(".png")
+                && !extension.equalsIgnoreCase(".jpg")
+                && !extension.equalsIgnoreCase(".jpeg"))
         {
-            new Error("[TiledLevel]: The inputted file does not have the correct file-extension.\n"
-                    + "Please make sure the file-extension is .png, .jpg or .jpeg.");
-            return;
+            throw new IllegalArgumentException(
+                "[TiledLevel]: The inputted file does not have the correct file-extension. "
+                    + "Please make sure the file-extension is .png, .jpg or .jpeg. Got: " + extension);
         }
 
         Bitmap bmp = Image.getAsBitmap(Image.load(TiledLevel.class, filePath));

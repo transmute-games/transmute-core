@@ -6,6 +6,7 @@ import TransmuteCore.core.TransmuteCore;
 import TransmuteCore.core.Manager;
 import TransmuteCore.core.interfaces.Cortex;
 import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.core.interfaces.services.IStateManager;
 import TransmuteCore.util.exceptions.StateException;
 
 /**
@@ -13,7 +14,7 @@ import TransmuteCore.util.exceptions.StateException;
  * <br>
  * This class should be used to manage various game states in a game.
  */
-public class StateManager implements Cortex
+public class StateManager implements Cortex, IStateManager
 {
     public static String CLASS_NAME = "stateManager"; //The key of the class
 
@@ -92,12 +93,17 @@ public class StateManager implements Cortex
     }
 
     /**
-     * Method used to remove the current state of the game.
+     * Removes the current (top) state from the stack.
+     *
+     * @return the removed state
      */
-    @SuppressWarnings("unused")
-    private void pop()
+    @Override
+    public State pop()
     {
-        stateStack.pop();
+        if (stateStack.isEmpty()) {
+            throw StateException.emptyStack();
+        }
+        return stateStack.pop();
     }
 
     /**

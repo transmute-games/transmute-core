@@ -32,6 +32,7 @@ public class TemplateUtils {
             version = '%s'
 
             repositories {
+                mavenLocal()
                 mavenCentral()
                 maven { url 'https://jitpack.io' }
             }
@@ -42,7 +43,9 @@ public class TemplateUtils {
             }
 
             dependencies {
-                implementation 'com.github.transmute-games.transmute-core:transmute-core:%s'
+                implementation 'games.transmute:transmute-core:%s'
+                // JitPack alternative:
+                // implementation 'com.github.transmute-games.transmute-core:transmute-core:v%s'
             }
 
             application {
@@ -52,10 +55,21 @@ public class TemplateUtils {
             run {
                 workingDir = projectDir
             }
+
+            tasks.register('verifyHeadless', JavaExec) {
+                group = 'verification'
+                description = 'Smoke-run the game headless for one frame'
+                classpath = sourceSets.main.runtimeClasspath
+                mainClass = '%s.Game'
+                args = ['--headless']
+                workingDir = projectDir
+            }
             """.formatted(
                 vars.get("PACKAGE_NAME"),
                 vars.get("GAME_VERSION"),
                 vars.get("TRANSMUTE_VERSION"),
+                vars.get("TRANSMUTE_VERSION"),
+                vars.get("PACKAGE_NAME"),
                 vars.get("PACKAGE_NAME")
             );
     }

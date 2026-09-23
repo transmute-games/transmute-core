@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Headless verify loop: `GameHarness`, `FrameAssert`, `stepFrame` / `initForHarness`, headless still renders into `Context`
+- `SimulatedInput` auto-installed in headless mode; `Manager.getInputHandler()`
+- `AssetPack` manifest loader + bundled default `fonts/font.png`
+- `GameSpec` properties manifest → `GameConfig` + assets
+- `Manager.bootstrapDefaults()` authoring seam
+- `examples/hello` reference game with `verifyHeadless`
+- `AGENTS.md` and `CONTEXT.md` for agent-autonomous authoring
+- CLI templates emit `gamespec.properties`, `--headless`, real Gradle wrapper copy, `verifyHeadless` task
+
+### Fixed
+- `StateManager.pop()` is public (tutorials were calling a private method)
+- `TiledLevel` extension check used `||` and always rejected valid files
+- `Mob` tile collision sampled tiles incorrectly
+- Asset paths no longer force-lowercased (case-sensitive filesystems)
+- `ObjectManager` encapsulates its list; implements `IObjectManager`
+
+### Changed
+- Manager is the documented authoring seam; GameContext is internal DI
+- CLI default dependency coord: `games.transmute:transmute-core` (mavenLocal-friendly)
+
 ## [1.0.1] - 2026-01-13
 
 ### Added

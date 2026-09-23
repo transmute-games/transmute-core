@@ -2,10 +2,12 @@ package TransmuteCore.ecs;
 
 import TransmuteCore.core.interfaces.Renderable;
 import TransmuteCore.core.interfaces.Updatable;
+import TransmuteCore.core.interfaces.services.IObjectManager;
 import TransmuteCore.core.interfaces.services.IRenderer;
 import TransmuteCore.core.Manager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,15 +15,16 @@ import java.util.List;
  * <br>
  * This class is used to handle all of the object's.
  */
-public class ObjectManager implements Updatable, Renderable
+public class ObjectManager implements Updatable, Renderable, IObjectManager
 {
-    public List<Object> objectList = new ArrayList<>(); //The list of objects
+    private final List<Object> objectList = new ArrayList<>();
 
     /**
      * Method used to add a object to the list
      *
      * @param obj The object to add to the list
      */
+    @Override
     public void add(Object obj)
     {
         if (obj == null) {
@@ -35,12 +38,19 @@ public class ObjectManager implements Updatable, Renderable
      *
      * @param obj The object to remove from the list
      */
+    @Override
     public void remove(Object obj)
     {
         if (obj == null) {
             return; // Silently ignore null removal
         }
         objectList.remove(obj);
+    }
+
+    @Override
+    public List<Object> getObjects()
+    {
+        return Collections.unmodifiableList(objectList);
     }
 
     @Override

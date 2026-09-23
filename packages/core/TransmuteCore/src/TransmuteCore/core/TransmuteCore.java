@@ -8,6 +8,7 @@ import TransmuteCore.core.interfaces.services.IRenderer;
 import TransmuteCore.graphics.Context;
 import TransmuteCore.graphics.RenderPipeline;
 import TransmuteCore.input.Input;
+import TransmuteCore.input.SimulatedInput;
 import TransmuteCore.util.Logger;
 import TransmuteCore.util.Util;
 import TransmuteCore.assets.AssetManager;
@@ -109,7 +110,8 @@ public abstract class TransmuteCore implements Cortex, LifecycleCallbacks, Windo
             .gameWindow(gameWindow)
             .build();
         
-        // Create render pipeline with lazy Manager provider (only if not headless)
+        // Create render pipeline with lazy Manager provider (only if not headless).
+        // Headless still keeps Context and renders into the pixel buffer via renderCallback.
         if (!config.isHeadless()) {
             renderPipeline = new RenderPipeline(
                 this,
@@ -213,24 +215,73 @@ public abstract class TransmuteCore implements Cortex, LifecycleCallbacks, Windo
 
     /**
      * Callback invoked after each game update.
-     * Updates input state (if not in headless mode).
+     * Advances input state (window Input or SimulatedInput).
      */
     private void updateCallback()
     {
-        if (input != null) {
-            input.update();
+        var handler = getManager().getInputHandler();
+        if (handler != null) {
+            handler.update();
         }
     }
 
     /**
      * Callback invoked for each render frame.
-     * Delegates to the render pipeline (if not in headless mode).
+     * Windowed mode uses the hardware pipeline; headless clears and renders into Context.
      */
     private void renderCallback()
     {
         if (renderPipeline != null) {
             renderPipeline.render();
+        } else if (gameConfig.isHeadless() && ctx != null) {
+            renderHeadlessFrame();
         }
+    }
+
+    /**
+     * Clears the pixel buffer and invokes {@link #render} without presenting to a window.
+     */
+    private void renderHeadlessFrame()
+    {
+        ctx.clear();
+        render(getManager(), ctx);
+    }
+
+    /**
+     * Initializes game state for {@link TransmuteCore.util.verify.GameHarness} without starting the loop thread.
+     */
+    public void initForHarness()
+    {
+        if (gameLoop.isRunning()) {
+            throw new IllegalStateException("Cannot initForHarness while the game loop is running");
+        }
+        init();
+        onGameLoopStart();
+    }
+
+    /**
+     * Runs one synchronous update + render cycle (headless or windowed).
+     * Intended for {@link TransmuteCore.util.verify.GameHarness} and tests.
+     *
+     * @param delta Fixed delta passed to {@link #update}.
+     */
+    public void stepFrame(double delta)
+    {
+        update(getManager(), delta);
+        updateCallback();
+        if (renderPipeline != null) {
+            renderPipeline.render();
+        } else if (ctx != null) {
+            renderHeadlessFrame();
+        }
+    }
+
+    /**
+     * @return The pixel render context (always available, including headless).
+     */
+    public Context getPixelContext()
+    {
+        return ctx;
     }
 
     /**
@@ -322,6 +373,8 @@ public abstract class TransmuteCore implements Cortex, LifecycleCallbacks, Windo
                     }
                     if (input != null) {
                         temp.setInput(input);
+                    } else if (gameConfig.isHeadless()) {
+                        temp.setInputHandler(new SimulatedInput());
                     }
                     manager = temp; // Assign only after full initialization
                 }

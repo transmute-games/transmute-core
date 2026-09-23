@@ -89,24 +89,61 @@ public class ProjectGenerator {
     }
 
     private void copyGradleWrapper(Path projectPath) throws IOException {
-        // Create minimal gradle wrapper files
-        writeFile(projectPath.resolve("gradlew"), generateGradlewScript());
-        writeFile(projectPath.resolve("gradlew.bat"), generateGradlewBat());
+        Path repoWrapperJar = findRepoFile("gradle/wrapper/gradle-wrapper.jar");
+        Path repoWrapperProps = findRepoFile("gradle/wrapper/gradle-wrapper.properties");
+        Path repoGradlew = findRepoFile("gradlew");
+        Path repoGradlewBat = findRepoFile("gradlew.bat");
 
-        // Make gradlew executable on Unix systems
+        Files.createDirectories(projectPath.resolve("gradle/wrapper"));
+
+        if (repoWrapperJar != null && Files.exists(repoWrapperJar)) {
+            Files.copy(repoWrapperJar, projectPath.resolve("gradle/wrapper/gradle-wrapper.jar"),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        }
+        if (repoWrapperProps != null && Files.exists(repoWrapperProps)) {
+            Files.copy(repoWrapperProps, projectPath.resolve("gradle/wrapper/gradle-wrapper.properties"),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } else {
+            String wrapperProps = "distributionBase=GRADLE_USER_HOME\n" +
+                                  "distributionPath=wrapper/dists\n" +
+                                  "distributionUrl=https\\://services.gradle.org/distributions/gradle-8.5-bin.zip\n" +
+                                  "zipStoreBase=GRADLE_USER_HOME\n" +
+                                  "zipStorePath=wrapper/dists\n";
+            writeFile(projectPath.resolve("gradle/wrapper/gradle-wrapper.properties"), wrapperProps);
+        }
+
+        if (repoGradlew != null && Files.exists(repoGradlew)) {
+            Files.copy(repoGradlew, projectPath.resolve("gradlew"),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } else {
+            writeFile(projectPath.resolve("gradlew"), generateGradlewScript());
+        }
+        if (repoGradlewBat != null && Files.exists(repoGradlewBat)) {
+            Files.copy(repoGradlewBat, projectPath.resolve("gradlew.bat"),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } else {
+            writeFile(projectPath.resolve("gradlew.bat"), generateGradlewBat());
+        }
+
         try {
             projectPath.resolve("gradlew").toFile().setExecutable(true);
         } catch (Exception e) {
             // Ignore on Windows
         }
+    }
 
-        // Create gradle-wrapper.properties
-        String wrapperProps = "distributionBase=GRADLE_USER_HOME\n" +
-                              "distributionPath=wrapper/dists\n" +
-                              "distributionUrl=https\\://services.gradle.org/distributions/gradle-8.5-bin.zip\n" +
-                              "zipStoreBase=GRADLE_USER_HOME\n" +
-                              "zipStorePath=wrapper/dists\n";
-        writeFile(projectPath.resolve("gradle/wrapper/gradle-wrapper.properties"), wrapperProps);
+    private Path findRepoFile(String relative) {
+        Path[] roots = {
+            Path.of(relative),
+            Path.of("..").resolve(relative),
+            Path.of("../..").resolve(relative)
+        };
+        for (Path candidate : roots) {
+            if (Files.exists(candidate)) {
+                return candidate.toAbsolutePath().normalize();
+            }
+        }
+        return null;
     }
 
     private String generateGradlewScript() {
