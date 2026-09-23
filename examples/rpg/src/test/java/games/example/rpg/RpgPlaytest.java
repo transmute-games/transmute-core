@@ -75,4 +75,22 @@ public class RpgPlaytest
                     Player.SIZE));
         }
     }
+
+    @Test
+    public void collectingTriggerFiresWhenWalkingIntoPickup()
+    {
+        try (GameHarness harness = GameHarness.of(() -> {
+            GameSpec spec = RpgGame.loadSpec();
+            return new RpgGame(RpgGame.headlessConfig(spec), spec);
+        }))
+        {
+            harness.step(1);
+            RpgGame game = (RpgGame) harness.game();
+            assertEquals(0, game.getCollected());
+            SimulatedInput input = (SimulatedInput) game.getManager().getInputHandler();
+            input.holdKey(KeyEvent.VK_RIGHT);
+            harness.step(20);
+            assertTrue(game.getCollected() >= 1);
+        }
+    }
 }

@@ -24,6 +24,7 @@ public final class World
     private final int tileSize;
     private final int[] tiles;
     private final List<Actor> actors = new ArrayList<>();
+    private final List<Trigger> triggers = new ArrayList<>();
     private int clearColor;
     private int solidColor;
 
@@ -124,6 +125,11 @@ public final class World
         actor.attach(this);
     }
 
+    public void addTrigger(Trigger trigger)
+    {
+        triggers.add(Objects.requireNonNull(trigger, "trigger"));
+    }
+
     public List<Actor> getActors()
     {
         return Collections.unmodifiableList(actors);
@@ -134,6 +140,10 @@ public final class World
         for (Actor actor : actors)
         {
             actor.update(manager, delta);
+        }
+        for (Trigger trigger : triggers)
+        {
+            trigger.evaluate(actors);
         }
     }
 
