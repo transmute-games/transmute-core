@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `GameSpec` properties manifest → `GameConfig` + assets
 - `Manager.bootstrapDefaults()` authoring seam
 - `World` tile-grid + Actor module for top-down games
+- `Body2D` platformer physics body
+- GameSpec `world.*` keys → `createWorld()`
+- `.cursor/skills/build-transmute-game` agent skill
 - `examples/hello`, `examples/platformer`, `examples/rpg` with headless playtests
 - `AGENTS.md` and `CONTEXT.md` for agent-autonomous authoring
 - CLI templates emit `gamespec.properties`, `--headless`, real Gradle wrapper copy, `verifyHeadless` task

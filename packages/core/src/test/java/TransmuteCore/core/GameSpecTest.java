@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class GameSpecTest
 {
@@ -17,5 +18,16 @@ public class GameSpecTest
         assertEquals(90, config.getHeight());
         assertEquals(2, config.getScale());
         assertFalse(config.isHeadless());
+    }
+
+    @Test
+    public void createWorldFromManifest()
+    {
+        GameSpec spec = GameSpec.loadClasspath("gamespec-world-fixture.properties");
+        var world = spec.createWorld();
+        assertEquals(8, world.getCols());
+        assertEquals(6, world.getRows());
+        assertTrue(world.isSolid(0, 0));
+        assertTrue(world.isSolid(3, 2));
     }
 }

@@ -60,10 +60,28 @@ world.add(player);
 player.tryMove(2, 0); // rejects if solids block
 ```
 
+Or from GameSpec (`world.cols`, `world.rows`, `world.border`, `world.solid=5,7;6,7`):
+
+```java
+World world = GameSpec.loadClasspath("gamespec.properties").createWorld();
+```
+
 See `examples/rpg`.
+
+## Platformer body
+
+```java
+Body2D body = new Body2D(x, y, 16, 16);
+body.setVelocityX(3);
+body.jump();
+body.step(platforms); // platforms implement Body2D.Solid
+```
+
+See `examples/platformer`.
 
 ## More
 
 - Tutorials: [docs/tutorials/](tutorials/)
 - Architecture: [WARP.md](../WARP.md)
 - Domain vocab: [CONTEXT.md](../CONTEXT.md)
+- Agent skill: `.cursor/skills/build-transmute-game/SKILL.md`
