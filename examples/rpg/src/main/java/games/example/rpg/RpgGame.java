@@ -10,6 +10,7 @@ import TransmuteCore.graphics.Color;
 import TransmuteCore.graphics.Context;
 import TransmuteCore.util.verify.FrameAssert;
 import TransmuteCore.util.verify.GameHarness;
+import TransmuteCore.world.Trigger;
 import TransmuteCore.world.World;
 
 /**
@@ -47,6 +48,18 @@ public class RpgGame extends TransmuteCore
 
         player = new Player(TILE * 2, TILE * 2);
         world.add(player);
+
+        // Demo collectible trigger — counts for agents writing pickup games
+        world.addTrigger(new Trigger(
+            TILE * 4, TILE * 2, TILE, TILE,
+            actor -> collected++));
+    }
+
+    private int collected;
+
+    public int getCollected()
+    {
+        return collected;
     }
 
     @Override

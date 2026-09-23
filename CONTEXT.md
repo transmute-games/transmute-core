@@ -17,6 +17,7 @@ Vocabulary for humans and agents working in this repository.
 - **Object / ObjectManager / Mob** — game entities (inheritance model under the `ecs` package name, not a true ECS).
 - **TiledLevel** — PNG-indexed tile map with viewport culling.
 - **World** — deep tile-grid + Actor module for top-down games (`blocks`, `tryMove`, `fillBorder`). Prefer over inventing TileMap.
+- **Trigger** — enter-once volume evaluated by World for pickups/doors.
 - **Body2D** — gravity/jump/AABB platformer body resolved against `Body2D.Solid` list.
 - **Camera** — view offset helper (`lookAt`, `clampToWorld`, world↔screen).
 - **GameConfig** — immutable runtime config (`headless`, size, scale, FPS).
