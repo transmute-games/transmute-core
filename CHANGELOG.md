@@ -13,9 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `AssetPack` manifest loader + bundled default `fonts/font.png`
 - `GameSpec` properties manifest → `GameConfig` + assets
 - `Manager.bootstrapDefaults()` authoring seam
-- `examples/hello` reference game with `verifyHeadless`
+- `World` tile-grid + Actor module for top-down games
+- `examples/hello`, `examples/platformer`, `examples/rpg` with headless playtests
 - `AGENTS.md` and `CONTEXT.md` for agent-autonomous authoring
 - CLI templates emit `gamespec.properties`, `--headless`, real Gradle wrapper copy, `verifyHeadless` task
+- `Collision.resolveAabb` and CI smoke workflow
 
 ### Fixed
 - `StateManager.pop()` is public (tutorials were calling a private method)

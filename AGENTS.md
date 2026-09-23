@@ -83,7 +83,8 @@ transmute new my-game -t basic -y
 
 - Do cast `IRenderer` to `Context` for pixel ops.
 - Do call `StateManager.pop()` to leave a state (public API).
-- Do copy `examples/hello` or `examples/platformer` before inventing structure.
+- Do copy `examples/hello`, `examples/platformer`, or `examples/rpg` before inventing structure.
+- Do use `TransmuteCore.world.World` for tile-based top-down games.
 - Don't invent parallel Entity/TileMap systems when `Object`, `Mob`, and `TiledLevel` exist.
 - Don't assume a display — always provide a headless verify path.
 - Prefer `manager.getInputHandler()` so `SimulatedInput` works in playtests.

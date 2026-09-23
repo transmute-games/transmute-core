@@ -28,6 +28,10 @@ jobs:
         run: |
           cd examples/platformer
           ./gradlew test verifyHeadless
+      - name: Verify rpg playtest
+        run: |
+          cd examples/rpg
+          ./gradlew test verifyHeadless
 
   cli:
     name: CLI build
