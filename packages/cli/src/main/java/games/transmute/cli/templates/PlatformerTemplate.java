@@ -210,6 +210,20 @@ public class PlatformerTemplate implements ProjectTemplate {
                             }
                         }
                     }
+                    // Probe one pixel down so flush contact still counts as grounded
+                    if (!onGround) {
+                        for (Platform platform : platforms) {
+                            if (TransmuteCore.math.Collision.aabb(
+                                    x, y + 1, width, height,
+                                    platform.getX(), platform.getY(),
+                                    platform.getWidth(), platform.getHeight())) {
+                                y = platform.getY() - height;
+                                velocityY = 0;
+                                onGround = true;
+                                break;
+                            }
+                        }
+                    }
                 }
             
                 public void render(Context ctx) {
