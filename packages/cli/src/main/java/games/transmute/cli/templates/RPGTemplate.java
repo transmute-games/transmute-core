@@ -10,7 +10,7 @@ import static games.transmute.cli.templates.TemplateUtils.writeCommonFiles;
 import static games.transmute.cli.templates.TemplateUtils.writeFile;
 
 /**
- * RPG project template with tile-based maps, entities, and grid movement.
+ * RPG project template built on {@code TransmuteCore.world.World}.
  */
 public class RPGTemplate implements ProjectTemplate {
     
@@ -19,13 +19,9 @@ public class RPGTemplate implements ProjectTemplate {
         String packagePath = config.getPackagePath();
         Path javaPath = projectPath.resolve("src/main/java").resolve(packagePath);
         
-        // Write common files
         writeCommonFiles(projectPath, vars);
-        
-        // Write RPG-specific classes
         writeFile(javaPath.resolve("Game.java"), generateGameClass(vars));
-        writeFile(javaPath.resolve("Entity.java"), generateEntityClass(vars));
-        writeFile(javaPath.resolve("TileMap.java"), generateTileMapClass(vars));
+        writeFile(javaPath.resolve("Player.java"), generatePlayerClass(vars));
     }
     
     @Override
@@ -37,21 +33,20 @@ public class RPGTemplate implements ProjectTemplate {
         return """
             package %s;
             
+            import TransmuteCore.assets.AssetPack;
             import TransmuteCore.core.GameConfig;
             import TransmuteCore.core.Manager;
             import TransmuteCore.core.TransmuteCore;
             import TransmuteCore.core.interfaces.services.IRenderer;
             import TransmuteCore.graphics.Color;
             import TransmuteCore.graphics.Context;
-            import java.awt.event.KeyEvent;
+            import TransmuteCore.world.World;
             
             public class Game extends TransmuteCore {
             
-                private TileMap tileMap;
-                private int playerX = 50;
-                private int playerY = 50;
-                private final int playerSize = 16;
-                private final int moveSpeed = 2;
+                private static final int TILE = 16;
+                private World world;
+                private Player player;
             
                 public Game(GameConfig config) {
                     super(config);
@@ -60,101 +55,35 @@ public class RPGTemplate implements ProjectTemplate {
                 @Override
                 public void init() {
                     getManager().bootstrapDefaults();
-
-                    // Create a simple tile map (20x15 tiles)
-                    tileMap = new TileMap(20, 15, 16);
-                    
-                    // Create some simple walls
-                    for (int x = 0; x < 20; x++) {
-                        tileMap.setTile(x, 0, 1);  // Top wall
-                        tileMap.setTile(x, 14, 1); // Bottom wall
-                    }
-                    for (int y = 0; y < 15; y++) {
-                        tileMap.setTile(0, y, 1);  // Left wall
-                        tileMap.setTile(19, y, 1); // Right wall
-                    }
-                    
-                    // Add some interior obstacles
+                    AssetPack.create(getManager().getAssetManager())
+                        .font(AssetPack.DEFAULT_FONT_RESOURCE)
+                        .ensureDefaultFont();
+            
+                    world = World.grid(20, 15, TILE)
+                        .clearColor(Color.toPixelInt(20, 20, 30, 255))
+                        .solidColor(Color.toPixelInt(60, 60, 80, 255));
+                    world.fillBorder(World.SOLID);
                     for (int x = 5; x < 10; x++) {
-                        tileMap.setTile(x, 7, 1);
+                        world.setTile(x, 7, World.SOLID);
                     }
                     for (int y = 3; y < 8; y++) {
-                        tileMap.setTile(15, y, 1);
+                        world.setTile(15, y, World.SOLID);
                     }
+            
+                    player = new Player(TILE * 2, TILE * 2);
+                    world.add(player);
                 }
             
                 @Override
                 public void update(Manager manager, double delta) {
-                    var input = manager.getInputHandler();
-                    if (input == null) {
-                        return;
-                    }
-                    // Exit on ESC
-                    if (input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
-                        System.exit(0);
-                    }
-            
-                    // Grid-based movement
-                    int newX = playerX;
-                    int newY = playerY;
-                    
-                    if (input.isKeyPressed(KeyEvent.VK_W, KeyEvent.VK_UP)) {
-                        newY -= moveSpeed;
-                    }
-                    if (input.isKeyPressed(KeyEvent.VK_S, KeyEvent.VK_DOWN)) {
-                        newY += moveSpeed;
-                    }
-                    if (input.isKeyPressed(KeyEvent.VK_A, KeyEvent.VK_LEFT)) {
-                        newX -= moveSpeed;
-                    }
-                    if (input.isKeyPressed(KeyEvent.VK_D, KeyEvent.VK_RIGHT)) {
-                        newX += moveSpeed;
-                    }
-                    
-                    // Simple collision detection
-                    if (!checkCollision(newX, newY)) {
-                        playerX = newX;
-                        playerY = newY;
-                    }
-                }
-                
-                private boolean checkCollision(int x, int y) {
-                    // Check if player would collide with a tile
-                    int tileX = x / 16;
-                    int tileY = y / 16;
-                    
-                    // Check all corners of player
-                    return checkTile(tileX, tileY) ||
-                           checkTile((x + playerSize - 1) / 16, tileY) ||
-                           checkTile(tileX, (y + playerSize - 1) / 16) ||
-                           checkTile((x + playerSize - 1) / 16, (y + playerSize - 1) / 16);
-                }
-                
-                private boolean checkTile(int tileX, int tileY) {
-                    // Simple tile collision (tile type 1 is solid)
-                    int tileType = tileMap.getTile(tileX, tileY);
-                    return tileType == 1; // Type 1 tiles are walls/solid
+                    world.update(manager, delta);
                 }
             
                 @Override
                 public void render(Manager manager, IRenderer renderer) {
+                    world.render(manager, renderer);
                     Context ctx = (Context) renderer;
-                    
-                    // Clear screen
-                    ctx.setClearColor(Color.toPixelInt(20, 20, 30, 255));
-                    
-                    // Render tile map
-                    tileMap.render(ctx);
-                    
-                    // Render player
-                    ctx.renderFilledRectangle(playerX, playerY, playerSize, playerSize,
-                        Color.toPixelInt(100, 150, 255, 255));
-                    
-                    // Instructions
-                    int white = Color.toPixelInt(255, 255, 255, 255);
-                    ctx.renderText("WASD / Arrow Keys: Move", 10, 10, white);
-                    ctx.renderText("ESC: Exit", 10, 20, white);
-                    ctx.renderText("Position: " + playerX + ", " + playerY, 10, 30, white);
+                    ctx.renderText("WASD MOVE", 10, 10, Color.toPixelInt(255, 255, 255, 255));
                 }
             
                 public static void main(String[] args) {
@@ -162,7 +91,7 @@ public class RPGTemplate implements ProjectTemplate {
                     GameConfig config = new GameConfig.Builder()
                         .title("%s")
                         .version("%s")
-                        .dimensions(%s, GameConfig.ASPECT_RATIO_SQUARE)
+                        .size(20 * TILE, 15 * TILE)
                         .scale(%s)
                         .headless(headless)
                         .showStartScreen(false)
@@ -182,103 +111,40 @@ public class RPGTemplate implements ProjectTemplate {
                 vars.get("PACKAGE_NAME"),
                 vars.get("GAME_TITLE"),
                 vars.get("GAME_VERSION"),
-                vars.get("SCREEN_WIDTH"),
                 vars.get("SCREEN_SCALE")
             );
     }
     
-    private String generateEntityClass(Map<String, String> vars) {
+    private String generatePlayerClass(Map<String, String> vars) {
         return """
             package %s;
             
-            import TransmuteCore.graphics.Context;
+            import TransmuteCore.core.Manager;
+            import TransmuteCore.world.World;
+            import java.awt.event.KeyEvent;
             
-            public abstract class Entity {
-                protected int x, y;
-                protected int health;
+            public class Player extends World.Actor {
+                public static final int SIZE = 16;
+                private final int moveSpeed = 2;
             
-                public Entity(int x, int y) {
-                    this.x = x;
-                    this.y = y;
-                    this.health = 100;
+                public Player(int x, int y) {
+                    super(x, y, SIZE, SIZE, 0xFF6496FF);
                 }
             
-                public abstract void update(double delta);
-                public abstract void render(Context ctx);
-            
-                public int getX() { return x; }
-                public int getY() { return y; }
-            }
-            """.formatted(vars.get("PACKAGE_NAME"));
-    }
-    
-    private String generateTileMapClass(Map<String, String> vars) {
-        return """
-            package %s;
-            
-            import TransmuteCore.graphics.Color;
-            import TransmuteCore.graphics.Context;
-            
-            public class TileMap {
-                private int[][] tiles;
-                private int tileSize;
-                private int width;
-                private int height;
-            
-                public TileMap(int width, int height, int tileSize) {
-                    this.width = width;
-                    this.height = height;
-                    this.tiles = new int[height][width];
-                    this.tileSize = tileSize;
-                }
-            
-                public void setTile(int x, int y, int type) {
-                    if (x >= 0 && x < tiles[0].length && y >= 0 && y < tiles.length) {
-                        tiles[y][x] = type;
+                @Override
+                public void update(Manager manager, double delta) {
+                    var input = manager.getInputHandler();
+                    if (input == null) {
+                        return;
                     }
+                    int dx = 0, dy = 0;
+                    if (input.isKeyHeld(KeyEvent.VK_A, KeyEvent.VK_LEFT)) dx -= moveSpeed;
+                    if (input.isKeyHeld(KeyEvent.VK_D, KeyEvent.VK_RIGHT)) dx += moveSpeed;
+                    if (input.isKeyHeld(KeyEvent.VK_W, KeyEvent.VK_UP)) dy -= moveSpeed;
+                    if (input.isKeyHeld(KeyEvent.VK_S, KeyEvent.VK_DOWN)) dy += moveSpeed;
+                    if (dx != 0) tryMove(dx, 0);
+                    if (dy != 0) tryMove(0, dy);
                 }
-                
-                public int getTile(int x, int y) {
-                    if (x >= 0 && x < tiles[0].length && y >= 0 && y < tiles.length) {
-                        return tiles[y][x];
-                    }
-                    return 0;
-                }
-            
-                public void render(Context ctx) {
-                    // Render tiles with simple colors
-                    for (int y = 0; y < tiles.length; y++) {
-                        for (int x = 0; x < tiles[y].length; x++) {
-                            int tileType = tiles[y][x];
-                            int color;
-                            
-                            // Simple color mapping
-                            switch (tileType) {
-                                case 0: // Empty/floor
-                                    color = Color.toPixelInt(40, 40, 50, 255);
-                                    break;
-                                case 1: // Wall
-                                    color = Color.toPixelInt(100, 100, 100, 255);
-                                    break;
-                                default:
-                                    color = Color.toPixelInt(60, 60, 70, 255);
-                                    break;
-                            }
-                            
-                            ctx.renderFilledRectangle(
-                                x * tileSize, 
-                                y * tileSize, 
-                                tileSize, 
-                                tileSize, 
-                                color
-                            );
-                        }
-                    }
-                }
-                
-                public int getTileSize() { return tileSize; }
-                public int getWidth() { return width; }
-                public int getHeight() { return height; }
             }
             """.formatted(vars.get("PACKAGE_NAME"));
     }

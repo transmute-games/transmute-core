@@ -16,6 +16,7 @@ Vocabulary for humans and agents working in this repository.
 - **State / StateManager** — stack of screens; `push` / `peek` / `pop`.
 - **Object / ObjectManager / Mob** — game entities (inheritance model under the `ecs` package name, not a true ECS).
 - **TiledLevel** — PNG-indexed tile map with viewport culling.
+- **World** — deep tile-grid + Actor module for top-down games (`blocks`, `tryMove`, `fillBorder`). Prefer over inventing TileMap.
 - **GameConfig** — immutable runtime config (`headless`, size, scale, FPS).
 
 ## Invariants

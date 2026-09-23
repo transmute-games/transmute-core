@@ -49,11 +49,18 @@ states.push(new PlayState(...));
 states.pop(); // leave current state
 ```
 
-## AABB overlap
+## Tile world (top-down)
 
 ```java
-boolean hit = MathUtils.rectanglesOverlap(x1, y1, w1, h1, x2, y2, w2, h2);
+World world = World.grid(20, 15, 16).clearColor(bg).solidColor(wall);
+world.fillBorder(World.SOLID);
+world.setTile(5, 7, World.SOLID);
+World.Actor player = World.Actor.colored(32, 32, 16, 16, color);
+world.add(player);
+player.tryMove(2, 0); // rejects if solids block
 ```
+
+See `examples/rpg`.
 
 ## More
 
