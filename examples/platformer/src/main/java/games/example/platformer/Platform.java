@@ -2,9 +2,10 @@ package games.example.platformer;
 
 import TransmuteCore.graphics.Color;
 import TransmuteCore.graphics.Context;
+import TransmuteCore.physics.Body2D;
 
 /** Solid AABB platform. */
-public final class Platform
+public final class Platform implements Body2D.Solid
 {
     private final int x;
     private final int y;
@@ -25,22 +26,22 @@ public final class Platform
             Color.toPixelInt(100, 100, 100, 255));
     }
 
-    public int getX()
+    public float getX()
     {
         return x;
     }
 
-    public int getY()
+    public float getY()
     {
         return y;
     }
 
-    public int getWidth()
+    public float getWidth()
     {
         return width;
     }
 
-    public int getHeight()
+    public float getHeight()
     {
         return height;
     }

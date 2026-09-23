@@ -3,6 +3,7 @@ package TransmuteCore.core;
 import TransmuteCore.assets.AssetManager;
 import TransmuteCore.assets.AssetPack;
 import TransmuteCore.graphics.Color;
+import TransmuteCore.world.World;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -121,6 +122,42 @@ public final class GameSpec
             }
         }
         return pack.registerAndLoad();
+    }
+
+    /**
+     * Builds a {@link World} when {@code world.cols} / {@code world.rows} are present.
+     * Optional keys: {@code world.tile} (default 16), {@code world.border=true},
+     * {@code world.solid=5,7;6,7} (tile coordinates).
+     *
+     * @return the world, or null if no world keys are set
+     */
+    public World createWorld()
+    {
+        if (!raw.containsKey("world.cols") || !raw.containsKey("world.rows"))
+        {
+            return null;
+        }
+        int cols = Integer.parseInt(raw.getProperty("world.cols").trim());
+        int rows = Integer.parseInt(raw.getProperty("world.rows").trim());
+        int tile = Integer.parseInt(raw.getProperty("world.tile", "16").trim());
+        World world = World.grid(cols, rows, tile).clearColor(clearColor);
+        if (Boolean.parseBoolean(raw.getProperty("world.border", "false")))
+        {
+            world.fillBorder(World.SOLID);
+        }
+        String solids = raw.getProperty("world.solid", "").trim();
+        if (!solids.isEmpty())
+        {
+            for (String pair : solids.split(";"))
+            {
+                String[] xy = pair.trim().split(",");
+                if (xy.length == 2)
+                {
+                    world.setTile(Integer.parseInt(xy[0].trim()), Integer.parseInt(xy[1].trim()), World.SOLID);
+                }
+            }
+        }
+        return world;
     }
 
     public String getTitle()

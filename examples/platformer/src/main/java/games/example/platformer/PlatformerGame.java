@@ -52,8 +52,7 @@ public class PlatformerGame extends TransmuteCore
     @Override
     public void update(Manager manager, double delta)
     {
-        player.update(manager, delta);
-        player.checkCollision(platforms);
+        player.update(manager, platforms);
     }
 
     @Override
