@@ -10,7 +10,7 @@ Canonical modules for new games (humans and agents):
 | Platformer physics | `Body2D` + `Collision` |
 | Scrolling | `Camera` + `World.render(..., camera)` |
 | Assets | `AssetPack` / `GameSpec` (`image.*`, `audio.*`, `spritesheet.*`, `font`) |
-| Verify | `GameHarness`, `FrameAssert`, `SimulatedInput`, `PlaytestScript` |
+| Verify | `GameHarness`, `FrameAssert`, `AudioProbe`, `SimulatedInput`, `PlaytestScript` |
 
 ## Legacy (supported, not preferred for new work)
 

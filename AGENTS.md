@@ -38,7 +38,7 @@ public void init() {
 |------|--------|
 | Tile top-down | `World` / `GameSpec.createWorld()` |
 | Gravity / jump | `Body2D` + `Collision` |
-| Headless play | `GameHarness`, `FrameAssert`, `SimulatedInput` |
+| Headless play | `GameHarness`, `FrameAssert`, `AudioProbe`, `SimulatedInput` |
 | Assets | `AssetPack` / `GameSpec` |
 
 ## Verify loop
@@ -88,8 +88,11 @@ world.solid=5,7;6,7
 cd examples/hello && ./gradlew test verifyHeadless
 cd examples/platformer && ./gradlew test verifyHeadless
 cd examples/rpg && ./gradlew test verifyHeadless
+./scripts/agent-eval.sh
 transmute new my-game -t basic -y
 ```
+
+Agent eval fixtures (prompt + golden solution + playtest): [eval/README.md](eval/README.md).
 
 ## Do / don't
 

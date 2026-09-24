@@ -157,10 +157,10 @@ Progressive, hands-on tutorials covering all engine features:
 1. **[Hello World](docs/tutorials/01-hello-world.md)** - Basic game structure
 2. **[Sprites & Animation](docs/tutorials/02-sprites-and-animation.md)** - Visual assets and animation
 3. **[Input & Movement](docs/tutorials/03-input-and-movement.md)** - Player controls
-4. **[Collision Detection](docs/tutorials/04-collision-detection.md)** - AABB, circle, and spatial partitioning
+4. **[Collision Detection](docs/tutorials/04-collision-detection.md)** - Body2D, World solids, Triggers
 5. **[State Management](docs/tutorials/05-state-management.md)** - Menus and game states
-6. **[Audio System](docs/tutorials/06-audio-system.md)** - Sound effects and music
-7. **[Level Design](docs/tutorials/07-level-design.md)** - Tile-based levels
+6. **[Audio System](docs/tutorials/06-audio-system.md)** - Sound effects, music, AudioProbe
+7. **[Level Design](docs/tutorials/07-level-design.md)** - World + GameSpec maps + Camera
 
 ### Reference Documentation
 - **[WARP.md](WARP.md)** - Architecture overview and core concepts

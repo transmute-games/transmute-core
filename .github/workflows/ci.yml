@@ -32,6 +32,8 @@ jobs:
         run: |
           cd examples/rpg
           ./gradlew test verifyHeadless
+      - name: Agent eval fixtures
+        run: ./scripts/agent-eval.sh
 
   cli:
     name: CLI build

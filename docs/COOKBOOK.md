@@ -63,6 +63,18 @@ PlaytestScript.loadClasspath("playtests/jump.script")
     .play(harness, (SimulatedInput) game.getManager().getInputHandler());
 ```
 
+## Assert audio cues (headless)
+
+```java
+try (AudioProbe probe = AudioProbe.install()) {
+    AudioPlayer.setMuted(true);
+    AudioPlayer.play("jump");
+    probe.assertPlayed("jump");
+}
+```
+
+Probe records even when muted or when the clip is missing from the AssetManager.
+
 ## Tile world (top-down)
 
 ```java

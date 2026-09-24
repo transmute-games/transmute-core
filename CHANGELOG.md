@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Tutorials 01–07 rewritten for Manager / World / Body2D / GameSpec / PlaytestScript
+- `AudioProbe` + `AudioPlayer.setMuted` for headless audio cue asserts
+- Agent eval fixtures under `eval/` with CI via `scripts/agent-eval.sh`
 - Headless verify loop: `GameHarness`, `FrameAssert`, `stepFrame` / `initForHarness`, headless still renders into `Context`
 - `SimulatedInput` auto-installed in headless mode; `Manager.getInputHandler()`
 - `AssetPack` manifest loader + bundled default `fonts/font.png`

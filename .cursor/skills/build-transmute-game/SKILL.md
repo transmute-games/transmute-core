@@ -30,8 +30,10 @@ Turn a prompt + asset folder into a runnable game that passes headless verify wi
 - Prefer `World` for tile maps; prefer `Body2D` + `Collision` for platformers
 - Prefer `Camera` when the world is larger than the view
 - Prefer `PlaytestScript` over hand-rolled key loops in tests
+- Assert SFX with `AudioProbe.install()` + `AudioPlayer.setMuted(true)` in headless
 - Do not invent parallel Entity/TileMap systems
 - See `docs/AUTHORING.md` for canonical vs legacy modules
+- Agent eval contract: `eval/fixtures/*` + `./scripts/agent-eval.sh`
 
 ## Verify loop
 
