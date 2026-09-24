@@ -28,7 +28,10 @@ Turn a prompt + asset folder into a runnable game that passes headless verify wi
 - Use `manager.getInputHandler()` (not only `getInput()`) so `SimulatedInput` works headless
 - Cast `IRenderer` → `Context` for pixel draws
 - Prefer `World` for tile maps; prefer `Body2D` + `Collision` for platformers
-- Repo skill: `.cursor/skills/build-transmute-game/SKILL.md`
+- Prefer `Camera` when the world is larger than the view
+- Prefer `PlaytestScript` over hand-rolled key loops in tests
+- Do not invent parallel Entity/TileMap systems
+- See `docs/AUTHORING.md` for canonical vs legacy modules
 
 ## Verify loop
 

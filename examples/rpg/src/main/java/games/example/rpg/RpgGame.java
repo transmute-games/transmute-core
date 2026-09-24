@@ -6,6 +6,7 @@ import TransmuteCore.core.GameSpec;
 import TransmuteCore.core.Manager;
 import TransmuteCore.core.TransmuteCore;
 import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.graphics.Camera;
 import TransmuteCore.graphics.Color;
 import TransmuteCore.graphics.Context;
 import TransmuteCore.util.verify.FrameAssert;
@@ -14,16 +15,20 @@ import TransmuteCore.world.Trigger;
 import TransmuteCore.world.World;
 
 /**
- * Verified top-down RPG recipe: GameSpec → World + SimulatedInput playtests.
+ * Verified top-down RPG: GameSpec → World + Camera + Trigger pickups.
  */
 public class RpgGame extends TransmuteCore
 {
     public static final int CLEAR = Color.toPixelInt(20, 20, 30, 255);
     public static final int TILE = 16;
+    public static final int VIEW_W = 320;
+    public static final int VIEW_H = 240;
 
     private final GameSpec spec;
     private World world;
     private Player player;
+    private Camera camera;
+    private int collected;
 
     public RpgGame(GameConfig config, GameSpec spec)
     {
@@ -48,14 +53,12 @@ public class RpgGame extends TransmuteCore
 
         player = new Player(TILE * 2, TILE * 2);
         world.add(player);
+        camera = new Camera(VIEW_W, VIEW_H);
 
-        // Demo collectible trigger — counts for agents writing pickup games
         world.addTrigger(new Trigger(
             TILE * 4, TILE * 2, TILE, TILE,
             actor -> collected++));
     }
-
-    private int collected;
 
     public int getCollected()
     {
@@ -66,12 +69,14 @@ public class RpgGame extends TransmuteCore
     public void update(Manager manager, double delta)
     {
         world.update(manager, delta);
+        camera.lookAt(player.getX() + player.getWidth() / 2f, player.getY() + player.getHeight() / 2f);
+        camera.clampToWorld(world.pixelWidth(), world.pixelHeight());
     }
 
     @Override
     public void render(Manager manager, IRenderer renderer)
     {
-        world.render(manager, renderer);
+        world.render(manager, renderer, camera);
         Context ctx = (Context) renderer;
         ctx.renderText("WASD MOVE", 10, 10, Color.toPixelInt(255, 255, 255, 255));
     }
@@ -86,6 +91,11 @@ public class RpgGame extends TransmuteCore
         return world;
     }
 
+    public Camera getCamera()
+    {
+        return camera;
+    }
+
     public static GameSpec loadSpec()
     {
         return GameSpec.loadClasspath("gamespec.properties");
@@ -96,7 +106,7 @@ public class RpgGame extends TransmuteCore
         return new GameConfig.Builder()
             .title(spec.getTitle())
             .version("1.0.0")
-            .size(20 * TILE, 15 * TILE)
+            .size(VIEW_W, VIEW_H)
             .scale(1)
             .headless(true)
             .showStartScreen(false)
@@ -110,7 +120,7 @@ public class RpgGame extends TransmuteCore
         GameConfig config = new GameConfig.Builder()
             .title(spec.getTitle())
             .version("1.0.0")
-            .size(20 * TILE, 15 * TILE)
+            .size(VIEW_W, VIEW_H)
             .scale(2)
             .headless(headless)
             .showStartScreen(false)
@@ -121,6 +131,7 @@ public class RpgGame extends TransmuteCore
             try (GameHarness harness = GameHarness.of(() -> new RpgGame(config, spec)))
             {
                 harness.step(1);
+                // Player near origin; camera clamped so screen coords ≈ world coords
                 FrameAssert.assertPixel(harness.renderer(), TILE * 2 + 8, TILE * 2 + 8, Player.COLOR);
                 System.out.println("rpg headless ok hash=0x"
                     + Integer.toHexString(FrameAssert.hash(harness.renderer())));

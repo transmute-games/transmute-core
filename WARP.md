@@ -89,6 +89,8 @@ Access via `TransmuteCore.getManager()` (lazy-initialized, thread-safe).
 ### Verify loop (agents / CI)
 Use `GameHarness` + `FrameAssert` with `GameConfig.headless(true)`. Headless still
 renders into `Context` so frames can be hashed and asserted without a window.
+Drive input with `SimulatedInput` or data scripts via `PlaytestScript`
+(`playtests/*.script`).
 
 ### Rendering Pipeline
 1. **Context** (`TransmuteCore.graphics.Context`) - Custom pixel buffer rendering system
@@ -123,13 +125,15 @@ Use `StateManager` to manage game states (menu, gameplay, pause):
 - Push states with `stateManager.push(newState)`
 - States are stack-based (only top state receives update/render calls)
 
-### Level System
-Two level types are provided:
-- `Level` - Base level class with entity management
-- `TiledLevel` - Tile-based levels loaded from PNG/JPG images
-  - Each pixel color in the image maps to a tile type
-  - Supports viewport culling for large levels
-  - Configure with `setTileSize()` and `addTile(index, tile)`
+### Level / world system (canonical)
+Prefer **`TransmuteCore.world.World`** for new games (tile grid + `Actor` + `Trigger`).
+Declare maps in `gamespec.properties` via `world.*` keys, or build in code.
+Use **`Camera`** when the world is larger than the view (`World.render(..., camera)`).
+
+### Legacy level / entity stack
+`TransmuteCore.level.TiledLevel` (PNG-indexed) and `TransmuteCore.ecs.*` (`Object`, `Mob`)
+remain available for existing projects. New agent/human games should not invent parallel
+TileMap/Entity types — use World / Body2D instead.
 
 ### Serialization
 The engine includes a custom binary serialization system ("TinyDatabase"):

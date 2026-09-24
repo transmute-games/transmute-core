@@ -151,6 +151,29 @@ public final class AssetPack
         return this;
     }
 
+    /**
+     * Registers sprite sheet images from {@code spritesheet.<name>=path} keys and optional
+     * {@code spritesheet.<name>.tile=N} (documented convention for agents).
+     * Sheets are registered as {@link Image} assets named {@code sheet-<name>}.
+     */
+    public AssetPack registerSpritesheetsFrom(java.util.Properties props)
+    {
+        for (String name : props.stringPropertyNames())
+        {
+            if (!name.startsWith("spritesheet.") || name.endsWith(".tile") || name.endsWith(".cols") || name.endsWith(".rows"))
+            {
+                continue;
+            }
+            String sheetName = name.substring("spritesheet.".length());
+            String path = props.getProperty(name).trim();
+            if (!path.isEmpty())
+            {
+                image("sheet-" + sheetName, path);
+            }
+        }
+        return this;
+    }
+
     public AssetManager getAssetManager()
     {
         return assetManager;

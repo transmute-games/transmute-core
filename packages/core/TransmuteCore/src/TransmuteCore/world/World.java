@@ -2,6 +2,7 @@ package TransmuteCore.world;
 
 import TransmuteCore.core.Manager;
 import TransmuteCore.core.interfaces.services.IRenderer;
+import TransmuteCore.graphics.Camera;
 import TransmuteCore.graphics.Context;
 import TransmuteCore.math.Collision;
 
@@ -149,6 +150,14 @@ public final class World
 
     public void render(Manager manager, IRenderer renderer)
     {
+        render(manager, renderer, null);
+    }
+
+    /**
+     * Renders the world. When {@code camera} is non-null, tiles and actors are drawn in screen space.
+     */
+    public void render(Manager manager, IRenderer renderer, Camera camera)
+    {
         Context ctx = (Context) renderer;
         ctx.renderFilledRectangle(0, 0, ctx.getWidth(), ctx.getHeight(), clearColor);
         for (int ty = 0; ty < rows; ty++)
@@ -157,14 +166,22 @@ public final class World
             {
                 if (isSolid(tx, ty))
                 {
-                    ctx.renderFilledRectangle(
-                        tx * tileSize, ty * tileSize, tileSize, tileSize, solidColor);
+                    int wx = tx * tileSize;
+                    int wy = ty * tileSize;
+                    int sx = camera == null ? wx : camera.worldToScreenX(wx);
+                    int sy = camera == null ? wy : camera.worldToScreenY(wy);
+                    if (sx + tileSize < 0 || sy + tileSize < 0
+                        || sx >= ctx.getWidth() || sy >= ctx.getHeight())
+                    {
+                        continue;
+                    }
+                    ctx.renderFilledRectangle(sx, sy, tileSize, tileSize, solidColor);
                 }
             }
         }
         for (Actor actor : actors)
         {
-            actor.render(manager, renderer);
+            actor.render(manager, renderer, camera);
         }
     }
 
@@ -235,8 +252,15 @@ public final class World
 
         public void render(Manager manager, IRenderer renderer)
         {
+            render(manager, renderer, null);
+        }
+
+        public void render(Manager manager, IRenderer renderer, Camera camera)
+        {
             Context ctx = (Context) renderer;
-            ctx.renderFilledRectangle(x, y, width, height, color);
+            int sx = camera == null ? x : camera.worldToScreenX(x);
+            int sy = camera == null ? y : camera.worldToScreenY(y);
+            ctx.renderFilledRectangle(sx, sy, width, height, color);
         }
 
         /**

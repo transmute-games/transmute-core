@@ -14,8 +14,9 @@ Vocabulary for humans and agents working in this repository.
 - **AssetPack** — loads assets from a properties manifest; owns default-font initialization.
 - **GameSpec** — declarative title/size/clear/asset keys → `GameConfig` + AssetPack.
 - **State / StateManager** — stack of screens; `push` / `peek` / `pop`.
-- **Object / ObjectManager / Mob** — game entities (inheritance model under the `ecs` package name, not a true ECS).
-- **TiledLevel** — PNG-indexed tile map with viewport culling.
+- **Object / ObjectManager / Mob** — legacy inheritance entities under `ecs` (not a true ECS). Prefer `World.Actor` / `Body2D` for new games.
+- **TiledLevel** — legacy PNG-indexed tile map. Prefer `World` + GameSpec `world.*`.
+- **PlaytestScript** — data-driven SimulatedInput sequences for agent/CI playthroughs.
 - **World** — deep tile-grid + Actor module for top-down games (`blocks`, `tryMove`, `fillBorder`). Prefer over inventing TileMap.
 - **Trigger** — enter-once volume evaluated by World for pickups/doors.
 - **Body2D** — gravity/jump/AABB platformer body resolved against `Body2D.Solid` list.
