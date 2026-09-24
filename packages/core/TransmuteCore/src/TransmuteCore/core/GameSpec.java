@@ -121,6 +121,7 @@ public final class GameSpec
                 pack.sound(name.substring("audio.".length()), value);
             }
         }
+        pack.registerSpritesheetsFrom(raw);
         return pack.registerAndLoad();
     }
 

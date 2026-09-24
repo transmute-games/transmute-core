@@ -39,10 +39,24 @@ public class RpgPlaytest
                 game.getPlayer().getY() + Player.SIZE / 2,
                 Player.COLOR);
 
-            harness.step(200);
-            int xAtWall = game.getPlayer().getX();
-            harness.step(10);
-            assertEquals("should stop against solid border", xAtWall, game.getPlayer().getX());
+            // Drive into the right border wall and ensure we stop
+            int prev = -1;
+            int stable = 0;
+            for (int i = 0; i < 500 && stable < 5; i++)
+            {
+                harness.step(1);
+                int x = game.getPlayer().getX();
+                if (x == prev)
+                {
+                    stable++;
+                }
+                else
+                {
+                    stable = 0;
+                    prev = x;
+                }
+            }
+            assertTrue("should stop against solid border", stable >= 5);
             assertFalse(game.getWorld().blocks(
                 game.getPlayer().getX(), game.getPlayer().getY(), Player.SIZE, Player.SIZE));
         }

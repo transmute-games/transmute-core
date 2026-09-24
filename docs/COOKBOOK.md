@@ -49,6 +49,20 @@ states.push(new PlayState(...));
 states.pop(); // leave current state
 ```
 
+## Playtest scripts
+
+```
+# playtests/jump.script
+0 press SPACE
+1 release SPACE
+4 idle
+```
+
+```java
+PlaytestScript.loadClasspath("playtests/jump.script")
+    .play(harness, (SimulatedInput) game.getManager().getInputHandler());
+```
+
 ## Tile world (top-down)
 
 ```java

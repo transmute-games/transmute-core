@@ -7,11 +7,12 @@ How to build and verify a game from a prompt + assets without a human at the win
 1. Publish or depend on the engine (`games.transmute:transmute-core:1.0.0` via mavenLocal / JitPack).
 2. Copy a verified example (`examples/hello`, `platformer`, `rpg`) or run `transmute new my-game -t basic|platformer|rpg -y`.
 3. Put assets under `src/main/resources/` (sprites, audio, `fonts/font.png`).
-4. Declare them in `src/main/resources/gamespec.properties` (optional `world.*` keys).
+4. Declare them in `src/main/resources/gamespec.properties` (optional `world.*`, `spritesheet.*` keys).
 5. Implement `init` / `update` / `render` on a `TransmuteCore` subclass.
-6. Verify headless: `GameHarness` + `FrameAssert`, or `./gradlew verifyHeadless`.
+6. Verify headless: `GameHarness` + `FrameAssert`, or data-driven `PlaytestScript`, or `./gradlew verifyHeadless`.
 
 Use the repo skill `.cursor/skills/build-transmute-game/SKILL.md` when scaffolding from a prompt + assets.
+Authoring model: [docs/AUTHORING.md](docs/AUTHORING.md).
 
 ## Authoring seam (one model)
 

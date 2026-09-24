@@ -43,8 +43,8 @@ public class TemplateUtils {
             }
 
             dependencies {
+                // Prefer mavenLocal while developing the engine; JitPack for published tags.
                 implementation 'games.transmute:transmute-core:%s'
-                // JitPack alternative:
                 // implementation 'com.github.transmute-games.transmute-core:transmute-core:v%s'
             }
 
