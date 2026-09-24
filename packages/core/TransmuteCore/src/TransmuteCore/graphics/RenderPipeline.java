@@ -93,8 +93,16 @@ public class RenderPipeline
         volatileGraphics.drawImage(renderer.getImage(), 0, 0, null);
         volatileGraphics.dispose();
         
-        // Scale and draw to window
-        g.drawImage(nativeImage, 0, 0, scaledWidth, scaledHeight, null);
+        // Scale and draw to the actual canvas (may differ slightly from config after insets).
+        int outW = gameWindow.getCanvas().getWidth();
+        int outH = gameWindow.getCanvas().getHeight();
+        if (outW <= 0 || outH <= 0) {
+            outW = scaledWidth;
+            outH = scaledHeight;
+        }
+        g.setColor(java.awt.Color.BLACK);
+        g.fillRect(0, 0, outW, outH);
+        g.drawImage(nativeImage, 0, 0, outW, outH, null);
         g.dispose();
         bs.show();
     }
