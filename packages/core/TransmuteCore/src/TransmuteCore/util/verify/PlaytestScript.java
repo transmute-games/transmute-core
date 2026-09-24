@@ -109,8 +109,17 @@ public final class PlaytestScript
                 steps.add(new Step(frame, action, key));
             }
         }
-        steps.sort((a, b) -> Integer.compare(a.frame(), b.frame()));
-        return new PlaytestScript(steps);
+        return of(steps);
+    }
+
+    /**
+     * Builds a script from recorded or hand-built steps (sorted by frame).
+     */
+    public static PlaytestScript of(List<Step> steps)
+    {
+        List<Step> copy = new ArrayList<>(Objects.requireNonNull(steps, "steps"));
+        copy.sort((a, b) -> Integer.compare(a.frame(), b.frame()));
+        return new PlaytestScript(copy);
     }
 
     /**

@@ -126,6 +126,30 @@ public final class World
         actor.attach(this);
     }
 
+    public boolean remove(Actor actor)
+    {
+        if (actor == null)
+        {
+            return false;
+        }
+        boolean removed = actors.remove(actor);
+        if (removed)
+        {
+            actor.attach(null);
+        }
+        return removed;
+    }
+
+    public Actor removeActor(String name)
+    {
+        Actor found = findActor(name);
+        if (found != null)
+        {
+            remove(found);
+        }
+        return found;
+    }
+
     public void addTrigger(Trigger trigger)
     {
         triggers.add(Objects.requireNonNull(trigger, "trigger"));
@@ -134,6 +158,37 @@ public final class World
     public List<Actor> getActors()
     {
         return Collections.unmodifiableList(actors);
+    }
+
+    public List<Trigger> getTriggers()
+    {
+        return Collections.unmodifiableList(triggers);
+    }
+
+    public Actor findActor(String name)
+    {
+        Objects.requireNonNull(name, "name");
+        for (Actor actor : actors)
+        {
+            if (name.equals(actor.getName()))
+            {
+                return actor;
+            }
+        }
+        return null;
+    }
+
+    public Trigger findTrigger(String id)
+    {
+        Objects.requireNonNull(id, "id");
+        for (Trigger trigger : triggers)
+        {
+            if (id.equals(trigger.getId()))
+            {
+                return trigger;
+            }
+        }
+        return null;
     }
 
     public void update(Manager manager, double delta)
@@ -225,6 +280,7 @@ public final class World
         protected int width;
         protected int height;
         protected int color;
+        protected String name;
         protected World world;
 
         public Actor(int x, int y, int width, int height, int color)
@@ -239,6 +295,12 @@ public final class World
         public static Actor colored(int x, int y, int width, int height, int color)
         {
             return new Actor(x, y, width, height, color);
+        }
+
+        public Actor named(String name)
+        {
+            this.name = name;
+            return this;
         }
 
         void attach(World world)
@@ -290,6 +352,11 @@ public final class World
         public boolean overlaps(Actor other)
         {
             return Collision.aabb(x, y, width, height, other.x, other.y, other.width, other.height);
+        }
+
+        public String getName()
+        {
+            return name;
         }
 
         public int getX()

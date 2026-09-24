@@ -46,6 +46,7 @@ public class TemplateUtils {
                 // Prefer mavenLocal while developing the engine; JitPack for published tags.
                 implementation 'games.transmute:transmute-core:%s'
                 // implementation 'com.github.transmute-games.transmute-core:transmute-core:v%s'
+                testImplementation 'junit:junit:4.13.2'
             }
 
             application {

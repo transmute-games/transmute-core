@@ -28,10 +28,11 @@ Turn a prompt + asset folder into a runnable game that passes headless verify wi
 - Use `manager.getInputHandler()` (not only `getInput()`) so `SimulatedInput` works headless
 - Cast `IRenderer` → `Context` for pixel draws
 - Prefer `World` for tile maps; prefer `Body2D` + `Collision` for platformers
+- Prefer GameSpec `spawn.*` / `trigger.*` / `state.initial` over hard-coded layout when possible
 - Prefer `Camera` when the world is larger than the view
-- Prefer `PlaytestScript` over hand-rolled key loops in tests
+- Prefer `PlaytestScript` / `PlaytestRecorder` over hand-rolled key loops in tests
 - Assert SFX with `AudioProbe.install()` + `AudioPlayer.setMuted(true)` in headless
-- Do not invent parallel Entity/TileMap systems
+- Do not invent parallel Entity/TileMap systems; do not use deprecated `ecs.Object` / `TiledLevel`
 - See `docs/AUTHORING.md` for canonical vs legacy modules
 - Agent eval contract: `eval/fixtures/*` + `./scripts/agent-eval.sh`
 

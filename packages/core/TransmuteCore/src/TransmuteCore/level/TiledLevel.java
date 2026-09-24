@@ -10,6 +10,12 @@ import TransmuteCore.graphics.Bitmap;
 import TransmuteCore.assets.Asset;
 import TransmuteCore.assets.types.Image;
 
+/**
+ * PNG color-indexed tile level.
+ *
+ * @deprecated Prefer {@link TransmuteCore.world.World}
+ */
+@Deprecated(since = "1.1")
 public class TiledLevel extends Level
 {
     private int tileSize;

@@ -10,7 +10,7 @@ import static games.transmute.cli.templates.TemplateUtils.writeCommonFiles;
 import static games.transmute.cli.templates.TemplateUtils.writeFile;
 
 /**
- * RPG project template built on {@code TransmuteCore.world.World}.
+ * RPG template aligned with {@code examples/rpg} (GameSpec World + Camera + triggers).
  */
 public class RPGTemplate implements ProjectTemplate {
     
@@ -20,6 +20,27 @@ public class RPGTemplate implements ProjectTemplate {
         Path javaPath = projectPath.resolve("src/main/java").resolve(packagePath);
         
         writeCommonFiles(projectPath, vars);
+        writeFile(projectPath.resolve("src/main/resources/gamespec.properties"), """
+            title=%s
+            version=%s
+            width=320
+            height=240
+            scale=%s
+            clear.r=20
+            clear.g=20
+            clear.b=30
+            font=fonts/font.png
+            world.cols=40
+            world.rows=20
+            world.tile=16
+            world.border=true
+            world.solid=5,7;6,7;10,3
+            spawn.player=2,2
+            spawn.player.color=100,150,255
+            trigger.coin=6,2
+            trigger.coin.audio=pickup
+            state.initial=play
+            """.formatted(vars.get("GAME_TITLE"), vars.get("GAME_VERSION"), vars.get("SCREEN_SCALE")));
         writeFile(javaPath.resolve("Game.java"), generateGameClass(vars));
         writeFile(javaPath.resolve("Player.java"), generatePlayerClass(vars));
     }
@@ -35,21 +56,33 @@ public class RPGTemplate implements ProjectTemplate {
             
             import TransmuteCore.assets.AssetPack;
             import TransmuteCore.core.GameConfig;
+            import TransmuteCore.core.GameSpec;
             import TransmuteCore.core.Manager;
             import TransmuteCore.core.TransmuteCore;
             import TransmuteCore.core.interfaces.services.IRenderer;
+            import TransmuteCore.graphics.Camera;
             import TransmuteCore.graphics.Color;
             import TransmuteCore.graphics.Context;
+            import TransmuteCore.util.verify.FrameAssert;
+            import TransmuteCore.util.verify.GameHarness;
             import TransmuteCore.world.World;
             
             public class Game extends TransmuteCore {
             
-                private static final int TILE = 16;
+                public static final int TILE = 16;
+                public static final int VIEW_W = 320;
+                public static final int VIEW_H = 240;
+                public static final int CLEAR = Color.toPixelInt(20, 20, 30, 255);
+            
+                private final GameSpec spec;
                 private World world;
                 private Player player;
+                private Camera camera;
+                private int collected;
             
-                public Game(GameConfig config) {
+                public Game(GameConfig config, GameSpec spec) {
                     super(config);
+                    this.spec = spec;
                 }
             
                 @Override
@@ -59,57 +92,62 @@ public class RPGTemplate implements ProjectTemplate {
                         .font(AssetPack.DEFAULT_FONT_RESOURCE)
                         .ensureDefaultFont();
             
-                    world = World.grid(20, 15, TILE)
-                        .clearColor(Color.toPixelInt(20, 20, 30, 255))
-                        .solidColor(Color.toPixelInt(60, 60, 80, 255));
-                    world.fillBorder(World.SOLID);
-                    for (int x = 5; x < 10; x++) {
-                        world.setTile(x, 7, World.SOLID);
-                    }
-                    for (int y = 3; y < 8; y++) {
-                        world.setTile(15, y, World.SOLID);
-                    }
+                    world = spec.createWorld();
+                    world.solidColor(Color.toPixelInt(60, 60, 80, 255));
             
+                    world.removeActor("player");
                     player = new Player(TILE * 2, TILE * 2);
                     world.add(player);
+            
+                    var coin = world.findTrigger("coin");
+                    if (coin != null) {
+                        coin.setOnEnter(a -> collected++);
+                    }
+            
+                    camera = new Camera(VIEW_W, VIEW_H);
                 }
             
                 @Override
                 public void update(Manager manager, double delta) {
                     world.update(manager, delta);
+                    camera.lookAt(player.getX() + player.getWidth() / 2f,
+                        player.getY() + player.getHeight() / 2f);
+                    camera.clampToWorld(world.pixelWidth(), world.pixelHeight());
                 }
             
                 @Override
                 public void render(Manager manager, IRenderer renderer) {
-                    world.render(manager, renderer);
+                    world.render(manager, renderer, camera);
                     Context ctx = (Context) renderer;
                     ctx.renderText("WASD MOVE", 10, 10, Color.toPixelInt(255, 255, 255, 255));
                 }
             
+                public int getCollected() { return collected; }
+            
                 public static void main(String[] args) {
+                    GameSpec spec = GameSpec.loadClasspath("gamespec.properties");
                     boolean headless = args.length > 0 && "--headless".equals(args[0]);
                     GameConfig config = new GameConfig.Builder()
-                        .title("%s")
+                        .title(spec.getTitle())
                         .version("%s")
-                        .size(20 * TILE, 15 * TILE)
+                        .size(VIEW_W, VIEW_H)
                         .scale(%s)
                         .headless(headless)
                         .showStartScreen(false)
                         .build();
-            
-                    Game game = new Game(config);
                     if (headless) {
-                        game.initForHarness();
-                        game.stepFrame(1.0);
-                        System.out.println("headless ok");
+                        try (GameHarness harness = GameHarness.of(() -> new Game(config, spec))) {
+                            harness.step(1);
+                            FrameAssert.assertPixel(harness.renderer(), TILE + 1, TILE + 1, CLEAR);
+                            System.out.println("headless ok");
+                        }
                         return;
                     }
-                    game.start();
+                    new Game(config, spec).start();
                 }
             }
             """.formatted(
                 vars.get("PACKAGE_NAME"),
-                vars.get("GAME_TITLE"),
                 vars.get("GAME_VERSION"),
                 vars.get("SCREEN_SCALE")
             );
@@ -129,6 +167,7 @@ public class RPGTemplate implements ProjectTemplate {
             
                 public Player(int x, int y) {
                     super(x, y, SIZE, SIZE, 0xFF6496FF);
+                    named("player");
                 }
             
                 @Override

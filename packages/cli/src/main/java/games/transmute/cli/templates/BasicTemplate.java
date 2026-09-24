@@ -12,7 +12,7 @@ import static games.transmute.cli.templates.TemplateUtils.writeCommonFiles;
 import static games.transmute.cli.templates.TemplateUtils.writeFile;
 
 /**
- * Basic project template with minimal game structure.
+ * Basic project template aligned with {@code examples/hello}.
  */
 public class BasicTemplate implements ProjectTemplate {
     
@@ -53,6 +53,7 @@ public class BasicTemplate implements ProjectTemplate {
             clear.g=32
             clear.b=64
             font=fonts/font.png
+            state.initial=play
             """.formatted(
                 vars.get("GAME_TITLE"),
                 vars.get("GAME_VERSION"),
@@ -63,7 +64,6 @@ public class BasicTemplate implements ProjectTemplate {
     }
 
     private Path findBundledFont() {
-        // Prefer monorepo font when developing; fall back to cwd-relative paths
         Path[] candidates = {
             Path.of("packages/core/TransmuteCore/res/fonts/font.png"),
             Path.of("../core/TransmuteCore/res/fonts/font.png"),
@@ -89,10 +89,12 @@ public class BasicTemplate implements ProjectTemplate {
             import TransmuteCore.core.interfaces.services.IRenderer;
             import TransmuteCore.graphics.Color;
             import TransmuteCore.graphics.Context;
+            import TransmuteCore.util.verify.FrameAssert;
+            import TransmuteCore.util.verify.GameHarness;
             
             public class Game extends TransmuteCore {
             
-                private int clearColor;
+                private final int clearColor;
             
                 public Game(GameConfig config, int clearColor) {
                     super(config);
@@ -110,18 +112,14 @@ public class BasicTemplate implements ProjectTemplate {
             
                 @Override
                 public void update(Manager manager, double delta) {
-                    // Update game logic here
                 }
             
                 @Override
                 public void render(Manager manager, IRenderer renderer) {
                     Context ctx = (Context) renderer;
-                    
                     ctx.renderFilledRectangle(0, 0, ctx.getWidth(), ctx.getHeight(), clearColor);
-                    ctx.renderFilledRectangle(20, 20, 40, 40,
-                        Color.toPixelInt(220, 180, 60, 255));
-                    ctx.renderText("%s", 20, 70,
-                        Color.toPixelInt(255, 255, 255, 255));
+                    ctx.renderFilledRectangle(20, 20, 40, 40, Color.toPixelInt(220, 180, 60, 255));
+                    ctx.renderText("%s", 20, 70, Color.toPixelInt(255, 255, 255, 255));
                 }
             
                 public static void main(String[] args) {
@@ -137,14 +135,16 @@ public class BasicTemplate implements ProjectTemplate {
                         .showStartScreen(false)
                         .build();
             
-                    Game game = new Game(config, spec.getClearColor());
                     if (headless) {
-                        game.initForHarness();
-                        game.stepFrame(1.0);
-                        System.out.println("headless ok");
+                        try (GameHarness harness = GameHarness.of(() -> new Game(config, spec.getClearColor()))) {
+                            harness.step(1);
+                            FrameAssert.assertPixel(harness.renderer(), 0, 0, spec.getClearColor());
+                            System.out.println("headless ok hash=0x"
+                                + Integer.toHexString(FrameAssert.hash(harness.renderer())));
+                        }
                         return;
                     }
-                    game.start();
+                    new Game(config, spec.getClearColor()).start();
                 }
             }
             """.formatted(

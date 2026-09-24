@@ -78,6 +78,11 @@ world.rows=15
 world.tile=16
 world.border=true
 world.solid=5,7;6,7
+spawn.player=2,2
+spawn.player.color=100,150,255
+trigger.coin=6,2
+trigger.coin.audio=pickup
+state.initial=play
 ```
 
 ## Commands

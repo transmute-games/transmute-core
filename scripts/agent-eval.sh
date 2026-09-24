@@ -10,6 +10,8 @@ echo "==> publish transmute-core to mavenLocal"
 
 FIXTURES=(
   eval/fixtures/collect-coin
+  eval/fixtures/platformer-jump
+  eval/fixtures/menu-state
 )
 
 failed=0

@@ -10,11 +10,11 @@ import TransmuteCore.graphics.Color;
 import TransmuteCore.graphics.Context;
 import TransmuteCore.util.verify.FrameAssert;
 import TransmuteCore.util.verify.GameHarness;
-import TransmuteCore.world.Trigger;
 import TransmuteCore.world.World;
 
 /**
  * Golden solution for the collect-coin agent eval fixture.
+ * Uses GameSpec {@code spawn.*} / {@code trigger.*} keys.
  */
 public class CollectGame extends TransmuteCore
 {
@@ -47,15 +47,21 @@ public class CollectGame extends TransmuteCore
         }
         world.solidColor(Color.toPixelInt(60, 60, 80, 255));
 
+        world.removeActor("marker");
         player = new Player(TILE * 2, TILE * 2);
         world.add(player);
 
-        world.addTrigger(new Trigger(
-            TILE * 6, TILE * 2, TILE, TILE,
-            actor -> {
-                collected++;
-                AudioPlayer.play("pickup");
-            }));
+        var coin = world.findTrigger("coin");
+        if (coin == null)
+        {
+            throw new IllegalStateException("gamespec must define trigger.coin");
+        }
+        coin.setOnEnter(actor -> collected++);
+
+        if (!"play".equals(spec.getInitialState()))
+        {
+            throw new IllegalStateException("expected state.initial=play");
+        }
     }
 
     @Override
