@@ -63,7 +63,7 @@ The CLI is released separately with its own versioning scheme (`cli-v*`).
 
 1. **Ensure core engine is released first** - The CLI embeds the core version in generated project templates
 
-2. **Update CLI version** in `packages/cli/build.gradle`:
+2. **Update CLI version** in `packages/java/transmute-cli/build.gradle`:
    ```gradle
    version = '0.1.0-ALPHA'
    ```
@@ -77,7 +77,7 @@ The CLI is released separately with its own versioning scheme (`cli-v*`).
 4. **Test the CLI locally**:
    ```bash
    ./gradlew :transmute-cli:fatJar
-   java -jar packages/cli/build/libs/transmute-cli-*-all.jar new test-project
+   java -jar packages/java/transmute-cli/build/libs/transmute-cli-*-all.jar new test-project
    cd test-project
    ./gradlew build
    ./gradlew run
@@ -85,7 +85,7 @@ The CLI is released separately with its own versioning scheme (`cli-v*`).
 
 5. **Commit changes**:
    ```bash
-   git add packages/cli/
+   git add packages/java/transmute-cli/
    git commit -m "Release CLI v0.1.0-ALPHA"
    ```
 

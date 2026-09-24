@@ -50,7 +50,7 @@ If you're developing the CLI itself:
 
 # Or build the fat JAR manually
 ./gradlew :transmute-cli:fatJar
-java -jar packages/cli/build/libs/transmute-cli-0.1.0-ALPHA-all.jar new my-game
+java -jar packages/java/transmute-cli/build/libs/transmute-cli-0.1.0-ALPHA-all.jar new my-game
 ```
 
 ## Usage

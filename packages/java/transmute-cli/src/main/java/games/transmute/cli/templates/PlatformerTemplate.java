@@ -10,7 +10,7 @@ import static games.transmute.cli.templates.TemplateUtils.writeCommonFiles;
 import static games.transmute.cli.templates.TemplateUtils.writeFile;
 
 /**
- * Platformer template aligned with {@code examples/platformer} (Body2D + GameHarness).
+ * Platformer template aligned with {@code examples/java/platformer} (Body2D + GameHarness).
  */
 public class PlatformerTemplate implements ProjectTemplate {
     

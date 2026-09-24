@@ -13,10 +13,10 @@ Turn a prompt + asset folder into a runnable game that passes headless verify wi
 
 1. Publish engine if needed: `./gradlew :transmute-core:publishToMavenLocal`
 2. Prefer copying a verified example over inventing structure:
-   - Minimal / UI: `examples/hello`
-   - Jump / gravity: `examples/platformer`
-   - Top-down tiles: `examples/rpg`
-3. Or scaffold: `transmute new my-game -t basic|platformer|rpg -y`
+   - Java: `examples/java/hello|platformer|rpg`
+   - Python / JS / C: `examples/python/hello`, `examples/javascript/hello`, `packages/c` hello
+   - Contracts: `contracts/gamespec.md`
+3. Or scaffold (Java): `transmute new my-game -t basic|platformer|rpg -y`
 4. Put assets under `src/main/resources/` and declare them in `gamespec.properties`
 5. Implement `init` / `update` / `render` on a `TransmuteCore` subclass
 6. Verify: `./gradlew test verifyHeadless`

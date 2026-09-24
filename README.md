@@ -8,11 +8,17 @@
 [![CLI Release](https://img.shields.io/github/v/release/transmute-games/transmute-core?filter=cli-*&label=CLI&color=success)](https://github.com/transmute-games/transmute-core/releases/latest)
 [![GitHub Actions](https://img.shields.io/github/actions/workflow/status/transmute-games/transmute-core/release-cli.yml?label=CLI%20Build)](https://github.com/transmute-games/transmute-core/actions)
 
-A high-performance 2D pixel game engine for Java
+A high-performance 2D pixel game engine — **Java reference**, with contract-compatible
+**Python**, **JavaScript**, and **C** agent-subset ports in this monorepo.
 
 ## Overview
 
-Transmute Core is a lightweight, high-performance 2D pixel game engine written in Java. It features custom pixel-level rendering with BufferedImage and DataBufferInt for maximum performance, making it ideal for retro-style games, pixel art projects, and educational purposes.
+Transmute Core is a lightweight 2D pixel game engine. The Java implementation is the
+full reference runtime. Python, JavaScript, and C packages implement the same authoring
+contract (`GameSpec`, `World`, `Body2D`, headless verify) so agents and humans can build
+games in those languages too.
+
+See [docs/AUTHORING.md](docs/AUTHORING.md), [contracts/](contracts/), and [examples/](examples/).
 
 ### Key Features
 
@@ -22,10 +28,11 @@ Transmute Core is a lightweight, high-performance 2D pixel game engine written i
 - 🎨 **Built-in Animation System** - Sprite sheets and frame-based animations
 - 🎯 **State Management** - Stack-based state system for menus, gameplay, and more
 - ⌨️ **Input Handling** - Comprehensive keyboard and mouse input with multiple states
-- 🗺️ **Tile-Based Levels** - Load levels from PNG images with viewport culling
+- 🗺️ **Tile-Based Levels** - `World` grids + GameSpec (legacy PNG `TiledLevel` deprecated)
 - 💾 **Serialization** - Custom binary serialization for save games and data
 - 🔊 **Audio Support** - Built-in audio playback for sound effects and music
 - 🛠️ **Developer Tools** - Logging system, debug utilities, and comprehensive error messages
+- 🌐 **Multi-language monorepo** - Java + Python + JavaScript + C ports of the agent subset
 
 ## Quick Start
 
@@ -149,8 +156,10 @@ public class MyGame extends TransmuteCore {
 ### Getting Started
 - **[Getting Started Guide](docs/GETTING_STARTED.md)** - Complete setup and first steps
 - **[Hello World Tutorial](docs/tutorials/01-hello-world.md)** - Your first Transmute Core game
-- **[AGENTS.md](AGENTS.md)** - Agent/automation guide (prompt + assets → verify)
-- **[examples/hello](examples/hello)** - Reference game with headless verify
+- **[AGENTS.md](AGENTS.md)** - Agent/automation guide (multi-language)
+- **[examples/](examples/)** - Java / Python / JavaScript hello examples
+- **[contracts/](contracts/)** - Shared GameSpec + PlaytestScript specs
+- **[transmute-cli](packages/java/transmute-cli/README.md)** - CLI tool for scaffolding new projects
 
 ### Tutorials
 Progressive, hands-on tutorials covering all engine features:
@@ -246,7 +255,7 @@ Input input = manager.getInput();
 
 ## Project Generator
 
-- **[transmute-cli](packages/cli/README.md)** - CLI tool for scaffolding new projects
+- **[transmute-cli](packages/java/transmute-cli/README.md)** - CLI tool for scaffolding new projects
 - Multiple templates: basic, platformer, rpg
 - Interactive project setup
 
@@ -297,4 +306,4 @@ This project is licensed under the [PolyForm Shield License 1.0.0](https://polyf
 
 Made with ❤️ by the Transmute Games team
 
-[Website](https://github.com/transmute-games) • [Documentation](docs/GETTING_STARTED.md) • [CLI Tool](packages/cli/README.md)
+[Website](https://github.com/transmute-games) • [Documentation](docs/GETTING_STARTED.md) • [CLI Tool](packages/java/transmute-cli/README.md)

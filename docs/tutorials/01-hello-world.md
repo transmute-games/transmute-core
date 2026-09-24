@@ -10,7 +10,7 @@ Build a minimal verified game with `Manager`, `AssetPack` / `GameSpec`, and head
 
 ## Prefer examples
 
-Copy [`examples/hello`](../../examples/hello) instead of inventing structure. Canonical modules: [AUTHORING.md](../AUTHORING.md).
+Copy [`examples/java/hello`](../../examples/java/hello) instead of inventing structure. Canonical modules: [AUTHORING.md](../AUTHORING.md).
 
 ## Scaffold
 
@@ -19,7 +19,7 @@ transmute new hello-world-game -t basic -y
 cd hello-world-game
 ```
 
-Or: `./gradlew :transmute-core:publishToMavenLocal` then copy `examples/hello`.
+Or: `./gradlew :transmute-core:publishToMavenLocal` then copy `examples/java/hello`.
 
 ## Game class
 

@@ -39,9 +39,9 @@ jobs:
       - name: Prepare release assets
         run: |
           mkdir -p release-assets
-          cp packages/cli/build/libs/transmute-cli-*-all.jar release-assets/transmute-cli.jar
-          cp packages/cli/bin/transmute release-assets/transmute
-          cp packages/cli/bin/transmute.bat release-assets/transmute.bat
+          cp packages/java/transmute-cli/build/libs/transmute-cli-*-all.jar release-assets/transmute-cli.jar
+          cp packages/java/transmute-cli/bin/transmute release-assets/transmute
+          cp packages/java/transmute-cli/bin/transmute.bat release-assets/transmute.bat
           chmod +x release-assets/transmute
       
       - name: Create Release

@@ -12,7 +12,7 @@ import static games.transmute.cli.templates.TemplateUtils.writeCommonFiles;
 import static games.transmute.cli.templates.TemplateUtils.writeFile;
 
 /**
- * Basic project template aligned with {@code examples/hello}.
+ * Basic project template aligned with {@code examples/java/hello}.
  */
 public class BasicTemplate implements ProjectTemplate {
     
@@ -65,8 +65,8 @@ public class BasicTemplate implements ProjectTemplate {
 
     private Path findBundledFont() {
         Path[] candidates = {
-            Path.of("packages/core/TransmuteCore/res/fonts/font.png"),
-            Path.of("../core/TransmuteCore/res/fonts/font.png"),
+            Path.of("packages/java/transmute-core/TransmuteCore/res/fonts/font.png"),
+            Path.of("../transmute-core/TransmuteCore/res/fonts/font.png"),
             Path.of("fonts/font.png")
         };
         for (Path candidate : candidates) {
