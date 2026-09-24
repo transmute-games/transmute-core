@@ -39,3 +39,4 @@ Thumbs.db
 
 # CMake
 packages/c/build/
+packages/typescript/dist/

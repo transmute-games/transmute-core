@@ -8,9 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Multi-language monorepo: Java under `packages/java`, plus Python / JavaScript / C agent-subset ports
+- Multi-language monorepo: Java under `packages/java`, plus Python / JavaScript / TypeScript / C agent-subset ports
 - Shared `contracts/` for GameSpec + PlaytestScript
-- Examples under `examples/java|python|javascript`
+- Examples under `examples/java|python|javascript|typescript`
 - GameSpec `spawn.*` / `trigger.*` / `state.initial`; World find/remove by name
 - `SpriteAtlas` grid helper; `PlaytestRecorder` for script capture
 - Agent eval fixtures: collect-coin, platformer-jump, menu-state

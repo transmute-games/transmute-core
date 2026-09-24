@@ -1,7 +1,7 @@
 # Authoring model
 
 Canonical modules for new games (humans and agents), available in **Java, Python,
-JavaScript, and C** under the same contract ([contracts/](../contracts/)):
+JavaScript, TypeScript, and C** under the same contract ([contracts/](../contracts/)):
 
 | Need | Use |
 |------|-----|
@@ -22,6 +22,7 @@ the agent subset first (see package READMEs under `packages/`).
 | Java | [`packages/java/transmute-core`](../packages/java/transmute-core) |
 | Python | [`packages/python`](../packages/python) |
 | JavaScript | [`packages/javascript`](../packages/javascript) |
+| TypeScript | [`packages/typescript`](../packages/typescript) |
 | C | [`packages/c`](../packages/c) |
 
 ## Legacy Java-only (deprecated)
