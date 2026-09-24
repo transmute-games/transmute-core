@@ -1,0 +1,15 @@
+{
+  "name": "hello-transmute-ts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify": "npm run build --prefix ../../../packages/typescript && tsx hello.ts --headless"
+  },
+  "dependencies": {
+    "transmute": "file:../../../packages/typescript"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

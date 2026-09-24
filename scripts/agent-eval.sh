@@ -50,6 +50,17 @@ else
   echo "PASS javascript hello"
 fi
 
+echo "==> typescript hello"
+if ! (
+  cd "$ROOT/packages/typescript" && npm install --silent && npm test --silent
+  cd "$ROOT/examples/typescript/hello" && npm install --silent && npm run verify
+); then
+  echo "FAIL typescript hello"
+  failed=1
+else
+  echo "PASS typescript hello"
+fi
+
 echo "==> c hello"
 if ! (
   cmake -S "$ROOT/packages/c" -B "$ROOT/packages/c/build" >/dev/null

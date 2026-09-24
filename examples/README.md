@@ -5,6 +5,7 @@
 | Java (reference) | [java/](java/) |
 | Python | [python/hello](python/hello/) |
 | JavaScript | [javascript/hello](javascript/hello/) |
+| TypeScript | [typescript/hello](typescript/hello/) |
 | C | build `packages/c` → `hello_headless` |
 
 ## Java
@@ -27,6 +28,13 @@ cd examples/python/hello && python -m hello --headless
 ```bash
 cd packages/javascript && npm test
 cd examples/javascript/hello && npm install && npm run verify
+```
+
+## TypeScript
+
+```bash
+cd packages/typescript && npm install && npm test
+cd examples/typescript/hello && npm install && npm run verify
 ```
 
 ## C

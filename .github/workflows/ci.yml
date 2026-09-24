@@ -87,6 +87,25 @@ jobs:
           npm install
           npm run verify
 
+  typescript:
+    name: TypeScript package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install and test
+        run: |
+          cd packages/typescript
+          npm install
+          npm test
+      - name: Hello example verify
+        run: |
+          cd examples/typescript/hello
+          npm install
+          npm run verify
+
   c:
     name: C library
     runs-on: ubuntu-latest

@@ -15,7 +15,7 @@ Transmute Core is a Java-based 2D pixel game engine designed for high-performanc
 
 ### Project Structure
 The project uses Gradle for the Java packages under `packages/java/`. Python, JavaScript,
-and C ports live beside them and share [contracts/](contracts/). Java source is in
+TypeScript, and C ports live beside them and share [contracts/](contracts/). Java source is in
 `packages/java/transmute-core/TransmuteCore/src/`.
 
 ```

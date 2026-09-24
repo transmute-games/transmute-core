@@ -9,6 +9,7 @@ How to build and verify a game from a prompt + assets without a human at the win
 | **Java** (reference) | `packages/java/transmute-core` | `cd examples/java/hello && ./gradlew verifyHeadless` |
 | **Python** | `packages/python` | `pip install -e packages/python && cd examples/python/hello && python -m hello --headless` |
 | **JavaScript** | `packages/javascript` | `cd examples/javascript/hello && npm install && npm run verify` |
+| **TypeScript** | `packages/typescript` | `cd examples/typescript/hello && npm install && npm run verify` |
 | **C** | `packages/c` | build with CMake, run `hello_headless` |
 
 Shared contracts: [contracts/gamespec.md](contracts/gamespec.md), [contracts/playtest.md](contracts/playtest.md).

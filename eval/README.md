@@ -10,6 +10,7 @@ Java golden solutions under `fixtures/` plus multi-language hello verifies via
 | `fixtures/menu-state` | Java | state.initial + ENTER → play |
 | `examples/python/hello` | Python | clear pixel |
 | `examples/javascript/hello` | JS | clear pixel |
+| `examples/typescript/hello` | TS | clear pixel |
 | `packages/c` hello_headless | C | clear pixel |
 
 ```bash
