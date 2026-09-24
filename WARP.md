@@ -90,7 +90,8 @@ Access via `TransmuteCore.getManager()` (lazy-initialized, thread-safe).
 Use `GameHarness` + `FrameAssert` with `GameConfig.headless(true)`. Headless still
 renders into `Context` so frames can be hashed and asserted without a window.
 Drive input with `SimulatedInput` or data scripts via `PlaytestScript`
-(`playtests/*.script`).
+(`playtests/*.script`). Assert audio cues with `AudioProbe` (works while muted).
+Agent eval fixtures: `eval/` + `scripts/agent-eval.sh`.
 
 ### Rendering Pipeline
 1. **Context** (`TransmuteCore.graphics.Context`) - Custom pixel buffer rendering system
