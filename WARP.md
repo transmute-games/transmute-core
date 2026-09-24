@@ -14,7 +14,9 @@ Transmute Core is a Java-based 2D pixel game engine designed for high-performanc
 - IDE with Java support (IntelliJ IDEA, Eclipse, or VS Code recommended)
 
 ### Project Structure
-The project uses Gradle for builds with a multi-project structure. Source files are in `packages/core/TransmuteCore/src/` with compiled output managed by Gradle.
+The project uses Gradle for the Java packages under `packages/java/`. Python, JavaScript,
+and C ports live beside them and share [contracts/](contracts/). Java source is in
+`packages/java/transmute-core/TransmuteCore/src/`.
 
 ```
 transmute-core/
@@ -80,7 +82,7 @@ The engine uses a fixed timestep game loop (default 60 FPS) with delta time calc
 ### Manager System
 The `Manager` is the **authoring seam** for game code. Call `manager.bootstrapDefaults()`
 in `init()` to wire AssetManager, StateManager, and ObjectManager.
-See [AGENTS.md](AGENTS.md) and [examples/hello](examples/hello).
+See [AGENTS.md](AGENTS.md) and [examples/java/hello](examples/java/hello).
 
 `GameContext` is an internal DI snapshot — prefer Manager in game subclasses.
 
@@ -258,11 +260,11 @@ When helping users or making code changes, reference these documentation resourc
 - `AGENTS.md` - Agent/automation golden path (prompt + assets → verify)
 - `CONTEXT.md` - Domain vocabulary
 - `docs/COOKBOOK.md` - Short recipes (verify, GameSpec, SimulatedInput)
-- `examples/hello` - Reference game with headless verify
+- `examples/java/hello` - Reference game with headless verify
 - `docs/GETTING_STARTED.md` - Initial setup
 
 ### Project Generator
-- `packages/cli/` - CLI tool for scaffolding new projects with multiple templates
+- `packages/java/transmute-cli/` - CLI tool for scaffolding new projects with multiple templates
 
 ## Common Issues
 

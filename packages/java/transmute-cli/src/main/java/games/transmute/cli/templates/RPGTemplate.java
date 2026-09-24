@@ -10,7 +10,7 @@ import static games.transmute.cli.templates.TemplateUtils.writeCommonFiles;
 import static games.transmute.cli.templates.TemplateUtils.writeFile;
 
 /**
- * RPG template aligned with {@code examples/rpg} (GameSpec World + Camera + triggers).
+ * RPG template aligned with {@code examples/java/rpg} (GameSpec World + Camera + triggers).
  */
 public class RPGTemplate implements ProjectTemplate {
     

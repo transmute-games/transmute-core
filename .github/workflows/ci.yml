@@ -6,8 +6,8 @@ on:
   pull_request:
 
 jobs:
-  core:
-    name: Core tests
+  java:
+    name: Java core + examples
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,15 +22,15 @@ jobs:
         run: ./gradlew :transmute-core:publishToMavenLocal
       - name: Verify hello example headless
         run: |
-          cd examples/hello
+          cd examples/java/hello
           ./gradlew test verifyHeadless
       - name: Verify platformer playtest
         run: |
-          cd examples/platformer
+          cd examples/java/platformer
           ./gradlew test verifyHeadless
       - name: Verify rpg playtest
         run: |
-          cd examples/rpg
+          cd examples/java/rpg
           ./gradlew test verifyHeadless
       - name: Agent eval fixtures
         run: ./scripts/agent-eval.sh
@@ -47,3 +47,54 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
       - name: Build CLI
         run: ./gradlew :transmute-cli:build
+
+  python:
+    name: Python package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install and test
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install -e "packages/python[dev]"
+          pytest -q packages/python
+      - name: Hello example verify
+        run: |
+          . .venv/bin/activate
+          cd examples/python/hello
+          python -m hello --headless
+
+  javascript:
+    name: JavaScript package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install and test
+        run: |
+          cd packages/javascript
+          npm install
+          npm test
+      - name: Hello example verify
+        run: |
+          cd examples/javascript/hello
+          npm install
+          npm run verify
+
+  c:
+    name: C library
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure and test
+        run: |
+          cmake -S packages/c -B packages/c/build
+          cmake --build packages/c/build
+          ctest --test-dir packages/c/build --output-on-failure
+          packages/c/build/examples/hello_headless

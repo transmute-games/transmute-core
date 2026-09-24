@@ -26,3 +26,16 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Python
+**/__pycache__/
+.venv-eval/
+
+*.egg-info/
+.pytest_cache/
+
+# Node
+**/node_modules/
+
+# CMake
+packages/c/build/

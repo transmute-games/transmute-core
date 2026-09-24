@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Multi-language monorepo: Java under `packages/java`, plus Python / JavaScript / C agent-subset ports
+- Shared `contracts/` for GameSpec + PlaytestScript
+- Examples under `examples/java|python|javascript`
 - GameSpec `spawn.*` / `trigger.*` / `state.initial`; World find/remove by name
 - `SpriteAtlas` grid helper; `PlaytestRecorder` for script capture
 - Agent eval fixtures: collect-coin, platformer-jump, menu-state
@@ -27,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GameSpec `spritesheet.*` → AssetPack image registration
 - `PlaytestScript` data-driven headless playthroughs
 - `.cursor/skills/build-transmute-game` agent skill
-- `examples/hello`, `examples/platformer`, `examples/rpg` with headless playtests
+- `examples/java/hello`, `examples/java/platformer`, `examples/java/rpg` with headless playtests
 - `docs/AUTHORING.md` canonical vs legacy module map
 - `AGENTS.md` and `CONTEXT.md` for agent-autonomous authoring
 - CLI templates emit `gamespec.properties`, `--headless`, real Gradle wrapper copy, `verifyHeadless` task

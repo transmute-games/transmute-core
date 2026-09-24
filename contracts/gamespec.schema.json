@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://transmute.games/contracts/gamespec.schema.json",
+  "title": "GameSpecProperties",
+  "description": "Informational schema for gamespec.properties keys (values are strings in .properties files).",
+  "type": "object",
+  "properties": {
+    "title": { "type": "string" },
+    "version": { "type": "string" },
+    "width": { "type": "string", "pattern": "^[0-9]+$" },
+    "height": { "type": "string", "pattern": "^[0-9]+$" },
+    "scale": { "type": "string", "pattern": "^[0-9]+$" },
+    "headless": { "type": "string", "enum": ["true", "false"] },
+    "clear.r": { "type": "string" },
+    "clear.g": { "type": "string" },
+    "clear.b": { "type": "string" },
+    "clear.a": { "type": "string" },
+    "font": { "type": "string" },
+    "world.cols": { "type": "string" },
+    "world.rows": { "type": "string" },
+    "world.tile": { "type": "string" },
+    "world.border": { "type": "string" },
+    "world.solid": { "type": "string" },
+    "state.initial": { "type": "string" }
+  },
+  "patternProperties": {
+    "^image\\..+": { "type": "string" },
+    "^audio\\..+": { "type": "string" },
+    "^spritesheet\\.[^.]+$": { "type": "string" },
+    "^spritesheet\\..+\\.tile$": { "type": "string" },
+    "^spawn\\.[^.]+$": { "type": "string", "pattern": "^-?[0-9]+,-?[0-9]+$" },
+    "^spawn\\..+\\.(w|h)$": { "type": "string" },
+    "^spawn\\..+\\.color$": { "type": "string" },
+    "^trigger\\.[^.]+$": { "type": "string", "pattern": "^-?[0-9]+,-?[0-9]+$" },
+    "^trigger\\..+\\.(w|h)$": { "type": "string" },
+    "^trigger\\..+\\.audio$": { "type": "string" }
+  },
+  "additionalProperties": true
+}
