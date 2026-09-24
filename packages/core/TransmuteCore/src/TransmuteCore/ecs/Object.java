@@ -14,7 +14,10 @@ import TransmuteCore.math.Tuple2i;
  * {@code Object} is a generic object class.
  * <br>
  * This class is a generic representation of a object.
+ *
+ * @deprecated Prefer {@link TransmuteCore.world.World.Actor} or {@link TransmuteCore.physics.Body2D}
  */
+@Deprecated(since = "1.1")
 public abstract class Object implements Updatable, Renderable
 {
     public static final int ANIMATABLE = 0x0; //A type of object that has an animation

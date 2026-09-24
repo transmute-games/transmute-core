@@ -7,23 +7,15 @@ running the playtest in this fixture (see `src/test`).
 
 Create a 320×240 top-down Transmute Core game:
 
-1. Load config from `gamespec.properties` (`world.*` keys).
+1. Load config from `gamespec.properties` with `world.*`, `spawn.*`, `trigger.*`, `state.initial=play`.
 2. Call `Manager.bootstrapDefaults()` and load assets via `GameSpec.loadAssets`.
-3. Spawn a player as a `World.Actor` at tile (2, 2).
-4. Place a one-shot `Trigger` coin at tile (6, 2) that increments a collect counter.
-5. On collect, call `AudioPlayer.play("pickup")` (asset key `audio.pickup` may be
-   missing in headless — still call play so `AudioProbe` can assert).
-6. Move with WASD / arrows via `manager.getInputHandler()`.
-7. Provide `--headless` that steps one frame and prints `collect headless ok`.
-8. Include a `PlaytestScript` that walks the player onto the coin.
+3. `createWorld()` should place trigger `coin` (and optional spawn markers).
+4. Replace/add a controllable `World.Actor` player; move with WASD via `getInputHandler()`.
+5. `findTrigger("coin").setOnEnter(...)` increments collect (GameSpec may already play `audio` cue).
+6. Provide `--headless` and a `PlaytestScript` that walks onto the coin.
+7. Do not use deprecated `ecs.Object` / `TiledLevel`.
 
 ## Pass criteria
 
 - `./gradlew test verifyHeadless` exits 0
 - Playtest asserts `collected == 1` and `AudioProbe.assertPlayed("pickup")`
-- No custom Entity/TileMap systems — use `World` / `Trigger` / `GameSpec`
-
-## Reference
-
-The `src/` tree in this fixture is the golden solution. Agents should match its
-behavior under the same playtest, not necessarily its exact source layout.

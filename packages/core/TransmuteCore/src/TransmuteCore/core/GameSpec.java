@@ -3,6 +3,7 @@ package TransmuteCore.core;
 import TransmuteCore.assets.AssetManager;
 import TransmuteCore.assets.AssetPack;
 import TransmuteCore.graphics.Color;
+import TransmuteCore.world.Trigger;
 import TransmuteCore.world.World;
 
 import java.io.BufferedReader;
@@ -128,7 +129,9 @@ public final class GameSpec
     /**
      * Builds a {@link World} when {@code world.cols} / {@code world.rows} are present.
      * Optional keys: {@code world.tile} (default 16), {@code world.border=true},
-     * {@code world.solid=5,7;6,7} (tile coordinates).
+     * {@code world.solid=5,7;6,7} (tile coordinates),
+     * {@code spawn.&lt;name&gt;=tx,ty} (+ optional {@code .color=r,g,b}, {@code .w}/ {@code .h} in tiles),
+     * {@code trigger.&lt;name&gt;=tx,ty} (+ optional {@code .w}/ {@code .h}, {@code .audio=cue}).
      *
      * @return the world, or null if no world keys are set
      */
@@ -158,7 +161,104 @@ public final class GameSpec
                 }
             }
         }
+        applySpawns(world, tile);
+        applyTriggers(world, tile);
         return world;
+    }
+
+    /**
+     * {@code state.initial} from the manifest (default {@code play}).
+     * Agents use this to pick which {@link TransmuteCore.state.State} to push first.
+     */
+    public String getInitialState()
+    {
+        return raw.getProperty("state.initial", "play").trim();
+    }
+
+    private void applySpawns(World world, int tile)
+    {
+        for (String name : baseNames("spawn."))
+        {
+            String pos = raw.getProperty("spawn." + name);
+            if (pos == null || pos.isBlank())
+            {
+                continue;
+            }
+            int[] xy = parsePair(pos);
+            int tw = Integer.parseInt(raw.getProperty("spawn." + name + ".w", "1").trim());
+            int th = Integer.parseInt(raw.getProperty("spawn." + name + ".h", "1").trim());
+            int color = parseColor(raw.getProperty("spawn." + name + ".color"), 0xFF6496FF);
+            world.add(World.Actor.colored(xy[0] * tile, xy[1] * tile, tw * tile, th * tile, color).named(name));
+        }
+    }
+
+    private void applyTriggers(World world, int tile)
+    {
+        for (String name : baseNames("trigger."))
+        {
+            String pos = raw.getProperty("trigger." + name);
+            if (pos == null || pos.isBlank())
+            {
+                continue;
+            }
+            int[] xy = parsePair(pos);
+            int tw = Integer.parseInt(raw.getProperty("trigger." + name + ".w", "1").trim());
+            int th = Integer.parseInt(raw.getProperty("trigger." + name + ".h", "1").trim());
+            String audio = raw.getProperty("trigger." + name + ".audio");
+            world.addTrigger(Trigger.named(
+                name, xy[0] * tile, xy[1] * tile, tw * tile, th * tile, audio));
+        }
+    }
+
+    private java.util.LinkedHashSet<String> baseNames(String prefix)
+    {
+        java.util.LinkedHashSet<String> names = new java.util.LinkedHashSet<>();
+        for (String key : raw.stringPropertyNames())
+        {
+            if (!key.startsWith(prefix))
+            {
+                continue;
+            }
+            String rest = key.substring(prefix.length());
+            int dot = rest.indexOf('.');
+            String name = dot < 0 ? rest : rest.substring(0, dot);
+            if (!name.isBlank())
+            {
+                names.add(name);
+            }
+        }
+        return names;
+    }
+
+    private static int[] parsePair(String value)
+    {
+        String[] parts = value.trim().split(",");
+        if (parts.length != 2)
+        {
+            throw new IllegalArgumentException("Expected x,y but was: " + value);
+        }
+        return new int[] {
+            Integer.parseInt(parts[0].trim()),
+            Integer.parseInt(parts[1].trim())
+        };
+    }
+
+    private static int parseColor(String rgb, int fallback)
+    {
+        if (rgb == null || rgb.isBlank())
+        {
+            return fallback;
+        }
+        String[] parts = rgb.trim().split(",");
+        if (parts.length < 3)
+        {
+            return fallback;
+        }
+        int r = Integer.parseInt(parts[0].trim());
+        int g = Integer.parseInt(parts[1].trim());
+        int b = Integer.parseInt(parts[2].trim());
+        int a = parts.length >= 4 ? Integer.parseInt(parts[3].trim()) : 255;
+        return Color.toPixelInt(r, g, b, a);
     }
 
     public String getTitle()

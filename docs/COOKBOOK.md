@@ -75,6 +75,39 @@ try (AudioProbe probe = AudioProbe.install()) {
 
 Probe records even when muted or when the clip is missing from the AssetManager.
 
+## Declarative spawns / triggers
+
+```properties
+spawn.player=2,2
+spawn.player.color=100,150,255
+trigger.coin=6,2
+trigger.coin.audio=pickup
+state.initial=play
+```
+
+```java
+World world = spec.createWorld();
+world.findTrigger("coin").setOnEnter(a -> score++);
+World.Actor marker = world.findActor("player");
+```
+
+## Record a playtest
+
+```java
+PlaytestRecorder rec = new PlaytestRecorder();
+rec.hold(KeyEvent.VK_D);
+harness.step(20); rec.advance(20);
+rec.release(KeyEvent.VK_D);
+rec.write(Path.of("playtests/walk.script"));
+```
+
+## Sprite atlas
+
+```java
+SpriteAtlas atlas = SpriteAtlas.fromAsset(assets, "sheet-player", 16);
+Animation walk = atlas.animation("walk", 150, 0,0, 1,0, 2,0);
+```
+
 ## Tile world (top-down)
 
 ```java

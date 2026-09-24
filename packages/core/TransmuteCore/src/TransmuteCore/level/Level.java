@@ -15,7 +15,10 @@ import TransmuteCore.ecs.types.Mob;
  * {@code Level} is a generic level class.
  * <br>
  * This class is a generic representation of a level.
+ *
+ * @deprecated Prefer {@link TransmuteCore.world.World} + GameSpec {@code world.*} keys
  */
+@Deprecated(since = "1.1")
 public abstract class Level implements Updatable, Renderable
 {
     protected int width, height; //The width and height of the level

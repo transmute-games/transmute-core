@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class GameSpecTest
@@ -29,5 +30,15 @@ public class GameSpecTest
         assertEquals(6, world.getRows());
         assertTrue(world.isSolid(0, 0));
         assertTrue(world.isSolid(3, 2));
+        assertEquals("play", spec.getInitialState());
+
+        var hero = world.findActor("hero");
+        assertNotNull(hero);
+        assertEquals(32, hero.getX());
+        assertEquals(32, hero.getY());
+
+        var coin = world.findTrigger("coin");
+        assertNotNull(coin);
+        assertEquals(64, coin.getX());
     }
 }

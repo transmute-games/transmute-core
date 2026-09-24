@@ -6,6 +6,12 @@ import TransmuteCore.level.TiledLevel;
 import TransmuteCore.ecs.Object;
 import TransmuteCore.math.Tuple2i;
 
+/**
+ * Legacy mobile entity for {@link TransmuteCore.level.TiledLevel}.
+ *
+ * @deprecated Prefer {@link TransmuteCore.world.World.Actor}
+ */
+@Deprecated(since = "1.1")
 public abstract class Mob extends Object
 {
     public Mob(Manager manager, String name, Tuple2i location, float scale)

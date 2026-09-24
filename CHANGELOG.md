@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- GameSpec `spawn.*` / `trigger.*` / `state.initial`; World find/remove by name
+- `SpriteAtlas` grid helper; `PlaytestRecorder` for script capture
+- Agent eval fixtures: collect-coin, platformer-jump, menu-state
+- CLI templates aligned with examples (GameHarness, GameSpec, Camera)
+- `@Deprecated` on `ecs.Object` / `Mob` and `level.Level` / `TiledLevel`
 - Tutorials 01–07 rewritten for Manager / World / Body2D / GameSpec / PlaytestScript
 - `AudioProbe` + `AudioPlayer.setMuted` for headless audio cue asserts
 - Agent eval fixtures under `eval/` with CI via `scripts/agent-eval.sh`

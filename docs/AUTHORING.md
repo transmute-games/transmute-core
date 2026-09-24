@@ -6,16 +6,17 @@ Canonical modules for new games (humans and agents):
 |------|-----|
 | Game loop | `TransmuteCore` + `Manager.bootstrapDefaults()` |
 | Top-down tiles | `World` + `World.Actor` + `Trigger` |
-| Map as data | `GameSpec` `world.*` → `createWorld()` |
+| Map as data | `GameSpec` `world.*` / `spawn.*` / `trigger.*` / `state.initial` → `createWorld()` |
 | Platformer physics | `Body2D` + `Collision` |
 | Scrolling | `Camera` + `World.render(..., camera)` |
-| Assets | `AssetPack` / `GameSpec` (`image.*`, `audio.*`, `spritesheet.*`, `font`) |
-| Verify | `GameHarness`, `FrameAssert`, `AudioProbe`, `SimulatedInput`, `PlaytestScript` |
+| Assets | `AssetPack` / `GameSpec` (`image.*`, `audio.*`, `spritesheet.*`, `font`) + `SpriteAtlas` |
+| Verify | `GameHarness`, `FrameAssert`, `AudioProbe`, `SimulatedInput`, `PlaytestScript` / `PlaytestRecorder` |
 
-## Legacy (supported, not preferred for new work)
+## Legacy (deprecated — do not use in new work)
 
-- `TransmuteCore.ecs.*` — inheritance entities (`Object`, `Mob`), not a real ECS
-- `TransmuteCore.level.TiledLevel` — PNG color-indexed tile maps
+- `TransmuteCore.ecs.Object` / `Mob` — `@Deprecated`; prefer `World.Actor` / `Body2D`
+- `TransmuteCore.level.TiledLevel` / `Level` — `@Deprecated`; prefer `World`
+- `ObjectManager` remains (bootstrap); package name is not renamed for binary compat
 
 Do not invent a third TileMap/Entity system in game code.
 
