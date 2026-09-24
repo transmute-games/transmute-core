@@ -70,18 +70,24 @@ public class GameWindow implements IGameWindow
         }
         frame = new JFrame(windowTitle);
         Dimension wDimension = new Dimension(windowWidth * windowScale, windowHeight * windowScale);
-        frame.setMinimumSize(wDimension);
-        frame.setMaximumSize(wDimension);
-        frame.setPreferredSize(wDimension);
+        // Size the canvas (content), not the frame — otherwise macOS title-bar insets
+        // shrink the drawable area and clip the bottom of the framebuffer.
+        canvas = new Canvas();
+        canvas.setMinimumSize(wDimension);
+        canvas.setMaximumSize(wDimension);
+        canvas.setPreferredSize(wDimension);
         frame.setFocusable(true);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        canvas = new Canvas();
         frame.add(canvas, BorderLayout.CENTER);
         frame.pack();
+        // Re-assert content size after pack — some LAFs shrink the canvas for insets.
+        canvas.setSize(wDimension);
+        canvas.setPreferredSize(wDimension);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
 
         // Add window event listeners
         if (windowEventCallbacks != null)
