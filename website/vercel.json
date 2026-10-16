@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "cd .. && PUPPETEER_SKIP_DOWNLOAD=true bun install --frozen-lockfile",
+  "buildCommand": "bunx playwright install chromium && bun run build",
+  "outputDirectory": "out",
+  "cleanUrls": true
+}
