@@ -35,7 +35,7 @@ public void init() {
 ## Modules to prefer
 
 | Need | Module |
-|------|--------|
+| ------ | -------- |
 | Tile top-down | `World` / `GameSpec.createWorld()` |
 | Gravity / jump | `Body2D` + `Collision` |
 | Headless play | `GameHarness`, `FrameAssert`, `AudioProbe`, `SimulatedInput` |
@@ -62,7 +62,7 @@ Headless installs `SimulatedInput` automatically. Prefer `manager.getInputHandle
 
 ## GameSpec manifest
 
-```
+```text
 title=My Game
 width=320
 height=180

@@ -12,7 +12,7 @@ Drive a character with `IInputHandler` so the same code works under `SimulatedIn
 ## Input states
 
 | Method | When true |
-|--------|-----------|
+| -------- | ----------- |
 | `isKeyPressed` | First frame of the press |
 | `isKeyHeld` | Every frame while down |
 | `isKeyReleased` | First frame after release |
@@ -40,7 +40,7 @@ if (dy != 0) tryMove(0, dy);
 
 `src/main/resources/playtests/walk.script`:
 
-```
+```text
 0 hold D
 20 release D
 22 idle

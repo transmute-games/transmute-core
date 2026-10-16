@@ -3,7 +3,7 @@
 Canonical modules for new games (humans and agents):
 
 | Need | Use |
-|------|-----|
+| ------ | ----- |
 | Game loop | `TransmuteCore` + `Manager.bootstrapDefaults()` |
 | Top-down tiles | `World` + `World.Actor` + `Trigger` |
 | Map as data | `GameSpec` `world.*` / `spawn.*` / `trigger.*` / `state.initial` → `createWorld()` |

@@ -8,7 +8,7 @@ passes the same `./gradlew test verifyHeadless` checks.
 ## Fixtures
 
 | Fixture | Verb | Asserts |
-|---------|------|---------|
+| --------- | ------ | --------- |
 | [`fixtures/collect-coin`](fixtures/collect-coin/) | Walk onto Trigger | `collected==1`, `AudioProbe`, GameSpec spawn/trigger |
 | [`fixtures/platformer-jump`](fixtures/platformer-jump/) | Body2D jump | PlaytestScript SPACE raises Y |
 | [`fixtures/menu-state`](fixtures/menu-state/) | Menu → play | `state.initial=menu`, ENTER pushes `play` |

@@ -25,7 +25,7 @@ Platforms implement `Body2D.Solid` (`getX/Y/Width/Height`). See `examples/platfo
 
 ## One-shot playtest
 
-```
+```text
 # playtests/jump.script
 0 press SPACE
 1 release SPACE

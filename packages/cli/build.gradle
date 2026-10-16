@@ -3,7 +3,7 @@ plugins {
 }
 
 // CLI uses its own version scheme
-version = '1.0.0'
+version = findProperty('releaseVersion') ?: '1.0.0'
 
 application {
     mainClass = 'games.transmute.cli.TransmuteCLI'

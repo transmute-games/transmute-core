@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - GameSpec `spawn.*` / `trigger.*` / `state.initial`; World find/remove by name
 - `SpriteAtlas` grid helper; `PlaytestRecorder` for script capture
 - Agent eval fixtures: collect-coin, platformer-jump, menu-state
@@ -34,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Collision.resolveAabb` and CI smoke workflow
 
 ### Fixed
+
 - `StateManager.pop()` is public (tutorials were calling a private method)
 - `TiledLevel` extension check used `||` and always rejected valid files
 - `Mob` tile collision sampled tiles incorrectly
@@ -41,22 +43,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ObjectManager` encapsulates its list; implements `IObjectManager`
 
 ### Changed
+
 - Manager is the documented authoring seam; GameContext is internal DI
 - CLI default dependency coord: `games.transmute:transmute-core` (mavenLocal-friendly)
 
 ## [1.0.1] - 2026-01-13
 
 ### Added
+
 - IRenderer interface implementation for Context class
 - Integer overload for `renderRectangle` method in Context
 - `getClearColor` getter method in Context for accessing the clear color
 
 ### Changed
+
 - Updated documentation and branding references to "Transmute Core"
 
 ## [1.0.0] - 2025-01-13
 
 ### Added
+
 - Initial release of Transmute Core engine
 - Standalone CLI distribution with JitPack integration
 - Custom pixel buffer rendering system with 32-bit ARGB format
