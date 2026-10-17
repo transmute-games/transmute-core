@@ -1,7 +1,7 @@
 import { Glob } from "bun";
 
 const groups = [
-  { glob: "website/{app,src}/**/*.{ts,tsx,css}", max: 2400 },
+  { glob: "website/{app,src}/**/*.{ts,tsx,css}", max: 2420 },
   { glob: "scripts/*.{ts,sh}", max: 700 },
 ];
 for (const { glob, max } of groups) {

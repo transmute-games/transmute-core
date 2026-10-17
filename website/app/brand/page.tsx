@@ -131,6 +131,19 @@ export default function BrandPage() {
               ["Browser icon", "favicon.svg", "SVG · scalable icon"],
             ].map(([name, file, detail]) => (
               <a className="feature" href={`/${file}`} download key={file}>
+                <div className="world-card">
+                  <Image
+                    src={`/${file}`}
+                    width={1200}
+                    height={630}
+                    alt=""
+                    style={{
+                      height: 150,
+                      objectFit: "contain",
+                      padding: file.endsWith(".svg") ? 28 : 0,
+                    }}
+                  />
+                </div>
                 <h3>{name}</h3>
                 <p>{detail}</p>
                 <span className="text-link">Download {name.toLowerCase()}</span>
