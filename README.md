@@ -1,6 +1,4 @@
-<p align="center"><img src="assets/logo.svg" alt="Transmute Core logo" width="64"></p>
-
-# Transmute Core
+# <img src="assets/logo.svg" alt="" width="36" height="36" align="absmiddle"> Transmute Core
 
 ![Small engine. Whole worlds.](assets/og-image.png)
 
