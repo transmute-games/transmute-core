@@ -160,7 +160,7 @@ h3 {
 }
 .start-section {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 100px;
   border-block: 1px solid var(--line);
   padding: 70px 0;
@@ -170,6 +170,7 @@ h3 {
   font-size: 14px;
 }
 .terminal {
+  min-width: 0;
   background: #252b25;
   color: #eff3e9;
   border-radius: 18px;
@@ -208,7 +209,7 @@ pre {
   }
   .hero,
   .start-section {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 35px;
     padding: 55px 0;
   }
@@ -220,7 +221,7 @@ pre {
     width: 45%;
   }
   .feature-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .section-heading {
     display: block;
@@ -235,19 +236,33 @@ pre {
     font-size: 10px;
   }
 }
-.terminal {
-  min-width: 0;
-}
-.start-section {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-}
-@media (max-width: 780px) {
-  .start-section {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
 @media (max-width: 360px) {
   .header-inner .brand-sub {
     display: none;
   }
+}
+
+.showcase {
+  --muted: #4e5943;
+  background: #e6edce;
+  border-radius: 24px;
+  margin-block: 40px;
+  padding-inline: 24px;
+}
+.showcase > p:not(.eyebrow) {
+  max-width: 580px;
+  margin: 20px auto;
+}
+.showcase .actions {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.minicraft-logo {
+  width: min(388px, 100%);
+  height: auto;
+  image-rendering: pixelated;
+}
+.showcase .button {
+  background: #3d5b32;
 }

@@ -36,3 +36,5 @@ Deploy `website/out/` to a static host that resolves clean paths to `.html` file
 The exported site uses root-relative URLs. Hosting beneath a subdirectory requires configuring Next.js `basePath` and adapting public asset URLs before deployment.
 
 The connected Vercel project uses `website/` as its root. `website/vercel.json` overrides legacy package-manager settings, installs the locked Bun workspace and Chromium for build-time diagrams, and publishes the static export with clean URLs. Enable access to files outside the root directory so the build can read shared docs and scripts. Configure `SITE_URL` for the production environment only; previews remain unindexed.
+
+The Minicraft showcase uses the wordmark linked by the [game’s README](https://github.com/transmute-games/minicraft), sourced from the [Minicraft+ website](https://minicraftplus.github.io/Minicraft_logo.png) and stored locally as `website/public/minicraft-logo.webp`. It identifies the featured game; it is not a Transmute Core brand asset.

@@ -141,17 +141,33 @@ export default function Home() {
             <Link href="/docs">Installation & setup</Link>
           </div>
         </section>
-        <section className="closing">
-          <p className="eyebrow">YOUR IDEA. YOUR RULES.</p>
-          <h2>
-            What will you <em>make?</em>
+        <section className="closing showcase" aria-labelledby="minicraft-title">
+          <p className="eyebrow">BUILT WITH TRANSMUTE CORE</p>
+          <Image
+            src="/minicraft-logo.webp"
+            alt="Minicraft"
+            width={388}
+            height={60}
+            className="minicraft-logo"
+          />
+          <h2 id="minicraft-title">
+            A whole world. <em>Meet Minicraft.</em>
           </h2>
           <p>
-            A tiny platformer. A wandering RPG. Something we haven’t imagined.
+            A Minicraft+ adaptation powered by Transmute Core, with singleplayer
+            survival and LAN multiplayer. See the engine become a playable game.
           </p>
-          <Link className="button" href="/docs">
-            Let’s build a game
-          </Link>
+          <div className="actions">
+            <a
+              className="button"
+              href="https://github.com/transmute-games/minicraft"
+            >
+              Explore Minicraft on GitHub
+            </a>
+            <Link className="text-link" href="/docs/examples">
+              Build your own game
+            </Link>
+          </div>
         </section>
       </main>
       <MarketingFooter />
