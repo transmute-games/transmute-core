@@ -21,7 +21,9 @@ test("primary flow, search recovery, and theme", async ({ page }) => {
   await page
     .getByRole("textbox", { name: "Search documentation" })
     .fill("not-a-real-guide");
-  await expect(page.getByRole("dialog").getByRole("status")).toHaveText("0 results");
+  await expect(page.getByRole("dialog").getByRole("status")).toHaveText(
+    "0 results",
+  );
   await page.getByRole("button", { name: "Clear search" }).click();
   await page
     .getByRole("textbox", { name: "Search documentation" })
@@ -110,4 +112,31 @@ test("all documentation, internal links, assets, and missing routes resolve", as
   for (const url of urls)
     expect((await request.get(url)).status(), url).toBe(200);
   expect((await request.get("/not-a-page")).status()).toBe(404);
+});
+
+test("brand swatches copy with feedback and downloads resolve", async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/brand");
+  await page.getByRole("button", { name: "Copy Sage #526447" }).click();
+  await expect(page.getByRole("status")).toHaveText("Copied Sage: #526447");
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+    "#526447",
+  );
+  await page.evaluate(() => {
+    Object.defineProperty(navigator.clipboard, "writeText", {
+      value: () => Promise.reject(new Error("Clipboard unavailable")),
+    });
+  });
+  await page.getByRole("button", { name: "Copy Paper #f7f7f2" }).click();
+  await expect(page.getByRole("status")).toContainText(
+    "Select and copy this value: #f7f7f2",
+  );
+  for (const link of await page.locator("a[download]").all()) {
+    const response = await page.request.get((await link.getAttribute("href"))!);
+    expect(response.ok()).toBeTruthy();
+    expect((await response.body()).byteLength).toBeGreaterThan(100);
+  }
 });

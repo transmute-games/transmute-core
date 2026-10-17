@@ -18,7 +18,7 @@ Open `http://localhost:3004`. Alternatively, use `flox services start website` a
 
 Edit the Markdown under `docs/`. `website/src/lib/docs.ts` maps files to routes. The build copies downloadable Markdown and renders Mermaid diagrams to SVG; no Mermaid runtime is shipped to visitors. Relative Markdown links resolve to website routes where available and GitHub otherwise.
 
-Brand assets live in `assets/` and `website/public/`. The build copies shared assets from `assets/` to the public directory. The social image is a 1200 × 630 PNG; SVG is retained for editing. Fonts are self-hosted with their license notices. No analytics, forms, or third-party tracking are included.
+Brand assets live in `assets/` and `website/public/`. The build copies shared assets from `assets/` to the public directory. The social image is a 1200 × 630 PNG; SVG is retained for editing. Run `bun scripts/generate-brand.ts` to regenerate both social images from the controller mark and the editable pixel-wave design. Fonts are self-hosted with their license notices. No analytics, forms, or third-party tracking are included.
 
 ## Verify and preview
 

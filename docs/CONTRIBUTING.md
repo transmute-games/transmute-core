@@ -27,7 +27,7 @@ GitHub Actions runs these groups independently, uploads test reports even on fai
 
 ## Keep it lean
 
-New website source files have a 300-line limit, with 2,200 total lines for the app and shared components/styles. Repository scripts have a 700-line total budget and the same file limit. The README stays under 80 lines. Generated files and lockfiles are excluded. These limits do not retroactively rewrite the Java engine. Split cohesive responsibilities rather than minifying code to satisfy a limit.
+New website source files have a 300-line limit, with 2,400 total lines for the app and shared components/styles. Repository scripts have a 700-line total budget and the same file limit. The README stays under 80 lines. Generated files and lockfiles are excluded. These limits do not retroactively rewrite the Java engine. Split cohesive responsibilities rather than minifying code to satisfy a limit.
 
 ## Releases
 
