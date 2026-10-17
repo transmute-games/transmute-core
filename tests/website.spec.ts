@@ -140,3 +140,50 @@ test("brand swatches copy with feedback and downloads resolve", async ({
     expect((await response.body()).byteLength).toBeGreaterThan(100);
   }
 });
+
+for (const width of [390, 1440]) {
+  test(`search filters, keyboard navigation, and accessibility at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/docs");
+    const trigger = page.getByRole("button", { name: "Search documentation" });
+    await trigger.click();
+    const dialog = page.getByRole("dialog", { name: "Find your next step." });
+    const input = dialog.getByRole("textbox", { name: "Search documentation" });
+    await expect(input).toBeFocused();
+    await dialog.getByRole("button", { name: "API", exact: true }).click();
+    await expect(dialog.getByRole("link")).toHaveCount(5);
+    await expect(
+      dialog.getByRole("button", { name: "API", exact: true }),
+    ).toHaveAttribute("aria-pressed", "true");
+    await input.fill("collision");
+    await expect(dialog.getByRole("link")).toHaveCount(1);
+    await input.press("ArrowDown");
+    await expect(
+      dialog.getByRole("link", { name: /Worlds and physics/ }),
+    ).toBeFocused();
+    await page.keyboard.press("ArrowUp");
+    await expect(input).toBeFocused();
+    expect(
+      (
+        await new AxeBuilder({ page })
+          .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+          .analyze()
+      ).violations,
+    ).toEqual([]);
+    expect(
+      await dialog.evaluate((el) => el.scrollWidth <= el.clientWidth),
+    ).toBe(true);
+    await page.keyboard.press("Escape");
+    await expect(trigger).toBeFocused();
+    await trigger.click();
+    await expect(input).toHaveValue("");
+    await expect(dialog.getByRole("link")).toHaveCount(docs.length);
+    await input.fill("Worlds and physics");
+    await input.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/docs\/api\/world/);
+    await expect(dialog).not.toBeVisible();
+  });
+}
