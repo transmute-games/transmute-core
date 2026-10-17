@@ -13,7 +13,12 @@ public final class CliConstants {
     }
 
     // Version information
-    public static final String CLI_VERSION = "1.0.0";
+    public static final String CLI_VERSION = getCliVersion();
+
+    private static String getCliVersion() {
+        String version = CliConstants.class.getPackage().getImplementationVersion();
+        return version != null ? version : "1.0.0";
+    }
     public static final String ENGINE_VERSION = "1.0.0";
 
     // Available templates

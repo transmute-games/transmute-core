@@ -30,7 +30,7 @@ From the repository root:
 
 ## Project Structure
 
-```
+```text
 core/
 ├── build.gradle           # Build configuration
 └── TransmuteCore/
@@ -133,34 +133,41 @@ public class MyGame extends TransmuteCore {
 ## Key Packages
 
 ### `TransmuteCore.core`
+
 - `TransmuteCore` - Main engine class (extend this)
 - `GameConfig` - Immutable configuration with builder pattern
 - `Manager` - Central coordinator for all subsystems
 - `GameLoop` - Fixed timestep game loop implementation
 
 ### `TransmuteCore.graphics`
+
 - `Context` - Custom pixel buffer rendering system
 - `Color` - Color utilities and ARGB conversion
 - `RenderPipeline` - Hardware-accelerated rendering pipeline
 
 ### `TransmuteCore.assets`
+
 - `AssetManager` - Global asset registry and loader
 - `types.Image` - Image asset type
 - `types.Audio` - Audio asset type
 - `types.Font` - Bitmap font asset type
 
 ### `TransmuteCore.input`
+
 - `Input` - Keyboard and mouse input handler
 
 ### `TransmuteCore.state`
+
 - `StateManager` - Stack-based state management
 - `State` - Base state class
 
 ### `TransmuteCore.ecs`
+
 - `Object` - Base game object class
 - `ObjectManager` - Batch update/render for game objects
 
 ### `TransmuteCore.level`
+
 - `Level` - Base level class
 - `TiledLevel` - Tile-based level loader
 
@@ -184,25 +191,27 @@ GameConfig config = new GameConfig.Builder()
 ```
 
 **Aspect Ratios:**
+
 - `GameConfig.ASPECT_RATIO_WIDESCREEN` - 16:9
 - `GameConfig.ASPECT_RATIO_SQUARE` - 4:3
 
 ## Dependencies
 
 The core engine has **zero external dependencies** and only requires:
+
 - Java 17 or higher
 - Java AWT (included in JDK)
 
 ## Documentation
 
-- **[Main README](../../README.md)** - Project overview
-- **[Getting Started](../../docs/GETTING_STARTED.md)** - Setup guide
-- **[Tutorials](../../docs/tutorials/)** - Step-by-step learning
-- **[WARP.md](../../WARP.md)** - Architecture reference
+- **[Main README](../../../README.md)** - Project overview
+- **[Getting Started](../../../docs/GETTING_STARTED.md)** - Setup guide
+- **[Tutorials](../../../docs/tutorials/)** - Step-by-step learning
+- **[WARP.md](../../../WARP.md)** - Architecture reference
 
 ## Using the CLI
 
-Instead of manual setup, use the [transmute-cli](../cli/) to scaffold new projects:
+Instead of manual setup, use the [transmute-cli](../transmute-cli/) to scaffold new projects:
 
 ```bash
 # Install CLI
@@ -216,4 +225,4 @@ cd my-game
 
 ## License
 
-MIT License - See [LICENSE](../../.github/LICENSE) for details.
+PolyForm Shield 1.0.0 - See [LICENSE](../../../LICENSE) for details.

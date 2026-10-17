@@ -1,0 +1,36 @@
+name: Auto release
+on:
+  workflow_run:
+    workflows: [CI]
+    branches: [master]
+    types: [completed]
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: auto-release-master
+  cancel-in-progress: false
+jobs:
+  tag:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+      - name: Compute next patch tag
+        id: version
+        env:
+          RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: bash scripts/release-version.sh
+      - name: Dispatch release build
+        if: steps.version.outputs.tag != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: gh workflow run release-cli.yml --ref master -f tag="$RELEASE_TAG"

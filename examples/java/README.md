@@ -1,10 +1,10 @@
 # Examples
 
-| Example | Purpose |
-|---------|---------|
-| [hello](hello/) | Golden-path game: GameSpec, AssetPack, Manager bootstrap, headless `FrameAssert` |
-| [platformer](platformer/) | Action recipe: `Collision` + `SimulatedInput` jump playtest |
-| [rpg](rpg/) | Top-down recipe: `World` tile grid + `SimulatedInput` movement playtest |
+| Example                   | Purpose                                                                          |
+| ------------------------- | -------------------------------------------------------------------------------- |
+| [hello](hello/)           | Golden-path game: GameSpec, AssetPack, Manager bootstrap, headless `FrameAssert` |
+| [platformer](platformer/) | Action recipe: `Collision` + `SimulatedInput` jump playtest                      |
+| [rpg](rpg/)               | Top-down recipe: `World` tile grid + `SimulatedInput` movement playtest          |
 
 ## hello
 

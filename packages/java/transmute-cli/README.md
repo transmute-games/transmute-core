@@ -7,16 +7,19 @@ Command-line tool for scaffolding new Transmute Core game projects.
 ### Quick Install (Recommended)
 
 #### Unix/macOS
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/transmute-games/transmute-core/master/scripts/install-cli.sh | sh
 ```
 
 #### Windows (PowerShell)
+
 ```powershell
 irm https://raw.githubusercontent.com/transmute-games/transmute-core/master/scripts/install-cli.ps1 | iex
 ```
 
 The installer will:
+
 - Download the latest CLI release
 - Install to `~/.local/bin` (Unix/macOS) or `%USERPROFILE%\bin` (Windows)
 - Guide you through PATH setup if needed
@@ -60,23 +63,26 @@ After installation, use the `transmute` command directly:
 ### Create a New Project
 
 Interactive mode (recommended):
+
 ```bash
 transmute new my-game
 ```
 
 Non-interactive with defaults:
+
 ```bash
 transmute new my-game -y
 ```
 
 Specify a template:
+
 ```bash
 transmute new my-game --template platformer
 ```
 
 ### Available Commands
 
-```
+```text
 transmute new <project-name> [options]   Create a new project
 transmute templates                      List available templates
 transmute help                           Show help message
@@ -91,26 +97,32 @@ transmute version                        Show version information
 ## Available Templates
 
 ### basic
+
 Minimal game with simple rendering. Good starting point for any game type.
 
 **Includes:**
+
 - Basic game loop setup
 - Simple rendering example
 - Project structure with build configuration
 
 ### platformer
+
 2D platformer with physics and collision detection.
 
 **Includes:**
+
 - Player class with jump mechanics
 - Platform class for level geometry
 - Basic gravity implementation
 - Collision detection stubs
 
 ### rpg
+
 Top-down RPG with tile-based maps.
 
 **Includes:**
+
 - Entity base class for characters
 - TileMap class for level design
 - Grid-based movement system stubs
@@ -119,7 +131,7 @@ Top-down RPG with tile-based maps.
 
 Generated projects follow this structure:
 
-```
+```text
 my-game/
 ├── build.gradle           # Build configuration
 ├── settings.gradle        # Gradle settings
@@ -225,11 +237,13 @@ cd quest
 ### "Command not found: transmute"
 
 1. Make sure you've installed the CLI:
+
    ```bash
    ./gradlew :transmute-cli:install
    ```
 
 2. Verify the install directory is in your PATH:
+
    ```bash
    # Check current PATH
    echo $PATH  # Unix/macOS
@@ -237,6 +251,7 @@ cd quest
    ```
 
 3. If not in PATH, add it to your shell configuration:
+
    ```bash
    # Bash/Zsh (~/.bashrc or ~/.zshrc)
    export PATH="$PATH:$HOME/.local/bin"
@@ -246,6 +261,7 @@ cd quest
    ```
 
 4. Reload your shell:
+
    ```bash
    source ~/.bashrc  # or ~/.zshrc
    # Or just open a new terminal
@@ -254,6 +270,7 @@ cd quest
 ### "Could not resolve: com.github.transmute-games.transmute-core:transmute-core"
 
 This usually means:
+
 1. No internet connection (JitPack requires internet to download dependencies)
 2. The specified version doesn't exist - check [available releases](https://github.com/transmute-games/transmute-core/releases)
 3. JitPack is building the artifact for the first time (can take 1-2 minutes)
@@ -263,10 +280,11 @@ You can check the build status at: `https://jitpack.io/#transmute-games/transmut
 ### Permission Denied (gradlew)
 
 Make gradlew executable:
+
 ```bash
 chmod +x gradlew
 ```
 
 ## License
 
-MIT License - See main project for details.
+PolyForm Shield 1.0.0 - See [LICENSE](../../../LICENSE) for details.

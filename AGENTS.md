@@ -4,13 +4,13 @@ How to build and verify a game from a prompt + assets without a human at the win
 
 ## Pick a language
 
-| Language | Package | Hello verify |
-|----------|---------|--------------|
-| **Java** (reference) | `packages/java/transmute-core` | `cd examples/java/hello && ./gradlew verifyHeadless` |
-| **Python** | `packages/python` | `pip install -e packages/python && cd examples/python/hello && python -m hello --headless` |
-| **JavaScript** | `packages/javascript` | `cd examples/javascript/hello && npm install && npm run verify` |
-| **TypeScript** | `packages/typescript` | `cd examples/typescript/hello && npm install && npm run verify` |
-| **C** | `packages/c` | build with CMake, run `hello_headless` |
+| Language             | Package                        | Hello verify                                                                               |
+| -------------------- | ------------------------------ | ------------------------------------------------------------------------------------------ |
+| **Java** (reference) | `packages/java/transmute-core` | `cd examples/java/hello && ./gradlew verifyHeadless`                                       |
+| **Python**           | `packages/python`              | `pip install -e packages/python && cd examples/python/hello && python -m hello --headless` |
+| **JavaScript**       | `packages/javascript`          | `cd examples/javascript/hello && npm install && npm run verify`                            |
+| **TypeScript**       | `packages/typescript`          | `cd examples/typescript/hello && npm install && npm run verify`                            |
+| **C**                | `packages/c`                   | build with CMake, run `hello_headless`                                                     |
 
 Shared contracts: [contracts/gamespec.md](contracts/gamespec.md), [contracts/playtest.md](contracts/playtest.md).
 Authoring model: [docs/AUTHORING.md](docs/AUTHORING.md).
@@ -42,18 +42,18 @@ public void init() {
 
 ## Modules to prefer
 
-| Need | Module |
-|------|--------|
-| Tile top-down | `World` / `GameSpec.createWorld()` |
-| Gravity / jump | `Body2D` |
-| Headless play | Harness + FrameAssert + SimulatedInput + PlaytestScript |
-| Assets | GameSpec / AssetPack (Java) |
+| Need           | Module                                                  |
+| -------------- | ------------------------------------------------------- |
+| Tile top-down  | `World` / `GameSpec.createWorld()`                      |
+| Gravity / jump | `Body2D`                                                |
+| Headless play  | Harness + FrameAssert + SimulatedInput + PlaytestScript |
+| Assets         | GameSpec / AssetPack (Java)                             |
 
 ## GameSpec manifest
 
 Portable across languages — see [contracts/gamespec.md](contracts/gamespec.md).
 
-```
+```text
 title=My Game
 width=320
 height=180

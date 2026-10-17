@@ -27,6 +27,19 @@ Thumbs.db
 # Logs
 *.log
 
+# Website and validation
+node_modules/
+.next/
+.website-studio/
+playwright-report/
+test-results/
+website/public/docs/
+website/public/diagrams/
+*.tsbuildinfo
+.env*
+.cache/
+.next-build/
+.next-dev/
 # Python
 **/__pycache__/
 .venv-eval/

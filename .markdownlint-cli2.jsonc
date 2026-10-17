@@ -1,0 +1,10 @@
+{
+  "globs": ["**/*.md", "!node_modules/**", "!**/node_modules/**", "!**/build/**", "!**/.next/**", "!**/out/**", "!.website-studio/**", "!.flox/**", "!.cache/**", "!website/public/docs/**", "!**/.next-*/**", "!playwright-report/**", "!test-results/**", "!.venv*/**"],
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD024": { "siblings_only": true },
+    "MD033": false,
+    "MD041": false
+  }
+}

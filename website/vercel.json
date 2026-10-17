@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "dnf install -y nss nspr atk at-spi2-atk cups-libs libXcomposite libXdamage libXrandr libxkbcommon mesa-libgbm alsa-lib pango cairo && cd .. && PUPPETEER_SKIP_DOWNLOAD=true bun install --frozen-lockfile",
+  "buildCommand": "bunx playwright install chromium && bun run build",
+  "outputDirectory": "out",
+  "cleanUrls": true
+}

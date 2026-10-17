@@ -60,8 +60,8 @@ publishing {
                 
                 licenses {
                     license {
-                        name = 'MIT License'
-                        url = 'https://opensource.org/licenses/MIT'
+                        name = 'PolyForm Shield License 1.0.0'
+                        url = 'https://polyformproject.org/licenses/shield/1.0.0/'
                     }
                 }
                 

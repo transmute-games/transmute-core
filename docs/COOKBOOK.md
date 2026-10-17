@@ -51,7 +51,7 @@ states.pop(); // leave current state
 
 ## Playtest scripts
 
-```
+```text
 # playtests/jump.script
 0 press SPACE
 1 release SPACE

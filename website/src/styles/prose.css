@@ -1,0 +1,123 @@
+.prose {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.prose h1 {
+  font-size: 40px;
+  color: var(--ink);
+  font-weight: 550;
+  letter-spacing: -0.055em;
+  margin: 0 0 18px;
+  line-height: 1.2;
+}
+.prose h2 {
+  color: var(--ink);
+  font-size: 28px;
+  margin: 50px 0 22px;
+  scroll-margin-top: 90px;
+}
+.prose h3 {
+  color: var(--ink);
+  font-size: 20px;
+  margin: 30px 0 15px;
+}
+.prose h4 {
+  color: var(--ink);
+}
+.prose p {
+  margin: 18px 0;
+  line-height: 1.9;
+}
+.prose strong {
+  color: var(--ink);
+  font-weight: 550;
+}
+.prose a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--muted);
+}
+.prose ul,
+.prose ol {
+  padding-left: 22px;
+}
+.prose code {
+  font-size: 11px;
+  background: var(--sage);
+  padding: 3px 5px;
+  border-radius: 4px;
+  color: var(--ink);
+}
+.code-block {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 10px;
+  margin: 22px 0;
+  overflow: auto;
+}
+.code-block pre {
+  margin: 0;
+  padding: 20px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.code-block pre code {
+  padding: 0;
+  background: transparent;
+}
+.prose table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.prose th,
+.prose td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.prose th {
+  color: var(--ink);
+}
+.prose .api-list {
+  list-style: none;
+  padding: 0;
+}
+.api-list li {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 16px 18px 16px 66px;
+  margin: 8px 0;
+  font-size: 11px;
+}
+.api-list li::before {
+  content: "JAVA";
+  position: absolute;
+  left: 14px;
+  top: 18px;
+  font:
+    9px "IBM Plex Mono",
+    monospace;
+  background: #102038;
+  color: #9cbde6;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.api-list li a {
+  display: block;
+  text-decoration: none;
+  font-size: 14px;
+}
+.api-list li a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.api-list li:hover {
+  background: var(--sage);
+}

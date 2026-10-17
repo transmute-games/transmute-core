@@ -2,7 +2,7 @@
 
 Data-driven headless input. One command per line; `#` starts a comment.
 
-```
+```text
 # frame  action   key
 0        hold     D
 20       release  D
@@ -12,13 +12,13 @@ Data-driven headless input. One command per line; `#` starts a comment.
 
 ## Actions
 
-| Action | Args | Meaning |
-|--------|------|---------|
-| `hold` | KEY | Key down until release |
-| `release` | KEY | Key up |
-| `press` | KEY | One-frame press |
-| `idle` | — | No input change |
-| `clear` | — | Release all keys |
+| Action    | Args | Meaning                |
+| --------- | ---- | ---------------------- |
+| `hold`    | KEY  | Key down until release |
+| `release` | KEY  | Key up                 |
+| `press`   | KEY  | One-frame press        |
+| `idle`    | —    | No input change        |
+| `clear`   | —    | Release all keys       |
 
 Frames are **absolute** from the start of playback. Between scripted frames the
 harness steps while holding current key state. After applying events at frame N,

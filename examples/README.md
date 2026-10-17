@@ -1,12 +1,12 @@
 # Examples
 
-| Language | Path |
-|----------|------|
-| Java (reference) | [java/](java/) |
-| Python | [python/hello](python/hello/) |
-| JavaScript | [javascript/hello](javascript/hello/) |
-| TypeScript | [typescript/hello](typescript/hello/) |
-| C | build `packages/c` → `hello_headless` |
+| Language         | Path                                  |
+| ---------------- | ------------------------------------- |
+| Java (reference) | [java/](java/)                        |
+| Python           | [python/hello](python/hello/)         |
+| JavaScript       | [javascript/hello](javascript/hello/) |
+| TypeScript       | [typescript/hello](typescript/hello/) |
+| C                | build `packages/c` → `hello_headless` |
 
 ## Java
 

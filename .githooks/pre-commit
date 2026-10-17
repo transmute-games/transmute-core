@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+# Verify the staged tree, including staged changes hidden by later edits.
+if ! git diff --quiet || [ -n "$(git ls-files --others --exclude-standard)" ]; then
+  echo "Stage or stash all changes before committing so checks match the commit." >&2
+  exit 1
+fi
+flox activate -- bash scripts/check.sh
