@@ -1,0 +1,11 @@
+{
+  "name": "hello-transmute-js",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify": "node hello.js --headless"
+  },
+  "dependencies": {
+    "transmute": "file:../../../packages/javascript"
+  }
+}

@@ -8,7 +8,7 @@ import { diagramId, renderDiagram } from "./markdown";
 const files = [...new Glob("**/*.md").scanSync(".")].filter(
   (p) =>
     !p.startsWith("website/public/docs/") &&
-    !/(^|\/)(node_modules|playwright-report|test-results|build|out|\.next[^/]*|\.git|\.flox|\.cache|\.website-studio)\//.test(
+    !/(^|\/)(node_modules|playwright-report|test-results|build|out|\.next[^/]*|\.git|\.flox|\.venv[^/]*|\.cache|\.website-studio)\//.test(
       p,
     ),
 );

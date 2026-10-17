@@ -1,5 +1,5 @@
 {
-  "globs": ["**/*.md", "!node_modules/**", "!**/node_modules/**", "!**/build/**", "!**/.next/**", "!**/out/**", "!.website-studio/**", "!.flox/**", "!.cache/**", "!website/public/docs/**", "!**/.next-*/**", "!playwright-report/**", "!test-results/**"],
+  "globs": ["**/*.md", "!node_modules/**", "!**/node_modules/**", "!**/build/**", "!**/.next/**", "!**/out/**", "!.website-studio/**", "!.flox/**", "!.cache/**", "!website/public/docs/**", "!**/.next-*/**", "!playwright-report/**", "!test-results/**", "!.venv*/**"],
   "config": {
     "default": true,
     "MD013": false,

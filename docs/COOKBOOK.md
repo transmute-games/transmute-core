@@ -1,7 +1,7 @@
 # Cookbook
 
 Short recipes for Transmute Core. For agent automation, start with [AGENTS.md](../AGENTS.md)
-and [examples/hello](../examples/hello).
+and [examples/java/hello](../examples/java/hello).
 
 ## Headless verify one frame
 
@@ -125,7 +125,7 @@ Or from GameSpec (`world.cols`, `world.rows`, `world.border`, `world.solid=5,7;6
 World world = GameSpec.loadClasspath("gamespec.properties").createWorld();
 ```
 
-See `examples/rpg`.
+See `examples/java/rpg`.
 
 ## Platformer body
 
@@ -136,7 +136,7 @@ body.jump();
 body.step(platforms); // platforms implement Body2D.Solid
 ```
 
-See `examples/platformer`.
+See `examples/java/platformer`.
 
 ## More
 

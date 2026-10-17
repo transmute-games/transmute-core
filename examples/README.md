@@ -1,35 +1,45 @@
 # Examples
 
-| Example | Purpose |
-| --------- | --------- |
-| [hello](hello/) | Golden-path game: GameSpec, AssetPack, Manager bootstrap, headless `FrameAssert` |
-| [platformer](platformer/) | Action recipe: `Collision` + `SimulatedInput` jump playtest |
-| [rpg](rpg/) | Top-down recipe: `World` tile grid + `SimulatedInput` movement playtest |
+| Language         | Path                                  |
+| ---------------- | ------------------------------------- |
+| Java (reference) | [java/](java/)                        |
+| Python           | [python/hello](python/hello/)         |
+| JavaScript       | [javascript/hello](javascript/hello/) |
+| TypeScript       | [typescript/hello](typescript/hello/) |
+| C                | build `packages/c` → `hello_headless` |
 
-## hello
+## Java
 
 ```bash
-# from repo root
 ./gradlew :transmute-core:publishToMavenLocal
-cd examples/hello
-./gradlew test verifyHeadless
-./gradlew run   # windowed
+cd examples/java/hello && ./gradlew test verifyHeadless
 ```
 
-## platformer
+## Python
 
 ```bash
-./gradlew :transmute-core:publishToMavenLocal
-cd examples/platformer
-./gradlew test verifyHeadless   # includes SimulatedInput jump playtest
-./gradlew run
+python -m venv .venv && . .venv/bin/activate
+pip install -e packages/python
+cd examples/python/hello && python -m hello --headless
 ```
 
-## rpg
+## JavaScript
 
 ```bash
-./gradlew :transmute-core:publishToMavenLocal
-cd examples/rpg
-./gradlew test verifyHeadless
-./gradlew run
+cd packages/javascript && npm test
+cd examples/javascript/hello && npm install && npm run verify
+```
+
+## TypeScript
+
+```bash
+cd packages/typescript && npm install && npm test
+cd examples/typescript/hello && npm install && npm run verify
+```
+
+## C
+
+```bash
+cmake -S packages/c -B packages/c/build && cmake --build packages/c/build
+packages/c/build/examples/hello_headless
 ```

@@ -22,4 +22,4 @@ Build your world and verify what happens inside it.
 
 ## Source and compatibility
 
-The source is the authority for signatures. Browse [core source](../../packages/core/TransmuteCore/src/TransmuteCore) or generate Javadocs. Published engine coordinates and CLI release tags have separate version histories; use the version your game was tested against.
+The source is the authority for signatures. Browse [core source](../../packages/java/transmute-core/TransmuteCore/src/TransmuteCore) or generate Javadocs. Published engine coordinates and CLI release tags have separate version histories; use the version your game was tested against.

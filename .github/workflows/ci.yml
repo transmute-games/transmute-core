@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        check: [docs, java, web]
+        check: [docs, engine, web]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: flox/install-flox-action@5bb9eaaffbeaa699a8251a1ae21ecf4c8e0e37d4 # v2
@@ -30,7 +30,7 @@ jobs:
       - name: Install locked dependencies
         run: flox activate -- bun install --frozen-lockfile
       - name: Install browser
-        if: matrix.check != 'java'
+        if: matrix.check != 'engine'
         run: flox activate -- bunx playwright install --with-deps chromium
       - name: Verify
         run: flox activate -- bash scripts/check.sh ${{ matrix.check }}
@@ -40,8 +40,8 @@ jobs:
         with:
           name: reports-${{ matrix.check }}
           path: |
-            packages/*/build/reports/
-            examples/*/build/reports/
+            packages/java/*/build/reports/
+            examples/java/*/build/reports/
             eval/fixtures/*/build/reports/
             playwright-report/
             test-results/

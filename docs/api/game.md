@@ -40,4 +40,4 @@ Imports come from `TransmuteCore.core` for `TransmuteCore`, `GameConfig`, and `M
 
 Use `manager.getAssetManager()`, `getStateManager()`, `getObjectManager()`, and `getInputHandler()`. Bootstrap defaults before accessing default services. Prefer `getInputHandler()` because headless mode supplies a `SimulatedInput` implementation.
 
-Use [assets and manifests](assets.md) next, or copy the complete [hello example](../../examples/hello).
+Use [assets and manifests](assets.md) next, or copy the complete [hello example](../../examples/java/hello).

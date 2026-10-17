@@ -8,7 +8,7 @@ Use engine collision helpers: `Body2D` + `Collision` for platformers, `World` so
 - Platforms as `Body2D.Solid`
 - Top-down blocking tiles and trigger volumes
 
-**Do not** invent a second physics/entity system. Prefer [`examples/platformer`](../../examples/platformer) and [`examples/rpg`](../../examples/rpg).
+**Do not** invent a second physics/entity system. Prefer [`examples/java/platformer`](../../examples/java/platformer) and [`examples/java/rpg`](../../examples/java/rpg).
 
 ## Platformer body
 
@@ -21,7 +21,7 @@ if (input.isKeyPressed(KeyEvent.VK_SPACE)) {
 body.step(platforms); // List<? extends Body2D.Solid>
 ```
 
-Platforms implement `Body2D.Solid` (`getX/Y/Width/Height`). See `examples/platformer` `Platform` + `Player`.
+Platforms implement `Body2D.Solid` (`getX/Y/Width/Height`). See `examples/java/platformer` `Platform` + `Player`.
 
 ## One-shot playtest
 

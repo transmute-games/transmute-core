@@ -31,7 +31,7 @@ world.addTrigger(new Trigger(x, y, tile, tile, actor -> collected++));
 
 ## Camera
 
-When the world is larger than the framebuffer (see [`examples/rpg`](../../examples/rpg)):
+When the world is larger than the framebuffer (see [`examples/java/rpg`](../../examples/java/rpg)):
 
 ```java
 Camera camera = new Camera(viewW, viewH);

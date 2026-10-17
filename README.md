@@ -19,6 +19,9 @@ external runtime dependencies. The CLI scaffolds basic, platformer, and RPG game
 Build through `Manager`, declare resources with `GameSpec`, and verify behavior
 with `GameHarness`, simulated input, pixel assertions, and audio probes—without a display.
 
+Python, JavaScript, TypeScript, and C implement a shared headless authoring subset.
+See [language packages and examples](examples/README.md) and [portable contracts](contracts/).
+
 ## Start building
 
 With [Flox](https://flox.dev/docs/install-flox/) installed:
@@ -26,7 +29,7 @@ With [Flox](https://flox.dev/docs/install-flox/) installed:
 ```bash
 flox activate
 ./gradlew :transmute-core:publishToMavenLocal
-cd examples/hello
+cd examples/java/hello
 ./gradlew test verifyHeadless
 ./gradlew run
 ```

@@ -135,7 +135,7 @@ export default function Home() {
                 <span className="code-comment">
                   # Or verify a checked-in example
                 </span>
-                {"\ncd examples/platformer\n./gradlew test verifyHeadless"}
+                {"\ncd examples/java/platformer\n./gradlew test verifyHeadless"}
               </code>
             </pre>
             <Link href="/docs">Installation & setup</Link>

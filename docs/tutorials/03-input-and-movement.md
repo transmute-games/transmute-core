@@ -21,7 +21,7 @@ Always use `manager.getInputHandler()`, not only `getInput()`, so `GameHarness` 
 
 ## Top-down (preferred)
 
-Copy [`examples/rpg`](../../examples/rpg) `Player`:
+Copy [`examples/java/rpg`](../../examples/java/rpg) `Player`:
 
 ```java
 var input = manager.getInputHandler();
@@ -62,7 +62,7 @@ harness.step(1);
 
 ## Platformer movement
 
-Use `Body2D` (next tutorial / [`examples/platformer`](../../examples/platformer)) instead of hand-rolled gravity.
+Use `Body2D` (next tutorial / [`examples/java/platformer`](../../examples/java/platformer)) instead of hand-rolled gravity.
 
 ## Next
 

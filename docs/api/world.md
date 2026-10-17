@@ -27,8 +27,8 @@ World world = spec.createWorld();
 
 ## Gravity and collisions
 
-`Body2D` lives in `TransmuteCore.physics`. Advance it against the scene's solids with `step(solids)`. Follow the [platformer example](../../examples/platformer) for a complete jump, gravity, and collision setup; use the [collision tutorial](../tutorials/04-collision-detection.md) for the individual operations.
+`Body2D` lives in `TransmuteCore.physics`. Advance it against the scene's solids with `step(solids)`. Follow the [platformer example](../../examples/java/platformer) for a complete jump, gravity, and collision setup; use the [collision tutorial](../tutorials/04-collision-detection.md) for the individual operations.
 
 ## Verify the result
 
-Check movement and trigger behavior using simulated input. The [RPG example](../../examples/rpg) verifies collection, and the platformer verifies a jump. Both expose `verifyHeadless`.
+Check movement and trigger behavior using simulated input. The [RPG example](../../examples/java/rpg) verifies collection, and the platformer verifies a jump. Both expose `verifyHeadless`.

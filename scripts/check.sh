@@ -9,11 +9,14 @@ case "${1:-all}" in
     actionlint
     shellcheck scripts/check.sh scripts/release-version.sh .githooks/pre-commit
     ;;
-  java)
+  java|engine)
     ./gradlew build :transmute-core:publishToMavenLocal
     for example in hello platformer rpg; do
-      (cd "examples/$example" && ./gradlew test verifyHeadless)
+      (cd "examples/java/$example" && ./gradlew test verifyHeadless)
     done
+    python3 -m venv .venv-eval
+    .venv-eval/bin/pip install -e "packages/python[dev]"
+    .venv-eval/bin/pytest -q packages/python
     ./scripts/agent-eval.sh
     ;;
   web)
@@ -21,7 +24,7 @@ case "${1:-all}" in
     bun run test:web
     ;;
   all)
-    for check in docs java web; do bash scripts/check.sh "$check"; done
+    for check in docs engine web; do bash scripts/check.sh "$check"; done
     ;;
-  *) echo "Usage: $0 [docs|java|web|all]" >&2; exit 2 ;;
+  *) echo "Usage: $0 [docs|engine|web|all]" >&2; exit 2 ;;
 esac

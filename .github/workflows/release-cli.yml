@@ -36,12 +36,12 @@ jobs:
           RELEASE_VERSION: ${{ steps.version.outputs.version }}
         run: |
           flox activate -- ./gradlew :transmute-cli:test :transmute-cli:fatJar -PreleaseVersion="$RELEASE_VERSION"
-          flox activate -- java -jar "packages/cli/build/libs/transmute-cli-$RELEASE_VERSION-all.jar" version | grep -F "Transmute CLI v$RELEASE_VERSION"
+          flox activate -- java -jar "packages/java/transmute-cli/build/libs/transmute-cli-$RELEASE_VERSION-all.jar" version | grep -F "Transmute CLI v$RELEASE_VERSION"
       - name: Package assets
         run: |
           mkdir release-assets
-          cp packages/cli/build/libs/transmute-cli-*-all.jar release-assets/transmute-cli.jar
-          cp packages/cli/bin/transmute packages/cli/bin/transmute.bat LICENSE release-assets/
+          cp packages/java/transmute-cli/build/libs/transmute-cli-*-all.jar release-assets/transmute-cli.jar
+          cp packages/java/transmute-cli/bin/transmute packages/java/transmute-cli/bin/transmute.bat LICENSE release-assets/
           cd release-assets
           sha256sum ./* > SHA256SUMS
       - name: Publish release

@@ -18,12 +18,12 @@ Flox supplies the pinned Java and website toolchains. Without Flox, install JDK 
 ## Run an example
 
 ```bash
-cd examples/hello
+cd examples/java/hello
 ./gradlew test verifyHeadless
 ./gradlew run
 ```
 
-The first command works without a display. The second opens the game window; it needs a desktop session. Copy `examples/hello` to start your own project, or choose [platformer or RPG](EXAMPLES.md).
+The first command works without a display. The second opens the game window; it needs a desktop session. Copy `examples/java/hello` to start your own project, or choose [platformer or RPG](EXAMPLES.md).
 
 ## Use the CLI
 

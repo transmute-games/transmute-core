@@ -4,15 +4,15 @@ Each example has a Gradle wrapper, resources, tests, and a `verifyHeadless` task
 
 | Example | Use it for | Verification |
 | --- | --- | --- |
-| [Hello](../examples/hello) | Minimal game lifecycle and text rendering | Frame assertions |
-| [Platformer](../examples/platformer) | Gravity, jumping, and solids | Scripted jump |
-| [RPG](../examples/rpg) | Tile worlds, movement, and triggers | Scripted collection |
+| [Hello](../examples/java/hello) | Minimal game lifecycle and text rendering | Frame assertions |
+| [Platformer](../examples/java/platformer) | Gravity, jumping, and solids | Scripted jump |
+| [RPG](../examples/java/rpg) | Tile worlds, movement, and triggers | Scripted collection |
 
 ## Run or copy
 
 ```bash
 ./gradlew :transmute-core:publishToMavenLocal
-cd examples/rpg
+cd examples/java/rpg
 ./gradlew test verifyHeadless
 ./gradlew run
 ```

@@ -10,11 +10,20 @@
         "pkg-path": "bun",
         "version": "1.3.11"
       },
+      "clang": {
+        "pkg-path": "clang"
+      },
+      "cmake": {
+        "pkg-path": "cmake"
+      },
       "jdk17": {
         "pkg-path": "jdk17"
       },
       "nodejs_22": {
         "pkg-path": "nodejs_22"
+      },
+      "python312": {
+        "pkg-path": "python312"
       },
       "shellcheck": {
         "pkg-path": "shellcheck"
@@ -279,6 +288,249 @@
       "priority": 5
     },
     {
+      "attr_path": "clang",
+      "broken": false,
+      "derivation": "/nix/store/4wiccm7akykiqx5lpbgv8nskk32arg1w-clang-wrapper-21.1.8.drv",
+      "description": "C language family frontend for LLVM (wrapper script)",
+      "install_id": "clang",
+      "license": "[ NCSA, [ Apache-2.0 LLVM-exception ] ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "clang-wrapper-21.1.8",
+      "pname": "clang",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:10:22.376618Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "21.1.8",
+      "outputs_to_install": [
+        "out",
+        "out",
+        "out",
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/rwsbw420hcq148hifv7fga6r4g0k1dw8-clang-wrapper-21.1.8"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "clang",
+      "broken": false,
+      "derivation": "/nix/store/j45jh1vrri61a7wvwmym0vbf3dwlvlk9-clang-wrapper-21.1.8.drv",
+      "description": "C language family frontend for LLVM (wrapper script)",
+      "install_id": "clang",
+      "license": "[ NCSA, [ Apache-2.0 LLVM-exception ] ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "clang-wrapper-21.1.8",
+      "pname": "clang",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:44:33.913431Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "21.1.8",
+      "outputs_to_install": [
+        "out",
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/07dbczj01x1g8876yc11mrpdilqjq0vz-clang-wrapper-21.1.8"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "clang",
+      "broken": false,
+      "derivation": "/nix/store/65i5gvpv8rj6ncrv12d1yw3jiaw83zbb-clang-wrapper-21.1.8.drv",
+      "description": "C language family frontend for LLVM (wrapper script)",
+      "install_id": "clang",
+      "license": "[ NCSA, [ Apache-2.0 LLVM-exception ] ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "clang-wrapper-21.1.8",
+      "pname": "clang",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:15:55.362697Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "21.1.8",
+      "outputs_to_install": [
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/b27wqif15k5b2k7j13ajh401d2g4a9m6-clang-wrapper-21.1.8"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "clang",
+      "broken": false,
+      "derivation": "/nix/store/kvn093kyk728g66mwfswwvv8d3832wvn-clang-wrapper-21.1.8.drv",
+      "description": "C language family frontend for LLVM (wrapper script)",
+      "install_id": "clang",
+      "license": "[ NCSA, [ Apache-2.0 LLVM-exception ] ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "clang-wrapper-21.1.8",
+      "pname": "clang",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:52:11.161973Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "21.1.8",
+      "outputs_to_install": [
+        "out",
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/mw4gasdvwgscgpxpzihjgchfhs3hhqhn-clang-wrapper-21.1.8"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "cmake",
+      "broken": false,
+      "derivation": "/nix/store/h5qdd3jiy1qjw2p7vadmbxnbi88q2lry-cmake-4.1.2.drv",
+      "description": "Cross-platform, open-source build system generator",
+      "install_id": "cmake",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "cmake-4.1.2",
+      "pname": "cmake",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:10:22.402089Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.1.2",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/gsslmqvsx6ad8ba1b44a1qy2as37fwcn-cmake-4.1.2"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "cmake",
+      "broken": false,
+      "derivation": "/nix/store/lgx1kv9pfgvc9i8laacvijw9gbhmlk2z-cmake-4.1.2.drv",
+      "description": "Cross-platform, open-source build system generator",
+      "install_id": "cmake",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "cmake-4.1.2",
+      "pname": "cmake",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:44:33.948145Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.1.2",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "debug": "/nix/store/66xb3fk26w6qid73m4qhcg8hfrswdfdn-cmake-4.1.2-debug",
+        "out": "/nix/store/726yh2ybv8zsap087dkknrznqynhcv99-cmake-4.1.2"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "cmake",
+      "broken": false,
+      "derivation": "/nix/store/srfc9671a7sp13wl0360h5k77831qncf-cmake-4.1.2.drv",
+      "description": "Cross-platform, open-source build system generator",
+      "install_id": "cmake",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "cmake-4.1.2",
+      "pname": "cmake",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:15:55.387680Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.1.2",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/xk7jw17nw5yfwwzr1r777p44sxgdrkhk-cmake-4.1.2"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "cmake",
+      "broken": false,
+      "derivation": "/nix/store/mn0cdgk2g1pnl10bcp887n313f0xqrbd-cmake-4.1.2.drv",
+      "description": "Cross-platform, open-source build system generator",
+      "install_id": "cmake",
+      "license": "BSD-3-Clause",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "cmake-4.1.2",
+      "pname": "cmake",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:52:11.202382Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.1.2",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "debug": "/nix/store/j8ry84s4ks1v5ys47br0h1v12pnahhii-cmake-4.1.2-debug",
+        "out": "/nix/store/v2i1hgv567g3v91im5x4g5bff52143i0-cmake-4.1.2"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
       "attr_path": "jdk17",
       "broken": false,
       "derivation": "/nix/store/r28dilm5vbm7y4hscxj239ds3530h4zx-zulu-ca-jdk-17.0.18.drv",
@@ -512,6 +764,131 @@
       ],
       "outputs": {
         "out": "/nix/store/6x6v11xjf0psckgqmyhfyhw9bdma0rn6-nodejs-22.22.2"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "python312",
+      "broken": false,
+      "derivation": "/nix/store/shryblilmwrlh4dxfzm63b4p781vvh9k-python3-3.12.13.drv",
+      "description": "High-level dynamically-typed programming language",
+      "install_id": "python312",
+      "license": "Python-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "python3-3.12.13",
+      "pname": "python312",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:11:03.489548Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "python3-3.12.13",
+      "outputs_to_install": [
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/fn6fnl5cg8qnsn1xn3lwaahk48vyw9l7-python3-3.12.13"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "python312",
+      "broken": false,
+      "derivation": "/nix/store/mxbq0cqa6ym954sgicj46a0akbcw3rsg-python3-3.12.13.drv",
+      "description": "High-level dynamically-typed programming language",
+      "install_id": "python312",
+      "license": "Python-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "python3-3.12.13",
+      "pname": "python312",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:45:34.063381Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "python3-3.12.13",
+      "outputs_to_install": [
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "debug": "/nix/store/2x5zchy1i0bprgxdvn5crjjmc4dw83p1-python3-3.12.13-debug",
+        "out": "/nix/store/jczbi6lb8vws7zc251v47bpijh805lyg-python3-3.12.13"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "python312",
+      "broken": false,
+      "derivation": "/nix/store/wkh1wfw2xk88fcagjrwhjidzchapssh8-python3-3.12.13.drv",
+      "description": "High-level dynamically-typed programming language",
+      "install_id": "python312",
+      "license": "Python-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "python3-3.12.13",
+      "pname": "python312",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:16:36.065132Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "python3-3.12.13",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/074rsjnaz8sf3xdf09a16zcw1qf8cj81-python3-3.12.13"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "python312",
+      "broken": false,
+      "derivation": "/nix/store/3asg81mz0mzjlmpjrqp8ikqdl69dyi44-python3-3.12.13.drv",
+      "description": "High-level dynamically-typed programming language",
+      "install_id": "python312",
+      "license": "Python-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "python3-3.12.13",
+      "pname": "python312",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:53:14.982003Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "python3-3.12.13",
+      "outputs_to_install": [
+        "out",
+        "out",
+        "out",
+        "out",
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "debug": "/nix/store/8hjni6450l0l4m5cvlxjb6wn7r0ynffl-python3-3.12.13-debug",
+        "out": "/nix/store/h3q2g9wq4x3q84164qsfm3lz5djj0bf3-python3-3.12.13"
       },
       "system": "x86_64-linux",
       "group": "toplevel",

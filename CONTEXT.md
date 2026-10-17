@@ -28,4 +28,4 @@ Vocabulary for humans and agents working in this repository.
 1. Headless mode must still render into `Context` so agents can assert frames.
 2. Manager is the one authoring seam for game code.
 3. Asset paths keep filesystem case; keys remain case-insensitive.
-4. Templates and `examples/hello` must demonstrate Manager + AssetPack + verify, not reinvented systems.
+4. Templates and `examples/java/hello` must demonstrate Manager + AssetPack + verify, not reinvented systems.

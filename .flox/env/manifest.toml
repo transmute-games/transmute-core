@@ -7,6 +7,9 @@ bun.version = "1.3.11"
 nodejs_22.pkg-path = "nodejs_22"
 actionlint.pkg-path = "actionlint"
 shellcheck.pkg-path = "shellcheck"
+clang.pkg-path = "clang"
+cmake.pkg-path = "cmake"
+python312.pkg-path = "python312"
 
 [vars]
 PUPPETEER_SKIP_DOWNLOAD = "true"

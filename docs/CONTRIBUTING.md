@@ -11,7 +11,7 @@ bunx playwright install chromium
 bun run check
 ```
 
-Flox provides JDK 17, Bun, Node.js, ShellCheck, and actionlint. Commit `.flox/env/manifest.toml` and `manifest.lock` when changing tools. Activation installs the repository's pre-commit hook for local checkouts; CI does not modify hook settings. The website can run as a Flox service with `flox services start website`.
+Flox provides JDK 17, Bun, Node.js, Python 3.12, Clang, CMake, ShellCheck, and actionlint. Commit `.flox/env/manifest.toml` and `manifest.lock` when changing tools. Activation installs the repository's pre-commit hook for local checkouts; CI does not modify hook settings. The website can run as a Flox service with `flox services start website`.
 
 ## Checks and hooks
 
@@ -20,7 +20,7 @@ Flox provides JDK 17, Bun, Node.js, ShellCheck, and actionlint. Commit `.flox/en
 | Command | Checks |
 | --- | --- |
 | `bash scripts/check.sh docs` | Markdown, local links, real Mermaid rendering, LOC budgets, workflows, shell scripts |
-| `bash scripts/check.sh java` | Engine and CLI build/tests, examples, agent-eval fixtures |
+| `bash scripts/check.sh engine` | Java engine/CLI, Python tests, JavaScript/TypeScript tests, C tests, and all language examples |
 | `bash scripts/check.sh web` | Lint, TypeScript, static build, browser journeys and accessibility |
 
 GitHub Actions runs these groups independently, uploads test reports even on failure, and preserves the built website as an artifact. External links are not fetched by local link validation; network availability is not a documentation correctness test.

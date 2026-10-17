@@ -16,7 +16,7 @@ This runs Markdown, link, Mermaid, LOC, shell and workflow validation; engine an
 
 ```bash
 ./gradlew :transmute-core:publishToMavenLocal
-cd examples/platformer
+cd examples/java/platformer
 ./gradlew test verifyHeadless
 ```
 

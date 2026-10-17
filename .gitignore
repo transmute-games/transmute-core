@@ -40,3 +40,16 @@ website/public/diagrams/
 .cache/
 .next-build/
 .next-dev/
+# Python
+**/__pycache__/
+.venv-eval/
+
+*.egg-info/
+.pytest_cache/
+
+# Node
+**/node_modules/
+
+# CMake
+packages/c/build/
+packages/typescript/dist/

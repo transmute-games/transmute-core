@@ -3,5 +3,5 @@ rootProject.name = 'transmute'
 include 'transmute-core'
 include 'transmute-cli'
 
-project(':transmute-core').projectDir = file('packages/core')
-project(':transmute-cli').projectDir = file('packages/cli')
+project(':transmute-core').projectDir = file('packages/java/transmute-core')
+project(':transmute-cli').projectDir = file('packages/java/transmute-cli')
