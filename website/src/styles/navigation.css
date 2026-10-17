@@ -152,55 +152,7 @@ dialog::backdrop {
 body:has(dialog[open]) {
   overflow: hidden;
 }
-.search-dialog {
-  width: min(640px, calc(100% - 32px));
-  max-height: 80dvh;
-  border-radius: 20px;
-  padding: 24px;
-}
-.search-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.search-heading h2 {
-  font-size: 26px;
-  margin: 0 0 20px;
-}
-.search-heading button,
 .mobile-panel-heading button {
   min-width: 44px;
   min-height: 44px;
-}
-.search-dialog input {
-  width: 100%;
-  padding: 16px;
-  border: 1px solid #a5b696;
-  border-radius: 10px;
-  background: white;
-  color: #292b25;
-  font-size: 16px;
-}
-.search-dialog > p {
-  font-size: 11px;
-}
-.search-results {
-  max-height: 45dvh;
-  overflow: auto;
-}
-.search-results a {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  padding: 15px 8px;
-  border-top: 1px solid var(--line);
-  font-size: 14px;
-}
-.search-results small {
-  color: var(--muted);
-  font-size: 11px;
-}
-.search-results button {
-  text-decoration: underline;
 }
